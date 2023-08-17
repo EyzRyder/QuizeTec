@@ -1,7 +1,0 @@
-{
-  "name": "quiz-etec",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "react-vite"
-}
