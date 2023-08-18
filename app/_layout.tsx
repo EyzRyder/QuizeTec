@@ -4,7 +4,7 @@ import { Stack } from 'expo-router'
 
 export default function Layout() {
   return (
-    <View className="relative flex-1 bg-gray-900">
+    <View className="relative flex-1 bg-slate-50">
       <StatusBar style="light" translucent />
       <Stack
         screenOptions={{
