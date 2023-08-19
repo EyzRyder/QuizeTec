@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
-    "types": [
-      "nativewind/types"
-    ],
+    "types": ["nativewind/types"]
   },
+  "jsx": "react",
   "extends": "expo/tsconfig.base"
 }
