@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar'
 import { View } from 'react-native'
-import { SplashScreen, Stack } from 'expo-router'
+import { Stack } from 'expo-router'
+import * as SplashScreen from 'expo-splash-screen';
 
 import {
   useFonts,
@@ -8,7 +9,9 @@ import {
   Poppins_600SemiBold,
   Poppins_900Black
 } from '@expo-google-fonts/poppins'
+import { useCallback } from 'react';
 
+SplashScreen.preventAutoHideAsync();
 
 export default function Layout() {
   const [hasLoadedFonts] = useFonts({
@@ -16,13 +19,22 @@ export default function Layout() {
     Poppins_600SemiBold,
     Poppins_900Black
   })
+  const onLayoutRootView = useCallback(async () => {
+    if (hasLoadedFonts) {
+
+      await SplashScreen.hideAsync();
+    }
+  }, [hasLoadedFonts]);
 
   if (!hasLoadedFonts) {
-    return <SplashScreen />
+    return null
   }
 
   return (
-    <View className="relative flex-1 bg-slate-50">
+    <View
+      className="relative flex-1 bg-slate-50"
+      onLayout={onLayoutRootView}
+    >
       <StatusBar style="light" translucent />
       <Stack
         screenOptions={{
