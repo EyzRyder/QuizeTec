@@ -34,7 +34,7 @@ export default function Login() {
       />
         <TouchableOpacity
           onPress={() => router.push('/base')}
-          className="w-full items-center justify-center rounded-lg bg-blue-500 py-2">
+          className="w-full items-center justify-center rounded-lg bg-blue-500 py-4">
         <Text className='text-white'>
           Entrar
         </Text>
