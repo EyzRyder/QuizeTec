@@ -7,17 +7,16 @@ export default function Sobre() {
   const router = useRouter()
 
   return (
-    <View className='flex-1 items-center px-8 py-10'>
-      <View className='flex-row'>
+    <View className='flex-1 items-center'>
+      <View className='flex-row pt-10'>
         <TouchableOpacity
           onPress={() => router.back()}
           className="h-10 w-10 items-center justify-center ">
-          <Icon name="arrow-left" size={16} color="#2A416F" />
+          <Icon name="chevron-left" size={24} color="#2A416F" />
         </TouchableOpacity>
         <Text className='flex-1 font-semibold font-title text-2xl leading-tight text-[#2A416F]'>Sobre</Text>
       </View>
-      <ScrollView className='flex-1'>
-
+      <ScrollView className='flex-1 px-8'>
         <Text className='text-2xl font-semibold text-center text-[#2A416F] my-6'>O Motivo do desenvolvimento?</Text>
         <View className='bg-blue-500 px-7 py-6 rounded-lg mb-14'>
           <Text className='text-white text-lg font-light'>
@@ -27,7 +26,7 @@ export default function Sobre() {
         <Text className='text-2xl text-[#2A416F] font-semibold text-center mb-6'>Por Quem?</Text>
         <View className='flex-row justify-between'>
 
-          <View className='gap-2'>
+          <View className='space-y-2'>
             <View className='bg-slate-700 h-28 w-28 rounded-lg'></View>
             <View>
               <Text className='text-xl'>Gabriel B.</Text>
@@ -39,13 +38,13 @@ export default function Sobre() {
                 Designer
               </Text>
             </View>
-            <View className='gap-2'>
+            <View className='space-y-2'>
               <View className='w-5 h-5 rounded-full'></View>
               <View className='w-5 h-5 rounded-full'></View>
               <View className='w-5 h-5 rounded-full'></View>
             </View>
           </View>
-          <View className='gap-2'>
+          <View className='space-y-2'>
             <View className='bg-slate-700 h-28 w-28 rounded-lg'></View>
             <View>
               <Text className='text-xl'>Kauã M.</Text>
@@ -57,7 +56,7 @@ export default function Sobre() {
                 . Web Designer
               </Text>
             </View>
-            <View className='gap-2'>
+            <View className='space-y-2'>
               <View className='w-5 h-5 rounded-full'></View>
               <View className='w-5 h-5 rounded-full'></View>
               <View className='w-5 h-5 rounded-full'></View>
