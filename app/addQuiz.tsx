@@ -88,7 +88,7 @@ const Select = ({ options, onChangeSelect, text,label }:
             >
               <Icon name='chevron-left' size={30} color={'#2A416F'} />
             </TouchableOpacity>
-            <Text className='font-title text-lg text-[#2A416F]'>{txt}</Text>
+            <Text className='font-title text-lg text-[#2A416F]'>{text}</Text>
             <TouchableOpacity
               onPress={() => setModalVisible(false)}
             >
