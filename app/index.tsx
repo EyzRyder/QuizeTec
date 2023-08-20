@@ -8,7 +8,7 @@ export default function App() {
       <View className="flex justify-center items-center pr-14">
         <Image
           className=""
-          source={require("../assets/PhoneGirl.png")}
+          source={require("../src/assets/PhoneGirl.png")}
           style={{ width: 600, height: 700 }}
         />
       </View>
@@ -18,7 +18,7 @@ export default function App() {
         </Text>
         <Link href="/login" asChild>
           <TouchableOpacity className="w-full items-center justify-center rounded-[20px] bg-[#4A92FF] py-4">
-            <Text className="text-white font-medium text-lg ">Começar</Text>
+            <Text className="text-white font-medium text-lg">Começar</Text>
           </TouchableOpacity>
         </Link>
         <Link href="/sobre" asChild>

@@ -14,8 +14,8 @@ export default function Login() {
     <View className="flex-1 items-center px-10 py-40 justify-around">
       <View className="pb-60">
         <Image
-          source={require("../assets/FallGirl.png")}
-          style={{ width: 800, height: 650 }}
+          source={require("../src/assets/FallGirl.png")}
+          style={{ width: 800, height: 750 }}
         />
       </View>
 
@@ -88,7 +88,7 @@ export default function Login() {
           <TouchableOpacity className="flex w-[full] items-center rounded-lg py-4">
             <View className="flex items-center flex-row">
               <Image
-                source={require("../assets/google.png")}
+                source={require("../src/assets/google.png")}
                 style={{ width: 25, height: 25 }}
               />
               <Text className="text-[#757575] text-lg ml-2">
