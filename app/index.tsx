@@ -4,13 +4,15 @@ import Icon from "@expo/vector-icons/Feather";
 
 export default function App() {
   return (
-    <View className="flex-1 items-center px-8 py-0 justify-around">
-      <Image
-        className=""
-        source={require("../assets/Saly-10.png")}
-        style={{ width: 400, height: 400 }}
-      />
-      <View className="items-center w-full gap-3 pb-20">
+    <View className="flex-1 items-center px-6 py-0 justify-around">
+      <View className="flex justify-center items-center pr-14">
+        <Image
+          className=""
+          source={require("../assets/PhoneGirl.png")}
+          style={{ width: 600, height: 700 }}
+        />
+      </View>
+      <View className="items-center w-full gap-3 pb-40">
         <Text className="text-center font-title text-[27px] leading-tight font-semibold text-[#2A416F] py-3">
           Hora de começar a se {"\n"} aventurar no aprendizado!
         </Text>

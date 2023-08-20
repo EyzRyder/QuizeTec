@@ -1,49 +1,102 @@
-import { Link, useRouter } from 'expo-router';
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
-import Icon from '@expo/vector-icons/Feather'
-import { useState } from 'react';
+import { Link, useRouter } from "expo-router";
+import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import Icon from "@expo/vector-icons/Feather";
+import { useState } from "react";
 
 export default function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const router = useRouter()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isEmailFocused, setIsEmailFocused] = useState(false);
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  const router = useRouter();
 
   return (
-    <View className='flex-1 items-center px-8 py-10'>
-      <View className='pb-4 w-full'>
-      <Text className='font-title font-bold text-2xl leading-tight'>Olá</Text>
-      <Text className='font-title font-bold text-2xl leading-tight'>Hora do Cadastro!</Text>
+    <View className="flex-1 items-center px-10 py-40 justify-around">
+      <View className="pb-60">
+        <Image
+          source={require("../assets/FallGirl.png")}
+          style={{ width: 800, height: 750 }}
+        />
       </View>
 
-      <View className='gap-2 w-full'>
-      <TextInput
-        value={email}
-        onChangeText={setEmail}
-        className="w-full px-2 py-3 border-2 border-blue-400 font-body text-lg text-gray-50 rounded-lg"
-        textAlignVertical="top"
-        placeholderTextColor="#56565a"
-        placeholder="johndoe@exemplo.com"
-      />
-      <TextInput
-        value={password}
-        onChangeText={setPassword}
-        className="w-full px-2 py-3 font-body text-lg text-gray-50 bg-slate-300 rounded-lg"
-        textAlignVertical="top"
-        placeholderTextColor="#56565a"
-        placeholder="********"
-      />
-        <TouchableOpacity
-          onPress={() => router.push('/base')}
-          className="w-full items-center justify-center rounded-lg bg-blue-500 py-4">
-        <Text className='text-white'>
-          Entrar
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity className="w-full items-center justify-center rounded-lg py-2">
-        <Text className='text-slate-400'>
-          Entrar Com Google
-        </Text>
-      </TouchableOpacity>
+      <View className="w-full py-60 pb-60">
+        <View className="pb-7 w-full">
+          <Text className="font-title font-semibold text-[#2A416F] text-[30px] leading-tight">
+            Olá,
+          </Text>
+          <Text className="font-title font-semibold text-[#2A416F] text-[30px]  leading-tight">
+            Hora do Cadastro!
+          </Text>
+        </View>
+
+        <View className="gap-2 w-full">
+          <TextInput
+            value={email}
+            onChangeText={setEmail}
+            style={{
+              backgroundColor: isEmailFocused ? "#fff" : "#EFEFEF",
+              borderRadius: 20,
+              marginBottom: 0,
+              padding: 18,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.25,
+              fontSize: 19,
+              shadowRadius: 3.84,
+              width: "100%",
+              borderColor: isEmailFocused ? "#4A92FF" : "transparent",
+              borderWidth: isEmailFocused ? 2 : 0,
+              color: isEmailFocused ? "black" : "gray",
+            }}
+            textAlignVertical="top"
+            placeholderTextColor="#888888"
+            placeholder="Email"
+            onFocus={() => setIsEmailFocused(true)}
+            onBlur={() => setIsEmailFocused(false)}
+          />
+          <TextInput
+            value={password}
+            onChangeText={setPassword}
+            style={{
+              backgroundColor: isPasswordFocused ? "#fff" : "#EFEFEF",
+              borderRadius: 20,
+              marginBottom: 15,
+              padding: 18,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.25,
+              fontSize: 19,
+              shadowRadius: 3.84,
+              width: "100%",
+              borderColor: isPasswordFocused ? "#4A92FF" : "transparent",
+              borderWidth: isPasswordFocused ? 2 : 0,
+              color: isPasswordFocused ? "black" : "gray",
+            }}
+            textAlignVertical="top"
+            placeholderTextColor="#888888"
+            placeholder="Senha"
+            onFocus={() => setIsPasswordFocused(true)}
+            onBlur={() => setIsPasswordFocused(false)}
+          />
+
+          <TouchableOpacity
+            onPress={() => router.push("/base")}
+            className="w-full items-center justify-center rounded-[20px] bg-[#4A92FF] py-4"
+          >
+            <Text className="text-white font-medium text-[21px]">Entrar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity className="flex w-[full] items-center rounded-lg py-4">
+            <View className="flex items-center flex-row">
+              <Image
+                source={require("../assets/google.png")}
+                style={{ width: 25, height: 25 }}
+              />
+              <Text className="text-[#757575] text-lg ml-2">
+                Entrar Com Google
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
