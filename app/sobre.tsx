@@ -7,7 +7,7 @@ export default function Sobre() {
   const router = useRouter()
 
   return (
-    
+
     <View className='flex-1 items-center'>
       <View className='flex-row pt-10'>
         <TouchableOpacity
@@ -27,7 +27,7 @@ export default function Sobre() {
         <Text className='text-2xl text-[#2A416F] font-semibold text-center mb-6'>Por Quem?</Text>
         <View className='flex-row justify-between'>
 
-          <View className='space-y-2'>
+          <View className='space-y-2 justify-center items-center'>
             <View className='bg-slate-700 h-28 w-28 rounded-lg'></View>
             <View>
               <Text className='text-xl'>Gabriel B.</Text>
@@ -39,13 +39,13 @@ export default function Sobre() {
                 Designer
               </Text>
             </View>
-            <View className='space-y-2'>
-              <View className='w-5 h-5 rounded-full'></View>
-              <View className='w-5 h-5 rounded-full'></View>
-              <View className='w-5 h-5 rounded-full'></View>
+            <View className='gap-2 flex-row'>
+              <View className='w-5 h-5 rounded-full bg-blue-500'></View>
+              <View className='w-5 h-5 rounded-full bg-blue-500'></View>
+              <View className='w-5 h-5 rounded-full bg-blue-500'></View>
             </View>
           </View>
-          <View className='space-y-2'>
+          <View className='space-y-2 justify-center items-center'>
             <View className='bg-slate-700 h-28 w-28 rounded-lg'></View>
             <View>
               <Text className='text-xl'>Kauã M.</Text>
@@ -57,10 +57,10 @@ export default function Sobre() {
                 . Web Designer
               </Text>
             </View>
-            <View className='space-y-2'>
-              <View className='w-5 h-5 rounded-full'></View>
-              <View className='w-5 h-5 rounded-full'></View>
-              <View className='w-5 h-5 rounded-full'></View>
+            <View className='gap-2 flex-row'>
+              <View className='w-5 h-5 rounded-full bg-blue-500'></View>
+              <View className='w-5 h-5 rounded-full bg-blue-500'></View>
+              <View className='w-5 h-5 rounded-full bg-blue-500'></View>
             </View>
           </View>
         </View>

@@ -15,7 +15,7 @@ export default function Login() {
       <View className="pb-60">
         <Image
           source={require("../src/assets/FallGirl.png")}
-          style={{ width: 800, height: 750 }}
+          style={{ width: 800, height: 650 }}
         />
       </View>
 
