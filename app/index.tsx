@@ -4,7 +4,7 @@ import Icon from "@expo/vector-icons/Feather";
 
 export default function App() {
   return (
-    <View className="flex-1 items-center px-6 py-0 justify-around">
+    <View className="flex-1 items-center px-5 py-0 justify-around">
       <View className="flex justify-center items-center pr-14">
         <Image
           className=""
@@ -13,7 +13,7 @@ export default function App() {
         />
       </View>
       <View className="items-center w-full gap-3 pb-40">
-        <Text className="text-center font-title text-[27px] leading-tight font-semibold text-[#2A416F] py-3">
+        <Text className="text-center font-title text-[25px] leading-tight font-semibold text-[#2A416F] py-4">
           Hora de começar a se {"\n"} aventurar no aprendizado!
         </Text>
         <Link href="/login" asChild>

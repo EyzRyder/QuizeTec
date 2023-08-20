@@ -54,30 +54,35 @@ export default function Login() {
             onFocus={() => setIsEmailFocused(true)}
             onBlur={() => setIsEmailFocused(false)}
           />
-          <TextInput
-            value={password}
-            onChangeText={setPassword}
-            style={{
-              backgroundColor: isPasswordFocused ? "#fff" : "#EFEFEF",
-              borderRadius: 20,
-              marginBottom: 15,
-              padding: 18,
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.25,
-              fontSize: 19,
-              shadowRadius: 3.84,
-              width: "100%",
-              borderColor: isPasswordFocused ? "#4A92FF" : "transparent",
-              borderWidth: isPasswordFocused ? 2 : 0,
-              color: isPasswordFocused ? "black" : "gray",
-            }}
-            textAlignVertical="top"
-            placeholderTextColor="#888888"
-            placeholder="Senha"
-            onFocus={() => setIsPasswordFocused(true)}
-            onBlur={() => setIsPasswordFocused(false)}
-          />
+          <View className="relatie w-full">
+            <TextInput
+              value={password}
+              onChangeText={setPassword}
+              style={{
+                backgroundColor: isPasswordFocused ? "#fff" : "#EFEFEF",
+                borderRadius: 20,
+                marginBottom: 15,
+                padding: 18,
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.25,
+                fontSize: 19,
+                shadowRadius: 3.84,
+                width: "100%",
+                borderColor: isPasswordFocused ? "#4A92FF" : "transparent",
+                borderWidth: isPasswordFocused ? 2 : 0,
+                color: isPasswordFocused ? "black" : "gray",
+              }}
+              textAlignVertical="top"
+              placeholderTextColor="#888888"
+              placeholder="Senha"
+              onFocus={() => setIsPasswordFocused(true)}
+              onBlur={() => setIsPasswordFocused(false)}
+            />
+            <View className="absolute nset-y-0 left-0 flex items-center pl-2">
+              {/* <Icon name="eye" size={16} color="#888888" /> */}
+            </View>
+          </View>
 
           <TouchableOpacity
             onPress={() => router.push("/base")}
