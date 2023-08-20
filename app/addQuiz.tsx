@@ -1,26 +1,26 @@
 import { useRouter } from 'expo-router';
 import Icon from '@expo/vector-icons/Feather'
-import { useState } from 'react';
+import { ElementType, ReactNode, useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View, Dimensions, Modal, SafeAreaView, FlatList } from 'react-native';
 const { width } = Dimensions.get('window');
-interface OptionsType{
+
+interface OptionsType {
   id: string
   nome: string
 }
 
-
 const levelsOptions: OptionsType[] = [
   {
     id: '1',
-    nome:"1"
+    nome: "1"
   },
   {
     id: '2',
-    nome:"2"
+    nome: "2"
   },
   {
     id: '3',
-    nome:"3"
+    nome: "3"
   },
 ]
 
@@ -38,34 +38,38 @@ const materiaOptions: OptionsType[] = [
     nome: 'Física',
   },
 ]
+const SelectOptions = ({item, selected, change}) => {
+  return (
+    <TouchableOpacity
+      onPress={() => change(item.nome, item.id)}
+      className={`flex-row items-center justify-between border-b-2 border-[#ddd] p-3 ${item.id === selected && 'bg-slate-200'}`}
+    >
+      <Text className='text-sm text-[#555]'>
+        {item.nome}
+      </Text>
+      {item.id === selected && <Icon name='check' size={26} color={'green'} />}
+    </TouchableOpacity>
+  )
+}
 
-const Select = ({ options, onChangeSelect, text,label }:
+const Select = ({ options, onChangeSelect, text, label, OptionComponent }:
   {
     text: string,
     options: OptionsType[],
     onChangeSelect: (id: string) => void,
-    label:string
+    label: string,
+    OptionComponent: ElementType
   }) => {
   const [txt, setTxt] = useState(text);
   const [selected, setSelected] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   function renderOption(item: OptionsType) {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          setModalVisible(false);
-          onChangeSelect(item.id)
-          setSelected(item.id)
-          setTxt(item.nome)
-        }}
-        className={`flex-row items-center justify-between border-b-2 border-[#ddd] p-3 ${item.id === selected && 'bg-slate-200'}`}
-      >
-        <Text className='text-sm text-[#555]'>
-          {item.nome}
-        </Text>
-        {item.id === selected && <Icon name='check' size={26} color={'green'} />}
-      </TouchableOpacity>
-    )
+    return <OptionComponent item={item} selected={selected} change={(nome, id) => {
+      setModalVisible(false);
+      onChangeSelect(id)
+      setSelected(id)
+      setTxt(nome)
+    }} />
   }
   return (
     <View>
@@ -126,12 +130,14 @@ export default function addQuiz() {
           text='Selecione a Materia'
           options={materiaOptions}
           onChangeSelect={(id) => console.log(id)}
+          OptionComponent={SelectOptions}
           label='Matéria'
         />
         <Select
           text='Selecione o Nível'
           options={levelsOptions}
           onChangeSelect={(id) => console.log(id)}
+          OptionComponent={SelectOptions}
           label='Nível'
         />
 
