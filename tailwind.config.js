@@ -2,9 +2,15 @@
 const nativewind = require('nativewind/tailwind/css')
 
 module.exports = {
- content: ["./App.tsx", "./app/**/*.{js,jsx,ts,tsx}"],
+  content: ["./App.tsx", "./app/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        title: 'Poppins_700Bold',
+        body: 'Poppins_400Regular',
+        alt: 'Poppins_900Black',
+      },
+    },
   },
   plugins: [nativewind],
 }
