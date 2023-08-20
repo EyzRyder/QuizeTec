@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        title: 'Poppins_700Bold',
+        title: 'Poppins_600SemiBold',
         body: 'Poppins_400Regular',
         alt: 'Poppins_900Black',
       },

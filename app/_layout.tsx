@@ -5,7 +5,7 @@ import { SplashScreen, Stack } from 'expo-router'
 import {
   useFonts,
   Poppins_400Regular,
-  Poppins_700Bold,
+  Poppins_600SemiBold,
   Poppins_900Black
 } from '@expo-google-fonts/poppins'
 
@@ -13,7 +13,7 @@ import {
 export default function Layout() {
   const [hasLoadedFonts] = useFonts({
     Poppins_400Regular,
-    Poppins_700Bold,
+    Poppins_600SemiBold,
     Poppins_900Black
   })
 

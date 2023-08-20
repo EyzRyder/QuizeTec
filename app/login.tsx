@@ -1,4 +1,4 @@
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Icon from "@expo/vector-icons/Feather";
 import { useState } from "react";
@@ -15,7 +15,7 @@ export default function Login() {
       <View className="pb-60">
         <Image
           source={require("../assets/FallGirl.png")}
-          style={{ width: 800, height: 750 }}
+          style={{ width: 800, height: 650 }}
         />
       </View>
 

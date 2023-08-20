@@ -1,48 +1,64 @@
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import Icon from '@expo/vector-icons/Feather'
 import { useRouter } from "expo-router";
 
+const quizes = [
+  {
+    id: '10',
+    opened: true,
+    level: '1',
+    materia: 'Portuguese'
+  },
+  {
+    id: '12',
+    opened: false,
+    level: '3',
+    materia: 'Biologia'
+  },
+  {
+    id: '17',
+    opened: true,
+    level: '1',
+    materia: 'Biologia'
+  },
+  {
+    id: '13',
+    opened: false,
+    level: '2',
+    materia: 'Física'
+  },
+  {
+    id: '133',
+    opened: true,
+    level: '1',
+    materia: 'Física'
+  },
+  {
+    id: '15',
+    opened: false,
+    level: '3',
+    materia: 'Física'
+  },
+]
+
+function getBGColorByMateria(materia: string): string {
+  if (materia === 'Biologia') return 'bg-[#FD746C]'
+  if (materia === 'Física') return 'bg-[#FC67FA]'
+  if (materia === 'Portuguese') return 'bg-[#0083FE]'
+  return 'bg-blue-500'
+}
+const QuizCard = ({ id, level, materia, opened }: { id: string, level: string, materia: string, opened:boolean }) => (
+  <TouchableOpacity key={id} className={`rounded-lg w-full px-6 py-4 ${getBGColorByMateria(materia)}`}>
+    <View className="border-2 border-white rounded-md h-8 w-8 justify-center items-center">
+      {opened ? <Icon name="play" size={16} color="#FFF" /> : <Icon name="check" size={16} color="#FFF" />}
+    </View>
+    <Text className="font-bold text-xl text-white">Nível {level}</Text>
+    <Text className="font-bold text-2xl text-white">{materia}</Text>
+  </TouchableOpacity>
+);
+
 export default function Base() {
   const router = useRouter()
-  const quizes = [
-    {
-      id:10,
-      level: '1',
-      materia:'Portuguese'
-    },
-    {
-      id:12,
-      level: '1',
-      materia:'Biologia'
-    },
-    {
-      id:17,
-      level: '1',
-      materia:'Biologia'
-    },
-    {
-      id:13,
-      level: '1',
-      materia:'Física'
-    },
-    {
-      id:133,
-      level: '1',
-      materia:'Física'
-    },
-    {
-      id:15,
-      level: '1',
-      materia:'Física'
-    },
-  ]
-
-  function getBGColorByMateria(materia: string): string {
-    if (materia === 'Biologia') return 'bg-[#FD746C]'
-    if (materia === 'Física') return 'bg-[#FC67FA]'
-    if (materia === 'Portuguese') return 'bg-[#0083FE]'
-    return 'bg-blue-500'
-  }
 
   return (
     <View className="flex-1 w-full">
@@ -54,16 +70,14 @@ export default function Base() {
         <Icon name="more-vertical" size={32} color="#FFF" />
       </View>
       <View className="flex-1 px-8 py-10 space-y-2 w-full">
-        <Text className="text-3xl text-[#2A416F] font-semibold">Quizes Base</Text>
-        <ScrollView contentContainerStyle={{padding:0,margin:0, gap: 32, width:'100%'}}>
-          {quizes.map(item => (
-            <View key={item.id} className={`rounded-lg w-full p-2 ${getBGColorByMateria(item.materia)}`}>
-              <Text className="font-bold text-xl text-white">Nível {item.level}</Text>
-              <Text className="font-bold text-2xl text-white">{item.materia}</Text>
-            </View>
-          ))}
-        </ScrollView>
-        <Text className="text-3xl text-[#2A416F] font-semibold">Seus Quizes</Text>
+        <Text className="text-3xl font-title text-[#2A416F] font-semibold">Quizes Base</Text>
+          <FlatList
+            data={quizes}
+            renderItem={({ item }) => <QuizCard id={item.id} level={item.level} materia={item.materia} opened={item.opened} />}
+            keyExtractor={item => item.id}
+            contentContainerStyle={{ padding: 0, margin: 0, gap: 32, width: '100%' }}
+          />
+        <Text className="text-3xl font-title text-[#2A416F] font-semibold">Seus Quizes</Text>
         <TouchableOpacity
           onPress={() => router.push('/addQuiz')}
         >
