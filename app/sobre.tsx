@@ -1,5 +1,5 @@
 import { Link } from 'expo-router';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import Icon from '@expo/vector-icons/Feather'
 import { useRouter } from 'expo-router'
 
@@ -28,7 +28,10 @@ export default function Sobre() {
         <View className='flex-row justify-between'>
 
           <View className='space-y-2 justify-center items-center'>
-            <View className='bg-slate-700 h-28 w-28 rounded-lg'></View>
+            <Image
+              source={{ uri: 'https://avatars.githubusercontent.com/u/85580011?v=4' }}
+              className='h-28 w-28 rounded-lg'
+            />
             <View>
               <Text className='text-xl'>Gabriel B.</Text>
               <Text className='text-sm w-36'>
@@ -46,7 +49,10 @@ export default function Sobre() {
             </View>
           </View>
           <View className='space-y-2 justify-center items-center'>
-            <View className='bg-slate-700 h-28 w-28 rounded-lg'></View>
+            <Image
+              source={{ uri: 'https://avatars.githubusercontent.com/u/98243777?v=4' }}
+              className='h-28 w-28 rounded-lg'
+            />
             <View>
               <Text className='text-xl'>Kauã M.</Text>
               <Text className='text-sm  w-36'>
