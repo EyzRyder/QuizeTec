@@ -1,8 +1,10 @@
 import { useRouter } from 'expo-router';
 import Icon from '@expo/vector-icons/Feather'
-import { ElementType, ReactNode, useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View, Dimensions, Modal, SafeAreaView, FlatList } from 'react-native';
+import { ElementType, ReactNode, useEffect, useState } from 'react';
+import { ScrollView, Text, TouchableOpacity, View, Dimensions, Modal, SafeAreaView, FlatList, TextInput } from 'react-native';
+import { useNewQuiz, useQuizStore } from '../src/lib/store';
 const { width } = Dimensions.get('window');
+import uuid from 'react-native-uuid';
 
 interface OptionsType {
   id: string
@@ -38,7 +40,8 @@ const materiaOptions: OptionsType[] = [
     nome: 'Física',
   },
 ]
-const SelectOptions = ({item, selected, change}) => {
+
+const SelectOptions = ({ item, selected, change }) => {
   return (
     <TouchableOpacity
       onPress={() => change(item.nome, item.id)}
@@ -56,7 +59,7 @@ const Select = ({ options, onChangeSelect, text, label, OptionComponent }:
   {
     text: string,
     options: OptionsType[],
-    onChangeSelect: (id: string) => void,
+    onChangeSelect: (select: string) => void,
     label: string,
     OptionComponent: ElementType
   }) => {
@@ -66,7 +69,7 @@ const Select = ({ options, onChangeSelect, text, label, OptionComponent }:
   function renderOption(item: OptionsType) {
     return <OptionComponent item={item} selected={selected} change={(nome, id) => {
       setModalVisible(false);
-      onChangeSelect(id)
+      onChangeSelect(nome)
       setSelected(id)
       setTxt(nome)
     }} />
@@ -109,42 +112,70 @@ const Select = ({ options, onChangeSelect, text, label, OptionComponent }:
     </View>
   )
 }
+
 export default function addQuiz() {
   const router = useRouter()
+  const { addQuiz } = useQuizStore()
+  const { quiz, addId, addLevel, addMateria, addQuestionsId, addTitle, resetQuiz } = useNewQuiz()
 
+  function adicionarQuiz() {
+    addQuiz({ ...quiz, id: String(uuid.v4()), QuestionsId: String(uuid.v4()) })
+    resetQuiz()
+    router.back()
+  }
   return (
     <View className='flex-1'>
       <View className='flex-row px-2 pt-12 pb-6 justify-start items-center bg-blue-500 rounded-b-3xl'>
         <TouchableOpacity
-          onPress={() => router.back()}
+          onPress={() => { resetQuiz(); router.back()}}
           className="h-10 w-10 items-center justify-center">
           <Icon name="chevron-left" size={32} color="#ffff" />
         </TouchableOpacity>
         <Text className='font-title text-2xl leading-tight text-white '>Inicio</Text>
       </View>
-      <ScrollView contentContainerStyle={{ padding: 12, margin: 0, width: '100%' }}>
-        <Text className='font-title text-2xl text-[#2A416F]'>
-          Tema & Nível
-        </Text>
-        <Select
-          text='Selecione a Materia'
-          options={materiaOptions}
-          onChangeSelect={(id) => console.log(id)}
-          OptionComponent={SelectOptions}
-          label='Matéria'
-        />
-        <Select
-          text='Selecione o Nível'
-          options={levelsOptions}
-          onChangeSelect={(id) => console.log(id)}
-          OptionComponent={SelectOptions}
-          label='Nível'
-        />
+      <ScrollView contentContainerStyle={{ padding: 12, margin: 0, width: '100%', gap: 16 }}>
+        <View>
+          <Text>{quiz.level}</Text>
+          <Text>Titulo</Text>
+          <TextInput value={quiz.title} onChangeText={addTitle} />
+          <Text className='font-title text-2xl text-[#2A416F]'>
+            Tema & Nível
+          </Text>
+          <Select
+            text='Selecione a Materia'
+            options={materiaOptions}
+            onChangeSelect={(select) => addMateria(select)}
+            OptionComponent={SelectOptions}
+            label='Matéria'
+          />
+          <Select
+            text='Selecione o Nível'
+            options={levelsOptions}
+            onChangeSelect={(select) => addLevel(select)}
+            OptionComponent={SelectOptions}
+            label='Nível'
+          />
+        </View>
 
-        <Text className='font-title text-2xl text-[#2A416F]'>
-          Questões & Alternativas
-        </Text>
+        <View className='flex-1'>
+          <View className='flex-row justify-between items-center'>
+            <Text className='font-title text-2xl text-[#2A416F]'>
+              Questões
+            </Text>
+            <TouchableOpacity>
+              <Icon name='plus-circle' size={26} color={'#2A416F'} />
+            </TouchableOpacity>
+          </View>
+        </View>
       </ScrollView>
+      <TouchableOpacity
+        className="w-fit flex-row items-end justify-center rounded-lg bg-blue-500 py-4 mx-4 my-3"
+        onPress={adicionarQuiz}
+      >
+        <Text className='text-white text-2xl'>
+          Adicionar Quiz
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }

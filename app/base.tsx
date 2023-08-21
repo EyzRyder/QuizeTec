@@ -1,45 +1,7 @@
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import Icon from '@expo/vector-icons/Feather'
 import { useRouter } from "expo-router";
-
-const quizes = [
-  {
-    id: '10',
-    opened: true,
-    level: '1',
-    materia: 'Portuguese'
-  },
-  {
-    id: '12',
-    opened: false,
-    level: '3',
-    materia: 'Biologia'
-  },
-  {
-    id: '17',
-    opened: true,
-    level: '1',
-    materia: 'Biologia'
-  },
-  {
-    id: '13',
-    opened: false,
-    level: '2',
-    materia: 'Física'
-  },
-  {
-    id: '133',
-    opened: true,
-    level: '1',
-    materia: 'Física'
-  },
-  {
-    id: '15',
-    opened: false,
-    level: '3',
-    materia: 'Física'
-  },
-]
+import { useQuizStore } from "../src/lib/store";
 
 function getBGColorByMateria(materia: string): string {
   if (materia === 'Biologia') return 'bg-[#FD746C]'
@@ -47,18 +9,20 @@ function getBGColorByMateria(materia: string): string {
   if (materia === 'Portuguese') return 'bg-[#0083FE]'
   return 'bg-blue-500'
 }
-const QuizCard = ({ id, level, materia, opened }: { id: string, level: string, materia: string, opened:boolean }) => (
+
+const QuizCard = ({ id, level, materia, opened, title }: { id: string, title:string, level: string, materia: string, opened:boolean }) => (
   <TouchableOpacity key={id} className={`rounded-lg w-full px-6 py-4 ${getBGColorByMateria(materia)}`}>
     <View className="border-2 border-white rounded-md h-8 w-8 justify-center items-center">
       {opened ? <Icon name="play" size={16} color="#FFF" /> : <Icon name="check" size={16} color="#FFF" />}
     </View>
     <Text className="font-bold text-xl text-white">Nível {level}</Text>
-    <Text className="font-bold text-2xl text-white">{materia}</Text>
+    <Text className="font-bold text-2xl text-white">{materia} - {title}</Text>
   </TouchableOpacity>
 );
 
 export default function Base() {
-  const router = useRouter()
+  const router = useRouter();
+  const {quizes} = useQuizStore()
 
   return (
     <View className="flex-1 w-full">
@@ -73,7 +37,7 @@ export default function Base() {
         <Text className="text-3xl font-title text-[#2A416F] font-semibold">Quizes Base</Text>
           <FlatList
             data={quizes}
-            renderItem={({ item }) => <QuizCard id={item.id} level={item.level} materia={item.materia} opened={item.opened} />}
+            renderItem={({ item }) => <QuizCard id={item.id} title={item.title} level={item.level} materia={item.materia} opened={item.opened} />}
             keyExtractor={item => item.id}
             contentContainerStyle={{ padding: 0, margin: 0, gap: 32, width: '100%' }}
           />
