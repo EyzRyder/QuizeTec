@@ -166,30 +166,28 @@ export default function addQuiz() {
         </View>
         <ScrollView contentContainerStyle={{ padding: 12, margin: 0, width: '100%', gap: 16 }}>
           <View>
+            <Text className='font-title text-2xl text-[#2A416F]'>
+              Titulo do quiz
+            </Text>
             <TextInput
               value={quiz.title}
               onChangeText={addTitle}
-              className='w-fit'
+              className='w-fit px-4 mx-5 rounded-lg border-2 border-blue-500 py-2'
               style={{
                 backgroundColor: "#fff",
-                borderRadius: 20,
-                marginBottom: 0,
-                paddingHorizontal: 18,
-                marginHorizontal: 12,
-                paddingVertical: 8,
                 shadowColor: "#000",
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: 0.25,
                 fontSize: 14,
                 shadowRadius: 3.84,
-                borderColor: "#4A92FF",
-                borderWidth: 2,
                 color: "black",
               }}
               textAlignVertical="center"
               placeholderTextColor="#888888"
               placeholder="titulo"
             />
+          </View>
+          <View>
             <Text className='font-title text-2xl text-[#2A416F]'>
               Tema & Nível
             </Text>
@@ -221,13 +219,12 @@ export default function addQuiz() {
             <View className='space-y-2'>
               {
                 questions.map((item) =>
-                  <View key={item.id} className='w-fit mx-4 space-y-2'>
-                    <View className='border-2 border-blue-500 px-2 py-3 w-full rounded-lg'>
+                  <View key={item.id} className='w-fit flex-row justify-between items-center'>
+                    <Icon name='trash' size={26} color={'red'} />
+                    <TouchableOpacity className='w-fit border-2 flex-row justify-between items-center border-blue-500 px-2 py-3 w-full rounded-lg'>
                       <Text>{item.title}</Text>
-                    </View>
-                    {item.answers.map((answer) => <View className={`border-2  px-2 py-3 w-full rounded-lg ${answer.isRight ? 'border-green-500' : 'border-gray-500'}`}>
-                      <Text>{answer.title}</Text>
-                    </View>)}
+                      <Icon name='chevron-right' size={26} color={"#2A416F"} />
+                    </TouchableOpacity>
                   </View>
                 )
               }
@@ -311,7 +308,8 @@ export default function addQuiz() {
                     value={answerARight}
                     onValueChange={() => { setAnswerARight(true); setAnswerBRight(false); setAnswerCRight(false); setAnswerDRight(false) }}
                     trackColor={{ false: '#2A416F', true: '#00FFF0 ' }}
-                    thumbColor={'#4A92FF'} />
+                    thumbColor={'#4A92FF'}
+                  />
                 </View>
               </View>
               <TextInput
