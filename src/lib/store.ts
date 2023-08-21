@@ -1,12 +1,12 @@
 import { create } from 'zustand';
 
-interface Questions {
+interface QuestionType {
   id: string
   title: string
   answers: AnswersType[]
 }
 
-interface AnswersType{
+interface AnswersType {
   id: string
   title: string
   isRight: boolean
@@ -18,7 +18,7 @@ interface QuizType {
   opened: boolean
   level: string
   materia: string
-  QuestionsId: string
+  Questions: QuestionType[]
 }
 
 type QuizStoreType = {
@@ -32,52 +32,26 @@ type AddingQuizStoreType = {
   addTitle: (title: string) => void
   addLevel: (level: string) => void
   addMateria: (materia: string) => void
-  addQuestionsId: (questionsId: string) => void
+  addQuestions: (questions: QuestionType) => void
   resetQuiz: () => void
+}
+type QuestionsStoreType = {
+  questions: QuestionType[] | null
+  addQuestion: (item: QuestionType) => void
+  deleteQuestion: (id: string) => void
+  resetQuestion: () => void
 }
 
 export const useQuizStore = create<QuizStoreType>()((set) => ({
-  // quizes: [
-  //    {
-  //   id: '10',
-  //   opened: true,
-  //   level: '1',
-  //   materia: 'Portuguese'
-  // },
-  // {
-  //   id: '12',
-  //   opened: false,
-  //   level: '3',
-  //   materia: 'Biologia'
-  // },
-  // {
-  //   id: '17',
-  //   opened: true,
-  //   level: '1',
-  //   materia: 'Biologia'
-  // },
-  // {
-  //   id: '13',
-  //   opened: false,
-  //   level: '2',
-  //   materia: 'Física'
-  // },
-  // {
-  //   id: '133',
-  //   opened: true,
-  //   level: '1',
-  //   materia: 'Física'
-  // },
-  // {
-  //   id: '15',
-  //   opened: false,
-  //   level: '3',
-  //   materia: 'Física'
-  // },
-  // ],
   quizes: [],
   addQuiz: (item) => set((state) => ({ quizes: [...state.quizes, item] }),),
   deleteQuiz: (id) => set((state) => ({ quizes: state.quizes.filter(quiz => { quiz.id !== id }) }))
+}))
+export const useQuestionsStore = create<QuestionsStoreType>()((set) => ({
+  questions: [],
+  addQuestion: (item) => set((state) => ({ questions: [...state.questions, item] }),),
+  deleteQuestion: (id) => set((state) => ({ questions: state.questions.filter(question => { question.id !== id }) })),
+  resetQuestion: () => set((state) => ({ questions: [] }),),
 }))
 
 export const useNewQuiz = create<AddingQuizStoreType>()((set) => ({
@@ -87,12 +61,12 @@ export const useNewQuiz = create<AddingQuizStoreType>()((set) => ({
     opened: false,
     level: '',
     materia: '',
-    QuestionsId: '',
+    Questions: [],
   },
   addId: (id) => set((state) => ({ quiz: { ...state.quiz, id } }),),
   addTitle: (title) => set((state) => ({ quiz: { ...state.quiz, title } }),),
   addLevel: (level) => set((state) => ({ quiz: { ...state.quiz, level } }),),
   addMateria: (materia) => set((state) => ({ quiz: { ...state.quiz, materia } }),),
-  addQuestionsId: (questionsId) => set((state) => ({ quiz: { ...state.quiz, questionsId } }),),
-  resetQuiz: () => set((state) => ({ quiz: { id: '', title: '', opened: false, level: '', materia: '', QuestionsId: '', } }),),
+  addQuestions: (questions) => set((state) => ({ quiz: { ...state.quiz, questions } }),),
+  resetQuiz: () => set((state) => ({ quiz: { id: '', title: '', opened: false, level: '', materia: '', Questions: [], } }),),
 }))
