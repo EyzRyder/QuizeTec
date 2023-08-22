@@ -1,6 +1,6 @@
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import Icon from '@expo/vector-icons/Feather'
-import { useRouter } from "expo-router";
+import { router, useRouter } from "expo-router";
 import { useQuizStore } from "../src/lib/store";
 
 function getBGColorByMateria(materia: string): string {
@@ -11,7 +11,10 @@ function getBGColorByMateria(materia: string): string {
 }
 
 const QuizCard = ({ id, level, materia, opened, title }: { id: string, title:string, level: string, materia: string, opened:boolean }) => (
-  <TouchableOpacity key={id} className={`rounded-lg w-full px-6 py-4 ${getBGColorByMateria(materia)}`}>
+  <TouchableOpacity
+    onPress={()=>router.push(`quiz/menu/${id}`)}
+    className={`rounded-lg w-full px-6 py-4 ${getBGColorByMateria(materia)}`}
+  >
     <View className="border-2 border-white rounded-md h-8 w-8 justify-center items-center">
       {opened ? <Icon name="play" size={16} color="#FFF" /> : <Icon name="check" size={16} color="#FFF" />}
     </View>
