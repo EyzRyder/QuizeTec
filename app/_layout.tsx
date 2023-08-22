@@ -45,6 +45,9 @@ export default function Layout() {
       >
         <Stack.Screen name="index" />
         <Stack.Screen name="sobre" />
+        <Stack.Screen name="login" />
+        <Stack.Screen name="base" />
+        <Stack.Screen name="addQuiz" />
       </Stack>
     </View>
   )

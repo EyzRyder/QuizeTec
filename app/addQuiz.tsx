@@ -5,6 +5,7 @@ import { ScrollView, Text, TouchableOpacity, View, Dimensions, Modal, SafeAreaVi
 import { useNewQuiz, useQuestionsStore, useQuizStore } from '../src/lib/store';
 const { width } = Dimensions.get('window');
 import uuid from 'react-native-uuid';
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface OptionsType {
   id: string
@@ -55,14 +56,7 @@ const SelectOptions = ({ item, selected, change }) => {
   )
 }
 
-const Select = ({ options, onChangeSelect, text, label, OptionComponent }:
-  {
-    text: string,
-    options: OptionsType[],
-    onChangeSelect: (select: string) => void,
-    label: string,
-    OptionComponent: ElementType
-  }) => {
+const Select = ({ options, onChangeSelect, text, OptionComponent }:{ text: string, options: OptionsType[], onChangeSelect: (select: string) => void, OptionComponent: ElementType }) => {
   const [txt, setTxt] = useState(text);
   const [selected, setSelected] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
@@ -75,12 +69,11 @@ const Select = ({ options, onChangeSelect, text, label, OptionComponent }:
     }} />
   }
   return (
-    <View>
-      <Text className='text-base pl-5 py-2 text-[#2A416F]'>{label}</Text>
+    <>
       <TouchableOpacity
         onPress={() => setModalVisible(true)}
-        className='h-[50px] flex-row justify-between items-center bg-[#f8f9fa] px-4 mx-5 rounded-lg border-2 border-blue-500'>
-        <Text className={`text-base w-[${width - 90}]`} numberOfLines={1}>{txt}</Text>
+        className='h-[50px] mb-3 flex-row justify-between items-center bg-[#f8f9fa] px-4 mx-5 rounded-2xl border-4 border-blue-500'>
+        <Text className={`text-base w-[${width - 90}px]`} numberOfLines={1}>{txt}</Text>
         <Icon name='chevron-down' size={26} color={'blue'} />
       </TouchableOpacity>
       <Modal
@@ -109,7 +102,7 @@ const Select = ({ options, onChangeSelect, text, label, OptionComponent }:
           />
         </SafeAreaView>
       </Modal>
-    </View>
+    </>
   )
 }
 
@@ -164,15 +157,15 @@ export default function addQuiz() {
           </TouchableOpacity>
           <Text className='font-title text-2xl leading-tight text-white '>Inicio</Text>
         </View>
-        <ScrollView contentContainerStyle={{ padding: 12, margin: 0, width: '100%', gap: 16 }}>
-          <View>
+        <ScrollView contentContainerStyle={{ paddingHorizontal: 32, paddingVertical: 24, margin: 0, width: '100%', gap: 16 }}>
+          <View className='space-y-3'>
             <Text className='font-title text-2xl text-[#2A416F]'>
               Titulo do quiz
             </Text>
             <TextInput
               value={quiz.title}
               onChangeText={addTitle}
-              className='w-fit px-4 mx-5 rounded-lg border-2 border-blue-500 py-2'
+              className='w-fit px-4 mx-5 rounded-2xl border-4 border-blue-500 py-2'
               style={{
                 backgroundColor: "#fff",
                 shadowColor: "#000",
@@ -188,25 +181,23 @@ export default function addQuiz() {
             />
           </View>
           <View>
-            <Text className='font-title text-2xl text-[#2A416F]'>
+            <Text className='font-title text-2xl text-[#2A416F] mb-3'>
               Tema & Nível
             </Text>
             <Select
-              text='Selecione a Materia'
+              text='Escolha o Nível'
               options={materiaOptions}
               onChangeSelect={(select) => addMateria(select)}
               OptionComponent={SelectOptions}
-              label='Matéria'
             />
             <Select
-              text='Selecione o Nível'
+              text='Escolha a Matéria'
               options={levelsOptions}
               onChangeSelect={(select) => addLevel(select)}
               OptionComponent={SelectOptions}
-              label='Nível'
             />
           </View>
-          <View>
+          <View className='gap-3'>
             <View className='flex-row justify-between items-center'>
               <Text className='font-title text-2xl text-[#2A416F]'>
                 Questões
@@ -219,10 +210,10 @@ export default function addQuiz() {
             <View className='space-y-2'>
               {
                 questions.map((item) =>
-                  <View key={item.id} className='w-fit flex-row justify-between items-center'>
-                    <Icon name='trash' size={26} color={'red'} />
-                    <TouchableOpacity className='w-fit border-2 flex-row justify-between items-center border-blue-500 px-2 py-3 w-full rounded-lg'>
-                      <Text>{item.title}</Text>
+                  <View key={item.id} className={`flex-row justify-between items-center space-x-3 `}>
+                    <Icon name='trash' size={26} color={'#2A416F'} />
+                    <TouchableOpacity className={`w-[290] border-2 flex-row justify-between items-center border-blue-500 px-2 py-3 rounded-2xl`}>
+                      <Text numberOfLines={1}>{item.title}</Text>
                       <Icon name='chevron-right' size={26} color={"#2A416F"} />
                     </TouchableOpacity>
                   </View>
@@ -233,12 +224,17 @@ export default function addQuiz() {
           </View>
         </ScrollView>
         <TouchableOpacity
-          className="w-fit flex-row items-end justify-center rounded-lg bg-blue-500 py-4 mx-4 my-3"
           onPress={adicionarQuiz}
-        >
+          >
+          <LinearGradient
+            className="w-fit flex-row items-end justify-center rounded-lg bg-blue-500 py-4 mx-4 my-3"
+            start={{x:0.1, y:0.2}}
+            colors={['#FD746C', '#FE846A', '#FF9068']}
+          >
           <Text className='text-white text-2xl'>
-            Adicionar Quiz
-          </Text>
+            Finalizar Quiz
+            </Text>
+            </LinearGradient>
         </TouchableOpacity>
       </View>
       <Modal

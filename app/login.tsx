@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
-import Icon from "@expo/vector-icons/Feather";
+// import Icon from "@expo/vector-icons/Feather";
 import { useState } from "react";
 
 export default function Login() {
@@ -10,12 +10,16 @@ export default function Login() {
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const router = useRouter();
 
+  function handleLogin() {
+    router.push("base")
+  }
+
   return (
     <View className="flex-1 items-center px-10 py-40 justify-around">
       <View className="pb-60">
         <Image
           source={require("../src/assets/FallGirl.png")}
-          style={{ width: 800, height: 650 }}
+          style={{ width: 800, height: 550 }}
         />
       </View>
 
@@ -85,7 +89,7 @@ export default function Login() {
           </View>
 
           <TouchableOpacity
-            onPress={() => router.push("/base")}
+            onPress={handleLogin}
             className="w-full items-center justify-center rounded-[20px] bg-[#4A92FF] py-4"
           >
             <Text className="text-white font-medium text-[21px]">Entrar</Text>
