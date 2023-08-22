@@ -50,7 +50,7 @@ export const useQuizStore = create<QuizStoreType>()((set) => ({
 export const useQuestionsStore = create<QuestionsStoreType>()((set) => ({
   questions: [],
   addQuestion: (item) => set((state) => ({ questions: [...state.questions, item] }),),
-  deleteQuestion: (id) => set((state) => ({ questions: state.questions.filter(question => { question.id !== id }) })),
+  deleteQuestion: (id) => set((state) => ({ questions: state.questions.filter(question =>  question.id !== id ) })),
   resetQuestion: () => set((state) => ({ questions: [] }),),
 }))
 

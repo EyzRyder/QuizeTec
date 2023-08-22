@@ -56,7 +56,7 @@ const SelectOptions = ({ item, selected, change }) => {
   )
 }
 
-const Select = ({ options, onChangeSelect, text, OptionComponent }:{ text: string, options: OptionsType[], onChangeSelect: (select: string) => void, OptionComponent: ElementType }) => {
+const Select = ({ options, onChangeSelect, text, OptionComponent }: { text: string, options: OptionsType[], onChangeSelect: (select: string) => void, OptionComponent: ElementType }) => {
   const [txt, setTxt] = useState(text);
   const [selected, setSelected] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
@@ -110,8 +110,9 @@ export default function addQuiz() {
   const router = useRouter()
   const { addQuiz } = useQuizStore()
   const { questions, addQuestion, deleteQuestion, resetQuestion } = useQuestionsStore()
-  const { quiz, addId, addLevel, addMateria, addQuestions, addTitle, resetQuiz } = useNewQuiz()
+  const { quiz, addLevel, addMateria, addTitle, resetQuiz } = useNewQuiz()
   const [modalQVisible, setModalQVisible] = useState(false);
+  const [questaoId, setQuestaoId] = useState<string|null>(null);
   const [questao, setQuestao] = useState('');
   const [answerA, setAnswerA] = useState('');
   const [answerB, setAnswerB] = useState('');
@@ -140,6 +141,11 @@ export default function addQuiz() {
     setAnswerB('');
     setAnswerC('');
     setAnswerD('');
+    setAnswerARight(false);
+    setAnswerBRight(false);
+    setAnswerCRight(false);
+    setAnswerDRight(false);
+    setQuestaoId(null)
   }
   function goBack() {
     fullReset()
@@ -185,13 +191,13 @@ export default function addQuiz() {
               Tema & Nível
             </Text>
             <Select
-              text='Escolha o Nível'
+              text='Escolha a Matéria'
               options={materiaOptions}
               onChangeSelect={(select) => addMateria(select)}
               OptionComponent={SelectOptions}
             />
             <Select
-              text='Escolha a Matéria'
+              text='Escolha o Nível'
               options={levelsOptions}
               onChangeSelect={(select) => addLevel(select)}
               OptionComponent={SelectOptions}
@@ -211,10 +217,32 @@ export default function addQuiz() {
               {
                 questions.map((item) =>
                   <View key={item.id} className={`flex-row justify-between items-center space-x-3 `}>
-                    <Icon name='trash' size={26} color={'#2A416F'} />
-                    <TouchableOpacity className={`w-[290] border-2 flex-row justify-between items-center border-blue-500 px-2 py-3 rounded-2xl`}>
-                      <Text numberOfLines={1}>{item.title}</Text>
-                      <Icon name='chevron-right' size={26} color={"#2A416F"} />
+                    <TouchableOpacity
+                      onPress={() => {
+                        deleteQuestion(item.id)
+                      }}
+                    >
+                      <Icon name='trash' size={26} color={'#2A416F'} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        const q = questions.filter(question => question.id === item.id)
+                        console.log(q[0].answers);
+                        setQuestaoId(q[0].id)
+                        setQuestao(q[0].title);
+                        setAnswerA(q[0].answers[0].title);
+                        setAnswerB(q[0].answers[1].title);
+                        setAnswerC(q[0].answers[2].title);
+                        setAnswerD(q[0].answers[3].title);
+                        setAnswerARight(q[0].answers[0].isRight);
+                        setAnswerBRight(q[0].answers[1].isRight);
+                        setAnswerCRight(q[0].answers[2].isRight);
+                        setAnswerDRight(q[0].answers[3].isRight);
+                        setModalQVisible(true)
+                      }}
+                      className={`w-[290] border-2 flex-row justify-between items-center border-blue-500 px-2 py-3 rounded-2xl`}>
+                      <Text className='w-[240]' numberOfLines={1}>{item.title}</Text>
+                      <Icon name='chevron-right' size={26} color={"#4A92FF"} />
                     </TouchableOpacity>
                   </View>
                 )
@@ -225,32 +253,28 @@ export default function addQuiz() {
         </ScrollView>
         <TouchableOpacity
           onPress={adicionarQuiz}
-          >
+        >
           <LinearGradient
             className="w-fit flex-row items-end justify-center rounded-lg bg-blue-500 py-4 mx-4 my-3"
-            start={{x:0.1, y:0.2}}
+            start={{ x: 0.1, y: 0.2 }}
             colors={['#FD746C', '#FE846A', '#FF9068']}
           >
-          <Text className='text-white text-2xl'>
-            Finalizar Quiz
+            <Text className='text-white text-2xl'>
+              Finalizar Quiz
             </Text>
-            </LinearGradient>
+          </LinearGradient>
         </TouchableOpacity>
       </View>
       <Modal
         animationType='fade'
         visible={modalQVisible}
         onRequestClose={() => {
-          setQuestao('');
-          setAnswerA('');
-          setAnswerB('');
-          setAnswerC('');
-          setAnswerD('');
+          resetQuestionAnswers()
           setModalQVisible(false);
         }}
       >
         <SafeAreaView className='flex-1'>
-          <View className=' flex-row items-center justify-between px-3 py-3 border-b-2 border-[#ddd]'>
+          <View className='flex-row px-2 py-5 justify-start items-center bg-blue-500 rounded-b-3xl'>
             <TouchableOpacity
               onPress={() => {
                 setQuestao('');
@@ -260,199 +284,191 @@ export default function addQuiz() {
                 setAnswerD('');
                 setModalQVisible(false);
               }}
+              className='h-10 w-10 items-center justify-center'
             >
-              <Icon name='chevron-left' size={30} color={'#2A416F'} />
+              <Icon name='chevron-left' size={30} color={'#fff'} />
             </TouchableOpacity>
-            <Text className='font-title text-lg text-[#2A416F]'>Questão</Text>
-            <TouchableOpacity
-              onPress={() => { resetQuestionAnswers(); setModalQVisible(false) }}
-            >
-              <Text className='text-sm font-bold text-[#2A416F]'>Cancela</Text>
-            </TouchableOpacity>
+            <Text className='font-title text-center text-2xl leading-tight text-white '>
+              {quiz.title}
+            </Text>
           </View>
-          <View className='flex-1 justify-center space-y-4'>
-            <TextInput
-              value={questao}
-              onChangeText={setQuestao}
-              className='w-fit'
-              style={{
-                backgroundColor: "#fff",
-                borderRadius: 20,
-                marginBottom: 0,
-                paddingHorizontal: 18,
-                marginHorizontal: 12,
-                paddingVertical: 8,
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.25,
-                fontSize: 14,
-                shadowRadius: 3.84,
-                borderColor: "#4A92FF",
-                borderWidth: 2,
-                color: "black",
-              }}
-              textAlignVertical="center"
-              placeholderTextColor="#888888"
-              placeholder="titulo"
-            />
+          <ScrollView contentContainerStyle={{ paddingHorizontal: 32, paddingVertical: 24,margin: 0, width: '100%', gap: 26 }} className='flex-1'>
+            <View className='gap-3'>
+              <Text className='font-title text-2xl text-[#2A416F]'>
+                Pergunta
+              </Text>
+              <TextInput
+                value={questao}
+                onChangeText={setQuestao}
+                className='w-fit px-4 rounded-2xl text-xl border-4 border-blue-500 py-2'
+                style={{
+                  backgroundColor: "#fff",
+                  marginBottom: 0,
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.25,
+                  shadowRadius: 3.84,
+                }}
+                textAlignVertical="center"
+                textAlign='center'
+                placeholderTextColor="#888888"
+                placeholder="Titulo"
+              />
+            </View>
             <View>
-              <View className='flex-row justify-between items-center'>
-                <Text>Resposta A</Text>
-                <View className='flex-row justify-between items-center'>
-                  <Text>Resposta certa</Text>
-                  <Switch
-                    value={answerARight}
-                    onValueChange={() => { setAnswerARight(true); setAnswerBRight(false); setAnswerCRight(false); setAnswerDRight(false) }}
-                    trackColor={{ false: '#2A416F', true: '#00FFF0 ' }}
-                    thumbColor={'#4A92FF'}
+              <Text className='font-title text-2xl text-[#2A416F]'>
+                Alternativas
+              </Text>
+              <View className='gap-6'>
+                <View>
+                  <View className='flex-row justify-between items-center'>
+                    <Text className='font-normal text-lg'>A.</Text>
+                    <View className='flex-row justify-between items-center'>
+                      <Text>Resposta Correta</Text>
+                      <Switch
+                        value={answerARight}
+                        onValueChange={() => { setAnswerARight(true); setAnswerBRight(false); setAnswerCRight(false); setAnswerDRight(false) }}
+                        trackColor={{ false: '#b4b6b7', true: '#7cfc00' }}
+                        thumbColor={'#d9dcdd'}
+                      />
+                    </View>
+                  </View>
+                  <TextInput
+                    value={answerA}
+                    onChangeText={setAnswerA}
+                    className='w-fit border-2 border-[#888] rounded-2xl'
+                    style={{
+                      backgroundColor: "#fff",
+                      marginBottom: 0,
+                      paddingHorizontal: 18,
+                      marginHorizontal: 12,
+                      paddingVertical: 8,
+                      shadowColor: "#000",
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.25,
+                      fontSize: 17,
+                      shadowRadius: 3.84,
+                      color: "black",
+                    }}
+                    textAlignVertical="center"
+                    placeholderTextColor="#888888"
+                    placeholder="Insira uma Resposta"
+                  />
+                </View>
+                <View>
+                  <View className='flex-row justify-between items-center'>
+                    <Text className='font-normal text-lg'>B.</Text>
+                    <View className='flex-row justify-between items-center'>
+                      <Text>Resposta Correta</Text>
+                      <Switch
+                        value={answerBRight}
+                        onValueChange={() => { setAnswerARight(false); setAnswerBRight(true); setAnswerCRight(false); setAnswerDRight(false) }}
+                        trackColor={{ false: '#b4b6b7', true: '#7cfc00' }}
+                        thumbColor={'#d9dcdd'} />
+                    </View>
+                  </View>
+                  <TextInput
+                    value={answerB}
+                    onChangeText={setAnswerB}
+                    className='w-fit border-2 border-[#888] rounded-2xl'
+                    style={{
+                      backgroundColor: "#fff",
+                      marginBottom: 0,
+                      paddingHorizontal: 18,
+                      marginHorizontal: 12,
+                      paddingVertical: 8,
+                      shadowColor: "#000",
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.25,
+                      fontSize: 17,
+                      shadowRadius: 3.84,
+                      color: "black",
+                    }}
+                    textAlignVertical="center"
+                    placeholderTextColor="#888888"
+                    placeholder="Insira uma Resposta"
+                  />
+                </View>
+                <View>
+                  <View className='flex-row justify-between items-center'>
+                    <Text className='font-normal text-lg'>C.</Text>
+                    <View className='flex-row justify-between items-center'>
+                      <Text>Resposta Correta</Text>
+                      <Switch
+                        value={answerCRight}
+                        onValueChange={() => { setAnswerARight(false); setAnswerBRight(false); setAnswerCRight(true); setAnswerDRight(false) }}
+                        trackColor={{ false: '#b4b6b7', true: '#7cfc00' }}
+                        thumbColor={'#d9dcdd'} />
+                    </View>
+                  </View>
+                  <TextInput
+                    value={answerC}
+                    onChangeText={setAnswerC}
+                    className='w-fit border-2 border-[#888] rounded-2xl'
+                    style={{
+                      backgroundColor: "#fff",
+                      marginBottom: 0,
+                      paddingHorizontal: 18,
+                      marginHorizontal: 12,
+                      paddingVertical: 8,
+                      shadowColor: "#000",
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.25,
+                      fontSize: 17,
+                      shadowRadius: 3.84,
+                      color: "black",
+                    }}
+                    textAlignVertical="center"
+                    placeholderTextColor="#888888"
+                    placeholder="Insira uma Resposta"
+                  />
+                </View>
+                <View>
+                  <View className='flex-row justify-between items-center'>
+                    <Text className='font-normal text-lg'>D.</Text>
+                    <View className='flex-row justify-between items-center'>
+                      <Text>Resposta Correta</Text>
+                      <Switch
+                        value={answerDRight}
+                        onValueChange={() => { setAnswerARight(false); setAnswerBRight(false); setAnswerCRight(false); setAnswerDRight(true) }}
+                        trackColor={{ false: '#b4b6b7', true: '#7cfc00' }}
+                        thumbColor={'#d9dcdd'} />
+                    </View>
+                  </View>
+                  <TextInput
+                    value={answerD}
+                    onChangeText={setAnswerD}
+                    className='w-fit border-2 border-[#888] rounded-2xl'
+                    style={{
+                      backgroundColor: "#fff",
+                      marginBottom: 0,
+                      paddingHorizontal: 18,
+                      marginHorizontal: 12,
+                      paddingVertical: 8,
+                      shadowColor: "#000",
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.25,
+                      fontSize: 17,
+                      shadowRadius: 3.84,
+                      color: "black",
+                    }}
+                    textAlignVertical="center"
+                    placeholderTextColor="#888888"
+                    placeholder="Insira uma Resposta"
                   />
                 </View>
               </View>
-              <TextInput
-                value={answerA}
-                onChangeText={setAnswerA}
-                className='w-fit'
-                style={{
-                  backgroundColor: "#fff",
-                  borderRadius: 20,
-                  marginBottom: 0,
-                  paddingHorizontal: 18,
-                  marginHorizontal: 12,
-                  paddingVertical: 8,
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.25,
-                  fontSize: 14,
-                  shadowRadius: 3.84,
-                  borderColor: "#4A92FF",
-                  borderWidth: 2,
-                  color: "black",
-                }}
-                textAlignVertical="center"
-                placeholderTextColor="#888888"
-                placeholder="Resposta A"
-              />
-            </View>
-            <View>
-              <View className='flex-row justify-between items-center'>
-                <Text>Resposta B</Text>
-                <View className='flex-row justify-between items-center'>
-                  <Text>Resposta certa</Text>
-                  <Switch
-                    value={answerBRight}
-                    onValueChange={() => { setAnswerARight(false); setAnswerBRight(true); setAnswerCRight(false); setAnswerDRight(false) }}
-                    trackColor={{ false: '#2A416F', true: '#00FFF0 ' }}
-                    thumbColor={'#4A92FF'} />
-                </View>
-              </View>
-              <TextInput
-                value={answerB}
-                onChangeText={setAnswerB}
-                className='w-fit'
-                style={{
-                  backgroundColor: "#fff",
-                  borderRadius: 20,
-                  marginBottom: 0,
-                  paddingHorizontal: 18,
-                  marginHorizontal: 12,
-                  paddingVertical: 8,
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.25,
-                  fontSize: 14,
-                  shadowRadius: 3.84,
-                  borderColor: "#4A92FF",
-                  borderWidth: 2,
-                  color: "black",
-                }}
-                textAlignVertical="center"
-                placeholderTextColor="#888888"
-                placeholder="Resposta B"
-              />
-            </View>
-            <View>
-              <View className='flex-row justify-between items-center'>
-                <Text>Resposta C</Text>
-                <View className='flex-row justify-between items-center'>
-                  <Text>Resposta certa</Text>
-                  <Switch
-                    value={answerCRight}
-                    onValueChange={() => { setAnswerARight(false); setAnswerBRight(false); setAnswerCRight(true); setAnswerDRight(false) }}
-                    trackColor={{ false: '#2A416F', true: '#00FFF0 ' }}
-                    thumbColor={'#4A92FF'} />
-                </View>
-              </View>
-              <TextInput
-                value={answerC}
-                onChangeText={setAnswerC}
-                className='w-fit'
-                style={{
-                  backgroundColor: "#fff",
-                  borderRadius: 20,
-                  marginBottom: 0,
-                  paddingHorizontal: 18,
-                  marginHorizontal: 12,
-                  paddingVertical: 8,
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.25,
-                  fontSize: 14,
-                  shadowRadius: 3.84,
-                  borderColor: "#4A92FF",
-                  borderWidth: 2,
-                  color: "black",
-                }}
-                textAlignVertical="center"
-                placeholderTextColor="#888888"
-                placeholder="Resposta C"
-              />
-            </View>
-            <View>
-              <View className='flex-row justify-between items-center'>
-                <Text>Resposta D</Text>
-                <View className='flex-row justify-between items-center'>
-                  <Text>Resposta certa</Text>
-                  <Switch
-                    value={answerDRight}
-                    onValueChange={() => { setAnswerARight(false); setAnswerBRight(false); setAnswerCRight(false); setAnswerDRight(true) }}
-                    trackColor={{ false: '#2A416F', true: '#00FFF0 ' }}
-                    thumbColor={'#4A92FF'} />
-                </View>
-              </View>
-              <TextInput
-                value={answerD}
-                onChangeText={setAnswerD}
-                className='w-fit'
-                style={{
-                  backgroundColor: "#fff",
-                  borderRadius: 20,
-                  marginBottom: 0,
-                  paddingHorizontal: 18,
-                  marginHorizontal: 12,
-                  paddingVertical: 8,
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.25,
-                  fontSize: 14,
-                  shadowRadius: 3.84,
-                  borderColor: "#4A92FF",
-                  borderWidth: 2,
-                  color: "black",
-                }}
-                textAlignVertical="center"
-                placeholderTextColor="#888888"
-                placeholder="Resposta D"
-              />
-            </View>
-
-
-          </View>
+</View>
+          </ScrollView>
 
           <TouchableOpacity
             className="w-fit flex-row items-end justify-center rounded-lg bg-blue-500 py-4 mx-4 my-3"
             onPress={() => {
+              if (!questao) return alert('Falta preencher o Titulo')
+              if (!answerA || !answerB || !answerC || !answerD) return alert('Falta preencher as alternativas')
+              deleteQuestion(questaoId)
               addQuestion({
-                id: String(uuid.v4()),
+                id: questaoId ? questaoId : String(uuid.v4()),
                 title: questao,
                 answers: [
                   { id: '1', isRight: answerARight, title: answerA },
