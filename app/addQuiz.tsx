@@ -471,10 +471,10 @@ export default function addQuiz() {
                 id: questaoId ? questaoId : String(uuid.v4()),
                 title: questao,
                 answers: [
-                  { id: '1', isRight: answerARight, title: answerA },
-                  { id: '2', isRight: answerBRight, title: answerB },
-                  { id: '3', isRight: answerCRight, title: answerC },
-                  { id: '4', isRight: answerDRight, title: answerD }
+                  { id: 'A', isRight: answerARight, title: answerA },
+                  { id: 'B', isRight: answerBRight, title: answerB },
+                  { id: 'C', isRight: answerCRight, title: answerC },
+                  { id: 'D', isRight: answerDRight, title: answerD }
                 ]
               })
               resetQuestionAnswers()

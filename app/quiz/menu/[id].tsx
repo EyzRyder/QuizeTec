@@ -74,10 +74,14 @@ export default function Menu() {
         </View>
       </ScrollView>
       <View className="px-9">
-        <TouchableOpacity className={`rounded-2xl bg-[${getBGColorByMateria(quiz.materia)}]`}>
+        <TouchableOpacity
+          onPress={() => { router.push(`/quiz/${id}/0`)}}
+          className={`rounded-2xl bg-[${getBGColorByMateria(quiz.materia)}]`}>
           <Text className="text-2xl font-body text-center py-4 text-white">Jogar</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => router.back()}
+>
           <Text className="text-xl font-body text-center py-4 text-[#2A416F]">Voltar ao Menu</Text>
         </TouchableOpacity>
       </View>

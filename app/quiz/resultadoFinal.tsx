@@ -1,6 +1,9 @@
+import { Text, View } from "react-native";
 
 export default function ResultadoFinal() {
   return (
-    <div>resultadoFinal</div>
+    <View>
+      <Text>resultadoFinal</Text>
+    </View>
   )
 }
