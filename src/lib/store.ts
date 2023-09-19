@@ -1,29 +1,11 @@
 import { create } from 'zustand';
+import { AnsweringType, QuestionType, QuizType } from './type';
 
-interface QuestionType {
-  id: string
-  title: string
-  answers: AnswersType[]
-}
-
-interface AnswersType {
-  id: string
-  title: string
-  isRight: boolean
-}
-
-interface QuizType {
-  id: string
-  title: string
-  opened: boolean
-  level: string
-  materia: string
-  Questions: QuestionType[]
-}
 
 type QuizStoreType = {
   quizes: QuizType[] | null
   addQuiz: (item: QuizType) => void
+  addQuizes: (item: QuizType[]) => void
   deleteQuiz: (id: string) => void
 }
 type AddingQuizStoreType = {
@@ -41,32 +23,65 @@ type QuestionsStoreType = {
   deleteQuestion: (id: string) => void
   resetQuestion: () => void
 }
+type UserStoreType = {
+  user: any | null
+  isUserAuthenticated: boolean | null
+  updateUser: (userData: any) => void
+  setIsUserAuthenticated: (data: any) => void
+}
 
-export const useQuizStore = create<QuizStoreType>()((set) => ({
+type CurAnswersStoreType = {
+  curAnswers: AnsweringType[] | null,
+  addAnswer: (answer: AnsweringType) => void,
+  resetAnswer: () => void,
+}
+
+export const useQuizStore = create<QuizStoreType>((set) => ({
   quizes: [],
   addQuiz: (item) => set((state) => ({ quizes: [...state.quizes, item] }),),
-  deleteQuiz: (id) => set((state) => ({ quizes: state.quizes.filter(quiz => { quiz.id !== id }) }))
+  addQuizes: (item) => set((state) => ({ quizes: [...item] }),),
+  deleteQuiz: (id) => set((state) => ({ quizes: state.quizes.filter(quiz =>  quiz.id !== id ) }))
 }))
-export const useQuestionsStore = create<QuestionsStoreType>()((set) => ({
+export const useQuizeAnswersStore = create<any>((set) => ({
+  quizeAnswers: [],
+  userAnswerList: [],
+  addQuizeAnswers: (item) => set((state) => ({ quizeAnswers: [...item] }),),
+  addCurUserAnswers: (item) => set((state) => ({ userAnswerList: [...item] }),),
+
+}))
+export const useQuestionsStore = create<QuestionsStoreType>((set) => ({
   questions: [],
   addQuestion: (item) => set((state) => ({ questions: [...state.questions, item] }),),
-  deleteQuestion: (id) => set((state) => ({ questions: state.questions.filter(question =>  question.id !== id ) })),
+  deleteQuestion: (id) => set((state) => ({ questions: state.questions.filter(question => question.id !== id) })),
   resetQuestion: () => set((state) => ({ questions: [] }),),
 }))
 
-export const useNewQuiz = create<AddingQuizStoreType>()((set) => ({
+export const useNewQuiz = create<AddingQuizStoreType>((set) => ({
   quiz: {
     id: '',
     title: '',
-    opened: false,
     level: '',
     materia: '',
     Questions: [],
+    createdBy:''
   },
   addId: (id) => set((state) => ({ quiz: { ...state.quiz, id } }),),
   addTitle: (title) => set((state) => ({ quiz: { ...state.quiz, title } }),),
   addLevel: (level) => set((state) => ({ quiz: { ...state.quiz, level } }),),
   addMateria: (materia) => set((state) => ({ quiz: { ...state.quiz, materia } }),),
   addQuestions: (questions) => set((state) => ({ quiz: { ...state.quiz, questions } }),),
-  resetQuiz: () => set((state) => ({ quiz: { id: '', title: '', opened: false, level: '', materia: '', Questions: [], } }),),
+  resetQuiz: () => set((state) => ({ quiz: { id: '', title: '', opened: false, level: '', materia: '', Questions: [],createdBy:'' } }),),
+}))
+
+export const useUserStore = create<UserStoreType>((set) => ({
+  user: null,
+  isUserAuthenticated: false,
+  updateUser: (userData) => set((state) => ({ user: userData })),
+  setIsUserAuthenticated: (data) => set((state) => ({ isUserAuthenticated: data }))
+}))
+
+export const useCurAnswersStore = create<CurAnswersStoreType>((set) => ({
+  curAnswers: [],
+  addAnswer: (answer) => set((state) => ({ curAnswers: [...state.curAnswers, answer] })),
+  resetAnswer: () => set((state) => ({ curAnswers: [] })),
 }))

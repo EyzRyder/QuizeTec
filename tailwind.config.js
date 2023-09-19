@@ -1,17 +1,20 @@
 /** @type {import('tailwindcss').Config} */
-const nativewind = require('nativewind/tailwind/css')
-
-module.exports = {
-  content: ["./App.tsx", "./app/**/*.{js,jsx,ts,tsx}"],
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
-    extend: {
+   extend: {
       fontFamily: {
-        title: 'Poppins_600SemiBold',
-        body: 'Poppins_400Regular',
-        alt: 'Poppins_900Black',
+        title: '',
+        body: '',
+        alt: '',
       },
+      colors: {
+        mainTitle:"#2A416F"
+      }
     },
   },
-  plugins: [nativewind],
+  plugins: [],
 }
-

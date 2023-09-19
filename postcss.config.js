@@ -1,9 +1,6 @@
-// postcss.config.js
-module.exports = {
+export default {
   plugins: {
     tailwindcss: {},
-        'nativewind/postcss': {
-      output: 'nativewind-output.js',
-    },
+    autoprefixer: {},
   },
-};
+}
