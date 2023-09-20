@@ -41,7 +41,7 @@ export default function Menu() {
                         {/* <Icon name="chevron-left" size={32} color={getBGColorByMateria(quiz.materia)} /> */}
                     </div>
                     <div className="flex flex-col justify-center items-center space-y-3">
-                        <div className="flex flex-col h-32 w-32 bg-gray-500"></div>
+                        {/* <div className="flex flex-col h-32 w-32 bg-gray-500"></div> */}
                         <p className="text-white text-xl font-title">{quiz.title}</p>
                         <div className="flex flex-row space-x-2">
                             <div className="flex flex-col rounded-md mix-blend-soft-light bg-[#1e293b66] py-1 px-4">
@@ -54,10 +54,10 @@ export default function Menu() {
 
                     </div>
                 </div>
-                <div className="flex flex-col flex-1 px-5 pt-5 pb-9 gap-7 overflow-y-scroll" >
+                <div className="flex flex-col flex-1 px-5 pt-5 pb-9 gap-7 " >
                     <div className="flex flex-col gap-4">
                         <p className="text-[#888] font-body text-lg">Resultados</p>
-                        <div className="flex flex-col flex-row justify-center space-x-5">
+                        <div className="flex flex-row justify-center space-x-5">
                             <div className="flex flex-col bg-white rounded-xl px-4 pt-4 pb-5 shadow">
                                 <div className="flex flex-row justify-between items-center space-x-8">
                                     <div className="flex flex-col h-9 w-9 bg-slate-300 rounded-full"></div>
@@ -115,7 +115,7 @@ export default function Menu() {
                             </p>
                     </div>
                     <div
-                        onClick={() => navigate("/")}
+                        onClick={() => navigate(-1)}
                     >
                         <p className="text-xl font-body text-center py-4 text-[#2A416F] cursor-pointer">Voltar ao Menu</p>
                     </div>

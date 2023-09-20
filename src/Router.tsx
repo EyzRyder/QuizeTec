@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Base from './pages/Base';
 import AddQuiz from './pages/AddQuiz';
 import Menu from './pages/Menu';
+import Quiz from './pages/Quiz';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -16,7 +17,7 @@ export const router = createBrowserRouter(
       <Route path='base' element={<Base />} />
       <Route path='addQuiz' element={<AddQuiz />} />
       <Route path="quiz" element={<Outlet />}>
-        <Route path=':id:questionIndex' element={<Sobre />} />
+        <Route path=':id/:questionIndex' element={<Quiz />} />
         <Route path='menu/:id' element={<Menu />} />
       </Route>
     </Route>
