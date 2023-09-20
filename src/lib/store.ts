@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+
 import { AnsweringType, QuestionType, QuizType, quizAnswers } from './type';
 
 
@@ -46,7 +47,7 @@ export const useQuizStore = create<QuizStoreType>((set) => ({
   quizes: [],
   addQuiz: (item) => set((state) => ({ quizes: [...state.quizes, item] }),),
   addQuizes: (item) => set((state) => ({ quizes: [...item] }),),
-  deleteQuiz: (id) => set((state) => ({ quizes: state.quizes.filter(quiz =>  quiz.id !== id ) }))
+  deleteQuiz: (id) => set((state) => ({ quizes: state.quizes.filter(quiz => quiz.id !== id) }))
 }))
 export const useQuizeAnswersStore = create<useQuizeAnswersType>((set) => ({
   quizeAnswers: [],
@@ -69,22 +70,26 @@ export const useNewQuiz = create<AddingQuizStoreType>((set) => ({
     level: '',
     materia: '',
     Questions: [],
-    createdBy:''
+    createdBy: ''
   },
   addId: (id) => set((state) => ({ quiz: { ...state.quiz, id } }),),
   addTitle: (title) => set((state) => ({ quiz: { ...state.quiz, title } }),),
   addLevel: (level) => set((state) => ({ quiz: { ...state.quiz, level } }),),
   addMateria: (materia) => set((state) => ({ quiz: { ...state.quiz, materia } }),),
   addQuestions: (questions) => set((state) => ({ quiz: { ...state.quiz, questions } }),),
-  resetQuiz: () => set((state) => ({ quiz: { id: '', title: '', opened: false, level: '', materia: '', Questions: [],createdBy:'' } }),),
+  resetQuiz: () => set((state) => ({ quiz: { id: '', title: '', opened: false, level: '', materia: '', Questions: [], createdBy: '' } }),),
 }))
 
-export const useUserStore = create<UserStoreType>((set) => ({
-  user: null,
-  isUserAuthenticated: false,
-  updateUser: (userData) => set((state) => ({ user: userData })),
-  setIsUserAuthenticated: (data) => set((state) => ({ isUserAuthenticated: data }))
-}))
+export const useUserStore = create<UserStoreType>(
+    (set) => (
+      {
+        user: null,
+        isUserAuthenticated: false,
+        updateUser: (userData) => set((state) => ({ user: userData })),
+        setIsUserAuthenticated: (data) => set((state) => ({ isUserAuthenticated: data }))
+      }
+    )
+);
 
 export const useCurAnswersStore = create<CurAnswersStoreType>((set) => ({
   curAnswers: [],

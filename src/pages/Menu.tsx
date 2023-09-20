@@ -19,6 +19,9 @@ export default function Menu() {
     );
     const userPastAnswers = useQuizeAnswersStore((store) => store.quizeAnswers.filter(q => q.quizId == quiz.id)[0].usersAnswer.filter(u => u.userId == user.uid)[0]?.pastAnswers);
 
+    if (!user) navigate('/')
+
+
     // listing how many answers got correct
     let answerindex = 0;
     type totalCorrectAnswerTYPE = { sum: number | string, index: number | string };

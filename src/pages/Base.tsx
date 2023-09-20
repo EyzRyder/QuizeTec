@@ -12,10 +12,12 @@ import useQuizAnswers from '../useHook/useQuizAnswers';
 export default function Base() {
   const [modalVisible, setModalVisible] = useState(false);
   const [alertVisible, setAlertVisible] = useState(false);
-  const { quizes } = useQuizStore();
-  const { user } = useUserStore();
 
   const navigate = useNavigate();
+
+  const { quizes } = useQuizStore();
+  const { user } = useUserStore();
+  if (!user) navigate('/')
 
   useQuizesList();
   useQuizAnswers();

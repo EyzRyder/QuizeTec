@@ -12,7 +12,7 @@ export default function Sobre() {
       <div className="flex flex-col flex-1 items-center overflow-y-scroll">
         <div className="flex flex-row pt-10">
           <div
-            onClick={() => navigate('/')}
+            onClick={() => navigate(-1)}
             className="flex flex-col h-8 w-12 items-center justify-center cursor-pointer"
           >
             <IonIcon

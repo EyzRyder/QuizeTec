@@ -17,6 +17,7 @@ export default function Quiz() {
 
   const [selectedAnswer, setSelectedAnswer] = useState<AnswersType | null>(null);
 
+
   // Store
   const { user } = useUserStore()
   const { addAnswer, curAnswers } = useCurAnswersStore()
@@ -27,6 +28,7 @@ export default function Quiz() {
   const CurQuestion = quiz.Questions[Number(questionIndex)];
   const userPastAnswers = useQuizeAnswersStore((store) => store.quizeAnswers.filter(q => q.quizId == quiz.id)[0].usersAnswer);
 
+  if (!user) navigate('/')
 
   function confirmeAnswer() {
     if (!selectedAnswer) return alert("Selecione uma resposta")
