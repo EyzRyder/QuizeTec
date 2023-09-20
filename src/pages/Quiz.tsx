@@ -20,15 +20,16 @@ export default function Quiz() {
 
   // Store
   const { user } = useUserStore()
+  if (!user) navigate('/')
   const { addAnswer, curAnswers } = useCurAnswersStore()
   const quiz = useQuizStore(
     (store) => store.quizes.filter((task) => task.id === id)[0]
   );
 
+
+
   const CurQuestion = quiz.Questions[Number(questionIndex)];
   const userPastAnswers = useQuizeAnswersStore((store) => store.quizeAnswers.filter(q => q.quizId == quiz.id)[0].usersAnswer);
-
-  if (!user) navigate('/')
 
   function confirmeAnswer() {
     if (!selectedAnswer) return alert("Selecione uma resposta")
