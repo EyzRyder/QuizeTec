@@ -3,7 +3,7 @@ import { AnsweringType, QuestionType, QuizType } from './type';
 
 
 type QuizStoreType = {
-  quizes: QuizType[] | null
+  quizes: QuizType[] | []
   addQuiz: (item: QuizType) => void
   addQuizes: (item: QuizType[]) => void
   deleteQuiz: (id: string) => void
@@ -18,22 +18,28 @@ type AddingQuizStoreType = {
   resetQuiz: () => void
 }
 type QuestionsStoreType = {
-  questions: QuestionType[] | null
+  questions: QuestionType[] | []
   addQuestion: (item: QuestionType) => void
   deleteQuestion: (id: string) => void
   resetQuestion: () => void
 }
 type UserStoreType = {
-  user: any | null
+  user: any | []
   isUserAuthenticated: boolean | null
   updateUser: (userData: any) => void
   setIsUserAuthenticated: (data: any) => void
 }
 
 type CurAnswersStoreType = {
-  curAnswers: AnsweringType[] | null,
+  curAnswers: AnsweringType[] | [],
   addAnswer: (answer: AnsweringType) => void,
   resetAnswer: () => void,
+}
+type useQuizeAnswersType = {
+  quizeAnswers: [],
+  userAnswerList: [],
+  addQuizeAnswers: (item: []) => void,
+  addCurUserAnswers: (item: []) => void,
 }
 
 export const useQuizStore = create<QuizStoreType>((set) => ({
@@ -42,7 +48,7 @@ export const useQuizStore = create<QuizStoreType>((set) => ({
   addQuizes: (item) => set((state) => ({ quizes: [...item] }),),
   deleteQuiz: (id) => set((state) => ({ quizes: state.quizes.filter(quiz =>  quiz.id !== id ) }))
 }))
-export const useQuizeAnswersStore = create<any>((set) => ({
+export const useQuizeAnswersStore = create<useQuizeAnswersType>((set) => ({
   quizeAnswers: [],
   userAnswerList: [],
   addQuizeAnswers: (item) => set((state) => ({ quizeAnswers: [...item] }),),
