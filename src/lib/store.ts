@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { AnsweringType, QuestionType, QuizType } from './type';
+import { AnsweringType, QuestionType, QuizType, quizAnswers } from './type';
 
 
 type QuizStoreType = {
@@ -36,10 +36,10 @@ type CurAnswersStoreType = {
   resetAnswer: () => void,
 }
 type useQuizeAnswersType = {
-  quizeAnswers: [],
-  userAnswerList: [],
-  addQuizeAnswers: (item: []) => void,
-  addCurUserAnswers: (item: []) => void,
+  quizeAnswers: quizAnswers[],
+  userAnswerList: object[],
+  addQuizeAnswers: (item: quizAnswers[]) => void,
+  addCurUserAnswers: (item: object[]) => void,
 }
 
 export const useQuizStore = create<QuizStoreType>((set) => ({

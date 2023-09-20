@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
+import { createBrowserRouter, createRoutesFromElements, Outlet, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Sobre from './pages/Sobre';
 import Layout from './pages/Layout';
@@ -14,5 +14,9 @@ export const router = createBrowserRouter(
       <Route path='login' element={<Login />} />
       <Route path='base' element={<Base />} />
       <Route path='addQuiz' element={<AddQuiz />} />
+      <Route path="quiz" element={<Outlet />}>
+        <Route path=':id/:questionIndex' element={<Sobre />} />
+        <Route path='menu/:id' element={<Sobre />} />
+      </Route>
     </Route>
   ));

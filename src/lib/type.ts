@@ -17,7 +17,7 @@ export interface QuizType {
   level: string
   materia: string
   Questions: QuestionType[]
-  createdBy:string
+  createdBy: string
 }
 export interface AnsweringType extends AnswersType {
   questionId: string,
@@ -28,3 +28,30 @@ export interface OptionsType {
   id: string
   nome: string
 }
+export type quizAnswers =
+  {
+    quizId: string,
+    title: string,
+    usersAnswer: usersAnswerType[]
+  }
+
+
+type usersAnswerType = {
+  userId: string
+  pastAnswers: pastAnswersType[]
+}
+
+type pastAnswersType =
+  {
+    questions: questionsType[]
+  }
+type questionsType = {
+  questionId: string,
+  title: string,
+  isRight: boolean,
+  question: string,
+  id: string,
+  letra: string
+}
+
+
