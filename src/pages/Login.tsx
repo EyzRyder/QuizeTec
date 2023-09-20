@@ -53,8 +53,8 @@ export default function Login() {
 
   return (
     <IonContent>
-      <div className="flex-1 items-center px-10 py-40 justify-around">
-        <div className="pb-60">
+      <div className="flex flex-col flex-1 items-center px-10 py-40 justify-around">
+        <div className="flex flex-col pb-60">
           <img
             src={fallgirl}
             className='w-[800] h-[550]'
@@ -62,8 +62,8 @@ export default function Login() {
           />
         </div>
 
-        <div className="w-full py-10 pb-60">
-          <div className="pb-7 w-full">
+        <div className="flex flex-col w-full py-10 pb-60">
+          <div className="flex flex-col pb-7 w-full">
             <p className="font-title font-semibold text-[#2A416F] text-[30px] leading-tight">
               Olá,
             </p>
@@ -71,17 +71,17 @@ export default function Login() {
               Hora do Cadastro!
             </p>
           </div>
+          <div className="flex flex-col gap-2 w-full">
 
-          <div className="gap-2 w-full">
             <input
               value={email}
               onChange={(e) => setEmail(e.currentTarget.value)}
-              className={`bg-[${isEmailFocused ? "#fff" : "#EFEFEF"}] rounded-3xl mb-0 p-4 shadow-md text-lg w-full border-${isEmailFocused ? '2' : '0'} border-${isEmailFocused ? "#4A92FF" : "transparent"} text-${isEmailFocused ?'black':'bg-gray-500'} placeholder-slate-500`}
+              className={`bg-[${isEmailFocused ? "#fff" : "#EFEFEF"}] rounded-3xl mb-0 p-4 shadow-md text-lg w-full border-${isEmailFocused ? '2' : '0'} border-${isEmailFocused ? "#4A92FF" : "transparent"} text-${isEmailFocused ? 'black' : 'bg-gray-500'} placeholder-slate-500`}
               placeholder="Email"
               onFocus={() => setIsEmailFocused(true)}
               onBlur={() => setIsEmailFocused(false)}
             />
-            <div className="relatie w-full">
+            <div className="relative flex flex-col w-full">
               <input
                 value={password}
                 onChange={(e) => setPassword(e.currentTarget.value)}
@@ -90,20 +90,20 @@ export default function Login() {
                 onFocus={() => setIsPasswordFocused(true)}
                 onBlur={() => setIsPasswordFocused(false)}
               />
-              <div className="absolute nset-y-0 left-0 flex items-center pl-2">
+              <div className="absolute flex-col nset-y-0 left-0 flex items-center pl-2">
                 {/* <Icon name="eye" size={16} color="#888888" /> */}
               </div>
             </div>
 
             <button
               onClick={handleLogin}
-              className="w-full items-center justify-center rounded-[20px] bg-[#4A92FF] py-4"
+              className="w-full flex flex-col items-center justify-center rounded-[20px] bg-[#4A92FF] py-4"
             >
               <p className="text-white font-medium text-[21px]">Login</p>
             </button>
             <button
               onClick={handleRegister}
-              className="w-full items-center justify-center rounded-[20px] bg-[#4A92FF] py-4"
+              className="w-full flex flex-col items-center justify-center rounded-[20px] bg-[#4A92FF] py-4"
             >
               <p className="text-white font-medium text-[21px]">Registrar</p>
             </button>
