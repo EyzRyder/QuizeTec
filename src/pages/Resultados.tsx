@@ -47,7 +47,7 @@ export default function Resultados() {
                                         {userEmail}
                                     </div>
                                 </DialogTrigger>
-                                <DialogContent className="h-[70%]">
+                                <DialogContent className="max-w-[80%] h-[80%]">
                                     <span className="text-xl text-center font-bold">Respostas do(a) {userEmail}</span>
                                     <ScrollArea className="h-[100%] ">
                                         {item?.pastAnswers?.map((answers: any) => {
