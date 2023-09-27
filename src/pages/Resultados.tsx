@@ -3,6 +3,12 @@ import { useNavigate, useParams } from "react-router";
 import useQuizAnswers from "../useHook/useQuizAnswers";
 import useUsersList from "../useHook/useUsersList";
 import { useQuizeAnswersStore, useUserStore } from "../lib/store";
+import Modal from "../components/Modal";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { AnsweringType, AnswersType } from "@/lib/type";
 
 export default function Resultados() {
     const navigate = useNavigate();
@@ -13,53 +19,58 @@ export default function Resultados() {
 
     const { users } = useUserStore()
 
-    const { usersAnswer, title } = useQuizeAnswersStore((store) => store.quizeAnswers.filter(q => q.quizId == id)[0]);
-    console.log(usersAnswer[0].pastAnswers[0])
+    const quizAnswers = useQuizeAnswersStore((store) => store.quizeAnswers.filter(q => q.quizId == id)[0]);
+    console.log(quizAnswers?.usersAnswer[0]?.pastAnswers[0])
     return (
         <IonContent className='min-h-screen h-full' style={{ height: '100%' }}>
             <div className="flex-1 w-full py-4 bg-slate-50 space-y-6">
                 <h1 className="text-2xl text-center">
                     Resultados da Quiz
                     <span className="text-blue-500">
-                        {" " + title}
+                        {" " + quizAnswers?.title}
                     </span>
                 </h1>
                 <h2>Respostas</h2>
                 <div className="w-full flex flex-col items-center gap-4">
-                    {usersAnswer?.map(item => {
+                    {quizAnswers?.usersAnswer?.map(item => {
                         const userEmail = users.filter((user: any) => user.id == item.userId)[0]?.email;
                         return (
-                            <>
-                                <div
-                                    key={item.userId}
-                                    className="bg-blue-500 w-[80%] flex flex-col px-3 py-2 rounded-md text-white"
-                                    onClick={() => {
-                                        console.log(item.userId)
-                                    }}>
-                                    <span>
-                                        Usuario
-                                    </span>
-                                    {userEmail}
-                                </div>
-
-                                {/* <Modal modalVisible={modalVisible} setModalVisible={setModalVisible}>
-                                    <div className="overflow-y-scroll h-[500px]">
-                                        {item.pastAnswers?.map(answers => (
-                                            <div>
-                                                <span>Respostas da {userEmail}</span>
-                                                <div>
-                                                    {answers?.questions?.map(q => (
-                                                        <div>{q.question} -{q.letra} - {q.title}</div>
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <div
+                                        key={item.userId}
+                                        className="bg-blue-500 w-[80%] flex flex-col px-3 py-2 rounded-md text-white"
+                                    >
+                                        <span>
+                                            Usuário
+                                        </span>
+                                        {userEmail}
+                                    </div>
+                                </DialogTrigger>
+                                <DialogContent className="h-[70%]">
+                                    <span className="text-xl text-center font-bold">Respostas do(a) {userEmail}</span>
+                                    <ScrollArea className="h-[100%] ">
+                                        {item?.pastAnswers?.map((answers: any) => (
+                                            <div className="bg-slate-50 shadow-md rounded-lg px-2 py-2 mt-5">
+                                                <span className="text-lg">Tentativa </span>
+                                                    {answers?.questions?.map((q: AnsweringType) => (
+                                                        <div key={q.id} className="flex flex-col ">
+                                                            <span>
+                                                                {q.question}
+                                                            </span>
+                                                            <span data-isRight={q.isRight} className=" data-[isRight=true]:text-green-500 text-red-400">
+                                                                {q.letra}  {q.title}
+                                                            </span>
+                                                        </div>
                                                     ))}
                                                 </div>
-                                            </div>
                                         ))}
-                                    </div>
-                                </Modal> */}
-                            </>
+                                    </ScrollArea>
+                                </DialogContent>
+                            </Dialog>
                         )
                     })}
-                </div>
+                </div >
             </div>
         </IonContent>
     )

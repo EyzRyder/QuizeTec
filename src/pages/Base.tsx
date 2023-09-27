@@ -1,4 +1,4 @@
-import { IonContent } from '@ionic/react'
+import { IonContent, IonIcon } from '@ionic/react'
 import { useState } from 'react';
 import Modal from '../components/Modal';
 import { signOut } from 'firebase/auth';
@@ -8,6 +8,15 @@ import useQuizesList from '../useHook/useQuiz';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { useNavigate } from 'react-router';
 import useQuizAnswers from '../useHook/useQuizAnswers';
+import { ellipsisVerticalOutline } from 'ionicons/icons';
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 export default function Base() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -30,9 +39,23 @@ export default function Base() {
             <p className="text-white text-2xl">Ola,</p>
             <p className="text-white text-2xl">Bem Vindo(a) {user?.email}</p>
           </div>
-          <button onClick={() => setModalVisible(true)}>
-            Opcoes
-          </button>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className='hover:bg-transparent hover:text-white'>
+                <IonIcon icon={ellipsisVerticalOutline} size="large"></IonIcon>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[80%]">
+              <button
+                onClick={() => { signOut(auth); }}
+                className={`flex-row items-center justify-between border-b-2 border-[#ddd] p-3 `}
+              >
+                <p className='text-sm text-[#555]'>
+                  Log Out
+                </p>
+              </button>
+            </PopoverContent>
+          </Popover>
         </div>
         <div className="flex flex-col flex-1 px-8 py-10 space-y-2 w-full">
           <p className="text-3xl font-title text-[#2A416F] font-semibold">Quizes Base</p>
@@ -57,60 +80,57 @@ export default function Base() {
                     <p className="font-bold text-2xl text-white">{item.materia} - {item.title}</p>
                   </div>
 
-                  {item.createdBy == user.uid && (
-                    <button
-                      onClick={() => { setAlertVisible(true); console.log("test") }}
-                      className="absolute h-7 w-7 rounded-full border-2 justify-center items-center top-2 right-2 border-white bg-white shadow-md">
-                      :
-                    </button>
-
+                  {
+                    // item.createdBy == user.uid
+                    true && (
+                    <Popover>
+                      <PopoverTrigger asChild className='absolute  top-2 right-2'>
+                        <Button variant="outline" className='rounded-full justify-center items-center hover:shadow-md hover:text-slate-800 text-slate-50'>
+                          <IonIcon icon={ellipsisVerticalOutline} className='w-5 h-5'></IonIcon>
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[80%] ">
+                        {/* <Dialog>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" className="w-full">Deletar</Button>
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-[425px]">
+                            <DialogTitle>Deletar Quiz</DialogTitle>
+                            <DialogHeader>
+                              <DialogDescription>
+                                Tem certeza que voce quer deletar.
+                              </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter>
+                              <Button type='submit'>Cancel</Button>
+                              <Button onClick={async () => {
+                                const quiz = await doc(db, 'Quizes', item.id);
+                                const quizAnswers = await doc(db, 'QuizAnswers', item.id);
+                                await deleteDoc(quiz);
+                                await deleteDoc(quizAnswers);
+                              }}>Confirmar</Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog> */}
+                        <Button
+                          variant="outline"
+                          onClick={() => { navigate(`../quiz/resultados/${item.id}`) }}
+                          className={` w-full`}
+                        >
+                            Ver resultados
+                        </Button>
+                      </PopoverContent>
+                    </Popover>
                   )}
-                </div>
-                <Modal modalVisible={alertVisible} setModalVisible={setAlertVisible}>
-                  <div className="flex-1 flex flex-col">
-                    <button
-                      onClick={async () => {
-                        const quiz = await doc(db, 'Quizes', item.id);
-                        const quizAnswers = await doc(db, 'QuizAnswers', item.id);
-                        await deleteDoc(quiz);
-                        await deleteDoc(quizAnswers);
-                      }}
-                      className={`flex-row items-center justify-between border-b-2 border-[#ddd] p-3 `}
-                    >
-                      <p className='text-sm text-[#555]'>
-                        Deletar
-                      </p>
-                    </button>
-                    <button
-                      onClick={() => { navigate(`../quiz/resultados/${item.id}`) }}
-                      className={`flex-row items-center justify-between border-b-2 border-[#ddd] p-3 `}
-                    >
-                      <p className='text-sm text-[#555]'>
-                        Ver resultados
-                      </p>
-                    </button>
-                  </div>
-                </Modal>
+                </div >
               </>
               ))
             }
 
           </div>
         </div>
-        <Modal modalVisible={modalVisible} setModalVisible={setModalVisible}>
-          <div className="flex-1">
-            <button
-              onClick={() => { signOut(auth); }}
-              className={`flex-row items-center justify-between border-b-2 border-[#ddd] p-3 `}
-            >
-              <p className='text-sm text-[#555]'>
-                Log Out
-              </p>
-            </button>
-          </div>
-        </Modal>
 
       </div>
-    </IonContent>
+    </IonContent >
   )
 }
