@@ -75,7 +75,7 @@ export default function Login() {
 
             <input
               value={email}
-              onChange={(e) => setEmail(e.currentTarget.value)}
+              onChange={(e) => setEmail(e.currentTarget.value.trim())}
               className={`bg-[${isEmailFocused ? "#fff" : "#EFEFEF"}] rounded-3xl mb-0 p-4 shadow-md text-lg w-full border-${isEmailFocused ? '2' : '0'} border-${isEmailFocused ? "#4A92FF" : "transparent"} text-${isEmailFocused ? 'black' : 'bg-gray-500'} placeholder-slate-500`}
               placeholder="Email"
               onFocus={() => setIsEmailFocused(true)}

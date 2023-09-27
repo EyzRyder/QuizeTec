@@ -19,7 +19,7 @@ const useUsersList = () => {
           }
         )
       })
-      console.log(itemsArr)
+      // console.log(itemsArr)
       updateUsersList(itemsArr)
       // console.log(quizes)
       // setData(itemsArr)

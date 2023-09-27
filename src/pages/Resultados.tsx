@@ -3,12 +3,11 @@ import { useNavigate, useParams } from "react-router";
 import useQuizAnswers from "../useHook/useQuizAnswers";
 import useUsersList from "../useHook/useUsersList";
 import { useQuizeAnswersStore, useUserStore } from "../lib/store";
-import Modal from "../components/Modal";
-import { useState } from "react";
+import { Progress } from "@/components/ui/progress"
+
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { AnsweringType, AnswersType } from "@/lib/type";
+import { AnsweringType } from "@/lib/type";
 
 export default function Resultados() {
     const navigate = useNavigate();
@@ -20,7 +19,8 @@ export default function Resultados() {
     const { users } = useUserStore()
 
     const quizAnswers = useQuizeAnswersStore((store) => store.quizeAnswers.filter(q => q.quizId == id)[0]);
-    console.log(quizAnswers?.usersAnswer[0]?.pastAnswers[0])
+
+    // console.log(quizAnswers?.usersAnswer[0]?.pastAnswers[0])
     return (
         <IonContent className='min-h-screen h-full' style={{ height: '100%' }}>
             <div className="flex-1 w-full py-4 bg-slate-50 space-y-6">
@@ -50,9 +50,15 @@ export default function Resultados() {
                                 <DialogContent className="h-[70%]">
                                     <span className="text-xl text-center font-bold">Respostas do(a) {userEmail}</span>
                                     <ScrollArea className="h-[100%] ">
-                                        {item?.pastAnswers?.map((answers: any) => (
+                                        {item?.pastAnswers?.map((answers: any) => {
+                                            let sum: boolean | number = false;
+                                            const total = answers.questions.length
+                                            answers.questions?.map((data: any) => sum = (+sum) + (+data.isRight));
+                                            return (
                                             <div className="bg-slate-50 shadow-md rounded-lg px-2 py-2 mt-5">
-                                                <span className="text-lg">Tentativa </span>
+                                                <span className="text-lg">
+                                                        Tentativa { sum }/{total} <Progress value={(Number(sum) / total) * 100} className="w-full" />
+                                                </span>
                                                     {answers?.questions?.map((q: AnsweringType) => (
                                                         <div key={q.id} className="flex flex-col ">
                                                             <span>
@@ -64,7 +70,7 @@ export default function Resultados() {
                                                         </div>
                                                     ))}
                                                 </div>
-                                        ))}
+                                        )})}
                                     </ScrollArea>
                                 </DialogContent>
                             </Dialog>
