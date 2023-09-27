@@ -39,18 +39,59 @@ export default function Base() {
 
           <div className='flex flex-col flex-1 overflow-y-scroll justify-between h-full space-y-4'>
             {
-              quizes.map((item) => (
+              quizes.map((item) => (<>
                 <div
-                  onClick={() => navigate(`../quiz/menu/${item.id}`)}
-                  className={`relative flex flex-col rounded-lg w-full px-6 py-4 bg-blue-500`}
+                  key={item.id}
+                  className={`relative flex flex-col`}
                 >
-                  <div className="flex flex-col border-2 border-white rounded-md h-8 w-8 justify-center items-center">
-                    {/* <Icon name="play" size={16} color="#FFF" /> */}
-                    {/* {false ? <Icon name="play" size={16} color="#FFF" /> : <Icon name="check" size={16} color="#FFF" />} */}
+                  <div
+                    className={` flex flex-col rounded-lg w-full px-6 py-4 bg-blue-500`}
+                    onClick={() => navigate(`../quiz/menu/${item.id}`)}
+                  >
+
+                    <div className="flex flex-col border-2 border-white rounded-md h-8 w-8 justify-center items-center">
+                      {/* <Icon name="play" size={16} color="#FFF" /> */}
+                      {/* {false ? <Icon name="play" size={16} color="#FFF" /> : <Icon name="check" size={16} color="#FFF" />} */}
+                    </div>
+                    <p className="font-bold text-xl text-white">Nível {item.level}</p>
+                    <p className="font-bold text-2xl text-white">{item.materia} - {item.title}</p>
                   </div>
-                  <p className="font-bold text-xl text-white">Nível {item.level}</p>
-                  <p className="font-bold text-2xl text-white">{item.materia} - {item.title}</p>
+
+                  {item.createdBy == user.uid && (
+                    <button
+                      onClick={() => { setAlertVisible(true); console.log("test") }}
+                      className="absolute h-7 w-7 rounded-full border-2 justify-center items-center top-2 right-2 border-white bg-white shadow-md">
+                      :
+                    </button>
+
+                  )}
                 </div>
+                <Modal modalVisible={alertVisible} setModalVisible={setAlertVisible}>
+                  <div className="flex-1 flex flex-col">
+                    <button
+                      onClick={async () => {
+                        const quiz = await doc(db, 'Quizes', item.id);
+                        const quizAnswers = await doc(db, 'QuizAnswers', item.id);
+                        await deleteDoc(quiz);
+                        await deleteDoc(quizAnswers);
+                      }}
+                      className={`flex-row items-center justify-between border-b-2 border-[#ddd] p-3 `}
+                    >
+                      <p className='text-sm text-[#555]'>
+                        Deletar
+                      </p>
+                    </button>
+                    <button
+                      onClick={() => { navigate(`../quiz/resultados/${item.id}`) }}
+                      className={`flex-row items-center justify-between border-b-2 border-[#ddd] p-3 `}
+                    >
+                      <p className='text-sm text-[#555]'>
+                        Ver resultados
+                      </p>
+                    </button>
+                  </div>
+                </Modal>
+              </>
               ))
             }
 
@@ -68,6 +109,7 @@ export default function Base() {
             </button>
           </div>
         </Modal>
+
       </div>
     </IonContent>
   )

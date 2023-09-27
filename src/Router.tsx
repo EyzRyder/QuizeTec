@@ -7,6 +7,7 @@ import Base from './pages/Base';
 import AddQuiz from './pages/AddQuiz';
 import Menu from './pages/Menu';
 import Quiz from './pages/Quiz';
+import Resultados from './pages/Resultados';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,6 +20,7 @@ export const router = createBrowserRouter(
       <Route path="quiz" element={<Outlet />}>
         <Route path=':id/:questionIndex' element={<Quiz />} />
         <Route path='menu/:id' element={<Menu />} />
+        <Route path='resultados/:id' element={<Resultados />} />
       </Route>
     </Route>
   ));

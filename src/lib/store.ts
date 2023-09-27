@@ -26,8 +26,10 @@ type QuestionsStoreType = {
 }
 type UserStoreType = {
   user: any | []
+  users: any | []
   isUserAuthenticated: boolean | null
   updateUser: (userData: any) => void
+  updateUsersList: (usersData: any) => void
   setIsUserAuthenticated: (data: any) => void
 }
 
@@ -84,8 +86,10 @@ export const useUserStore = create<UserStoreType>(
     (set) => (
       {
         user: null,
+        users: [],
         isUserAuthenticated: false,
         updateUser: (userData) => set((state) => ({ user: userData })),
+        updateUsersList: (usersData) => set((state) => ({ users: usersData })),
         setIsUserAuthenticated: (data) => set((state) => ({ isUserAuthenticated: data }))
       }
     )
