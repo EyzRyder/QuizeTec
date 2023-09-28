@@ -8,14 +8,14 @@ export default function Home() {
 
   return (
     <IonContent>
-      <div className="flex flex-col flex-1 items-center px-5 py-0 justify-around ">
-        <div className="flex justify-center items-center pr-14 w-[600] h-[700]">
+      <div className="flex flex-col flex-1 items-center px-5 h-full  justify-center sm:grid sm:grid-cols-2 ">
+        <div className="flex justify-center items-center pr-14 w-[600px]">
           <img
             src={PhoneGirl}
             alt='phonegirl'
           />
         </div>
-        <div className="flex flex-col items-center w-full gap-3 pb-40">
+        <div className="flex flex-col items-center w-full gap-3 ">
           <p className="text-center font-title text-[25px] leading-tight font-semibold text-[#2A416F] py-4">
             Hora de começar a se {"\n"} aventurar no aprendizado!
           </p>

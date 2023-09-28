@@ -53,16 +53,16 @@ export default function Login() {
 
   return (
     <IonContent>
-      <div className="flex flex-col flex-1 items-center px-10 py-40 justify-around">
-        <div className="flex flex-col pb-60">
+      <div className="flex flex-col flex-1 items-center px-10 h-full justify-center sm:grid sm:grid-cols-2">
+        <div className="flex flex-col">
           <img
             src={fallgirl}
-            className='w-[800] h-[550]'
+            className='w-[800px] '
             alt='fall'
           />
         </div>
 
-        <div className="flex flex-col w-full py-10 pb-60">
+        <div className="flex flex-col w-full py-10 ">
           <div className="flex flex-col pb-7 w-full">
             <p className="font-title font-semibold text-[#2A416F] text-[30px] leading-tight">
               Olá,

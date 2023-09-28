@@ -11,7 +11,7 @@ export default function Sobre() {
   return (
     <IonContent>
       <div className="flex flex-col flex-1 items-center overflow-y-scroll">
-        <div className="flex flex-row pt-10 w-full justify-between">
+        <div className="flex flex-row pt-10 w-full justify-between items-center">
           <div
             onClick={() => navigate(-1)}
             className="flex flex-col h-8 w-12 items-center justify-center cursor-pointer"
@@ -50,7 +50,7 @@ export default function Sobre() {
           <p className="text-2xl text-[#2A416F] font-semibold text-center mb-6">
             Por Quem?
           </p>
-          <div className="flex flex-row justify-between pb-5">
+          <div className="grid grid-cols-2">
             <div className="flex flex-col space-y-2 justify-center items-center">
 
               <Avatar className='h-28 w-28 rounded-xl'>
