@@ -4,13 +4,14 @@ import { arrowBackOutline } from 'ionicons/icons';
 import { useNavigate } from "react-router-dom";
 
 import book from "../assets/book.png";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export default function Sobre() {
   const navigate = useNavigate();
   return (
     <IonContent>
       <div className="flex flex-col flex-1 items-center overflow-y-scroll">
-        <div className="flex flex-row pt-10">
+        <div className="flex flex-row pt-10 w-full justify-between">
           <div
             onClick={() => navigate(-1)}
             className="flex flex-col h-8 w-12 items-center justify-center cursor-pointer"
@@ -23,7 +24,7 @@ export default function Sobre() {
             />
 
           </div>
-          <p className="flex flex-col flex-1 font-semibold font-title text-2xl leading-tight text-[#2A416F]">
+          <p className="flex flex-col flex-1 text-center font-semibold font-title text-2xl leading-tight text-[#2A416F]">
             Sobre
           </p>
         </div>
@@ -41,7 +42,7 @@ export default function Sobre() {
               abordagem interativa e didática.
             </p>
             <img
-              className="absolute p-10 top-[104%] left-[2px] w-[90] h-[100]"
+              className="absolute w-[100px] -bottom-16 "
               src={book}
               alt="book"
             />
@@ -51,19 +52,20 @@ export default function Sobre() {
           </p>
           <div className="flex flex-row justify-between pb-5">
             <div className="flex flex-col space-y-2 justify-center items-center">
-              <img
-                src="https://avatars.githubusercontent.com/u/85580011?v=4"
-                className="h-28 w-28 rounded-lg"
-                alt="avatar"
-              />
+
+              <Avatar className='h-28 w-28 rounded-xl'>
+                <AvatarImage src="https://avatars.githubusercontent.com/u/85580011?v=4" alt="Gabriel Bessi" />
+                <AvatarFallback>GB</AvatarFallback>
+              </Avatar>
+
               <div className="flex flex-col">
                 <p className="text-xl text-[#333333] font-medium">
                   Gabriel B.
                 </p>
                 <p className="text-sm w-36 text-[#333333] font-medium">
-                  Desenvolvedor Full Stack.
-                  <p className="text-sm text-blue-500 font-medium"> Web </p>
-                  Designer
+                  Desenvolvedor
+                  <span className="text-sm text-blue-500 font-medium"> Full Stack</span>
+                  . Web Designer
                 </p>
               </div>
               <div className="flex  gap-2 flex-row mr-16">
@@ -90,22 +92,20 @@ export default function Sobre() {
               </div>
             </div>
             <div className="flex flex-col space-y-2 justify-center items-center">
-              <img
-                src="https://instagram.fcgh23-1.fna.fbcdn.net/v/t51.2885-19/366023601_6675853295800089_7604792551801304264_n.jpg?stp=dst-jpg_s320x320&_nc_ht=instagram.fcgh23-1.fna.fbcdn.net&_nc_cat=109&_nc_ohc=_pyo_ULnVNIAX8vyAeh&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfABNGYoOq_ZNauhNPFLsVHJ0C4fHgqxy54ec7FlGzry_w&oe=64E83CB9&_nc_sid=8b3546"
-                alt="avatar"
-                className="h-28 w-28 rounded-lg"
-              />
+              <Avatar className='h-28 w-28 rounded-xl'>
+                <AvatarImage src="https://avatars.githubusercontent.com/u/98243777?v=4" alt="Kaua miguel" />
+                <AvatarFallback>KM</AvatarFallback>
+              </Avatar>
+
               <div className="flex flex-col">
                 <p className="text-xl text-[#333333] font-medium">
                   Kauã M.
                 </p>
                 <p className="text-sm  w-36 text-[#333333] font-medium">
-                  Desenvolvedor
-                  <p className="text-sm text-blue-500 font-medium">
-                    {" "}
-                    Full Stack{" "}
-                  </p>
-                  . Web Designer
+                  Desenvolvedor Full Stack.
+                  <span className="text-sm text-blue-500 font-medium">
+                    Web Designer
+                  </span>
                 </p>
               </div>
               <div className="flex gap-2 flex-row mr-16">

@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { AnsweringType } from "@/lib/type";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Resultados() {
     const navigate = useNavigate();
@@ -37,15 +38,16 @@ export default function Resultados() {
                         return (
                             <Dialog>
                                 <DialogTrigger asChild>
-                                    <div
+                                    <Card
                                         key={item.userId}
-                                        className="bg-blue-500 w-[80%] flex flex-col px-3 py-2 rounded-md text-white"
+                                        className="bg-blue-500 w-[80%] flex flex-col  rounded-2xl text-white"
                                     >
-                                        <span>
-                                            Usuário
-                                        </span>
-                                        {userEmail}
-                                    </div>
+                                        <CardHeader>
+                                            <CardTitle>Usuário</CardTitle>
+                                            <CardDescription className="text-slate-200"> {userEmail}</CardDescription>
+                                        </CardHeader>
+
+                                    </Card>
                                 </DialogTrigger>
                                 <DialogContent className="sm:max-w-[80%] h-[80%] justify-center items-center">
                                     <span className="sm:text-xl text-center font-bold whitespace-normal">Respostas do(a) {userEmail}</span>
