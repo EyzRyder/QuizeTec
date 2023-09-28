@@ -30,7 +30,7 @@ export default function Resultados() {
                         {" " + quizAnswers?.title}
                     </span>
                 </h1>
-                <h2>Respostas</h2>
+                <h2>{quizAnswers?.usersAnswer.length } Respostas</h2>
                 <div className="w-full flex flex-col items-center gap-4">
                     {quizAnswers?.usersAnswer?.map(item => {
                         const userEmail = users.filter((user: any) => user.id == item.userId)[0]?.email;
@@ -47,9 +47,9 @@ export default function Resultados() {
                                         {userEmail}
                                     </div>
                                 </DialogTrigger>
-                                <DialogContent className="max-w-[80%] h-[80%]">
-                                    <span className="text-xl text-center font-bold">Respostas do(a) {userEmail}</span>
-                                    <ScrollArea className="h-[100%] ">
+                                <DialogContent className="sm:max-w-[80%] h-[80%] justify-center items-center">
+                                    <span className="sm:text-xl text-center font-bold whitespace-normal">Respostas do(a) {userEmail}</span>
+                                    <ScrollArea className="h-[100%]">
                                         {item?.pastAnswers?.map((answers: any) => {
                                             let sum: boolean | number = false;
                                             const total = answers.questions.length
