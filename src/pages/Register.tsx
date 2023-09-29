@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form"
 import * as z from "zod"
 
 // DB
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth, db } from '../lib/firebaseConfig';
 import { doc, setDoc } from 'firebase/firestore';
 
@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Link } from 'react-router-dom';
+import { useUserStorage } from '@/useHook/useUserStorage';
 
 // type
 const formSchema = z.object({
@@ -64,22 +65,30 @@ export default function Register() {
 
   // store
   const { updateUser } = useUserStore()
+  const { updateUserStorage } = useUserStorage();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // console.log(values)
     await createUserWithEmailAndPassword(auth, values.email, values.senha)
-        .then(async (userCredential) => {
-          const user = userCredential.user;
-          updateUser(user)
-          await setDoc(doc(db, 'users', user.uid), { email: user.email, id: user.uid,userName: values.userName })
-          // AsyncStorage.setItem("@user", JSON.stringify(user));
-          navigate("/../base")
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(errorMessage)
-        });
+      .then(async (userCredential) => {
+        const user = userCredential.user;
+        await setDoc(doc(db, 'users', user.uid), { email: user.email, id: user.uid, userName: values.userName });
+        // await sendEmailVerification(auth.currentUser).catch((err) =>
+        //   console.log(err)
+        // );
+        await updateProfile(user, { displayName: values.userName }).catch(
+          (err) => console.log(err)
+        );
+        updateUser(user)
+        await updateUserStorage(user.toJSON())
+        // AsyncStorage.setItem("@user", JSON.stringify(user));
+        navigate("/../base")
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorMessage)
+      });
   }
 
   return (

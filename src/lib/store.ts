@@ -27,7 +27,7 @@ type QuestionsStoreType = {
 type UserStoreType = {
   user: any | []
   users: any | []
-  isUserAuthenticated: boolean | null
+  isUserAuthenticated: boolean 
   updateUser: (userData: any) => void
   updateUsersList: (usersData: any) => void
   setIsUserAuthenticated: (data: any) => void

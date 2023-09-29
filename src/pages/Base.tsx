@@ -1,6 +1,5 @@
 import { IonContent, IonIcon } from '@ionic/react'
 import { useState } from 'react';
-import Modal from '../components/Modal';
 import { signOut } from 'firebase/auth';
 import { auth, db } from '../lib/firebaseConfig';
 import { useQuizStore, useUserStore } from '../lib/store';
@@ -17,6 +16,7 @@ import {
 } from "@/components/ui/popover"
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { useUserStorage } from '@/useHook/useUserStorage';
 
 export default function Base() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -25,8 +25,8 @@ export default function Base() {
   const navigate = useNavigate();
 
   const { quizes } = useQuizStore();
-  const { user } = useUserStore();
-  if (!user) navigate('/')
+  const { user ,updateUserStorage} = useUserStorage();
+
 
   useQuizesList();
   useQuizAnswers();
@@ -46,14 +46,15 @@ export default function Base() {
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[80%]">
-              <button
-                onClick={() => { signOut(auth); }}
+              <Button
+                variant="outline"
+                onClick={async () => { await signOut(auth); await updateUserStorage(null); navigate('/') }}
                 className={`flex-row items-center justify-between border-b-2 border-[#ddd] p-3 `}
               >
                 <p className='text-sm text-[#555]'>
                   Log Out
                 </p>
-              </button>
+              </Button>
             </PopoverContent>
           </Popover>
         </div>

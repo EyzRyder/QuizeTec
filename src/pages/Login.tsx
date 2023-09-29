@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Link } from 'react-router-dom';
+import { useUserStorage } from '@/useHook/useUserStorage';
 
 // type
 const formSchema = z.object({
@@ -46,6 +47,10 @@ const formSchema = z.object({
 });
 
 export default function Login() {
+  //storage
+  const { updateUserStorage } = useUserStorage();
+  const { updateUser } = useUserStore()
+
   // form
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -58,33 +63,15 @@ export default function Login() {
   // react router
   const navigate = useNavigate();
 
-  // store
-  const { updateUser } = useUserStore()
-
   //functions
-  // async function handleRegister() {
-  //   await createUserWithEmailAndPassword(auth, email, password)
-  //     .then(async (userCredential) => {
-  //       const user = userCredential.user;
-  //       updateUser(user)
-  //       await setDoc(doc(db, 'users', user.uid), { email: user.email, id: user.uid })
-  //       // AsyncStorage.setItem("@user", JSON.stringify(user));
-  //       navigate("base")
-  //     })
-  //     .catch((error) => {
-  //       const errorCode = error.code;
-  //       const errorMessage = error.message;
-  //       console.log(errorMessage)
-  //     });
-  // }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // console.log(values)
     await signInWithEmailAndPassword(auth, values.email, values.senha)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         const user = userCredential.user;
         updateUser(user)
-        // AsyncStorage.setItem("@user", JSON.stringify(user));
+        await updateUserStorage(user.toJSON())
         navigate("/base")
       })
       .catch((error) => {

@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom';
-import { useUserStore } from '../lib/store';
 import PhoneGirl from "../assets/PhoneGirl.png";
 import { IonContent } from '@ionic/react';
+import { useUserStorage } from '@/useHook/useUserStorage';
 
 export default function Home() {
-  const { isUserAuthenticated } = useUserStore()
-
+  const { user } = useUserStorage();
   return (
     <IonContent>
       <div className="flex flex-col flex-1 items-center px-5 h-full  justify-center sm:grid sm:grid-cols-2 ">
@@ -20,7 +19,7 @@ export default function Home() {
             Hora de começar a se {"\n"} aventurar no aprendizado!
           </p>
           <Link
-            to={isUserAuthenticated ? "/base" : "/login"}
+            to={user?.uid ? "/base" : "/login"}
             className="w-full items-center flex justify-center rounded-[20px] bg-[#4A92FF] py-4 text-white font-medium text-lg">
             Começar
           </Link>
