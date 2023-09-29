@@ -36,10 +36,9 @@ export default function Resultados() {
                     {quizAnswers?.usersAnswer?.map(item => {
                         const userEmail = users.filter((user: any) => user.id == item.userId)[0]?.email;
                         return (
-                            <Dialog>
+                            <Dialog key={item.userId}>
                                 <DialogTrigger asChild>
                                     <Card
-                                        key={item.userId}
                                         className="bg-blue-500 w-[80%] flex flex-col  rounded-2xl text-white"
                                     >
                                         <CardHeader>
@@ -57,7 +56,9 @@ export default function Resultados() {
                                             const total = answers.questions.length
                                             answers.questions?.map((data: any) => sum = (+sum) + (+data.isRight));
                                             return (
-                                            <div className="bg-slate-50 shadow-md rounded-lg px-2 py-2 mt-5">
+                                                <div
+                                                    key={item.pastAnswers.indexOf(answers)}
+                                                    className="bg-slate-50 shadow-md rounded-lg px-2 py-2 mt-5">
                                                 <span className="text-lg">
                                                         Tentativa { sum }/{total} <Progress value={(Number(sum) / total) * 100} className="w-full" />
                                                 </span>
@@ -66,7 +67,7 @@ export default function Resultados() {
                                                             <span>
                                                                 {q.question}
                                                             </span>
-                                                            <span data-isRight={q.isRight} className=" data-[isRight=true]:text-green-500 text-red-400">
+                                                            <span data-isright={q.isRight} className=" data-[isright=true]:text-green-500 text-red-400">
                                                                 {q.letra}  {q.title}
                                                             </span>
                                                         </div>

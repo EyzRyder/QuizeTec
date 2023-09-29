@@ -32,6 +32,9 @@ import { Link } from 'react-router-dom';
 
 // type
 const formSchema = z.object({
+  userName: z.string().min(2, {
+    message: "Nome de usuário deve conter no mínimo 2 caracteres.",
+  }),
   email: z
     .string()
     .min(1, {
@@ -45,11 +48,12 @@ const formSchema = z.object({
   }),
 });
 
-export default function Login() {
+export default function Register() {
   // form
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      userName: "",
       email: "",
       senha: "",
     },
@@ -61,37 +65,21 @@ export default function Login() {
   // store
   const { updateUser } = useUserStore()
 
-  //functions
-  // async function handleRegister() {
-  //   await createUserWithEmailAndPassword(auth, email, password)
-  //     .then(async (userCredential) => {
-  //       const user = userCredential.user;
-  //       updateUser(user)
-  //       await setDoc(doc(db, 'users', user.uid), { email: user.email, id: user.uid })
-  //       // AsyncStorage.setItem("@user", JSON.stringify(user));
-  //       navigate("base")
-  //     })
-  //     .catch((error) => {
-  //       const errorCode = error.code;
-  //       const errorMessage = error.message;
-  //       console.log(errorMessage)
-  //     });
-  // }
-
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // console.log(values)
-    await signInWithEmailAndPassword(auth, values.email, values.senha)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        updateUser(user)
-        // AsyncStorage.setItem("@user", JSON.stringify(user));
-        navigate("/base")
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorMessage)
-      });
+    await createUserWithEmailAndPassword(auth, values.email, values.senha)
+        .then(async (userCredential) => {
+          const user = userCredential.user;
+          updateUser(user)
+          await setDoc(doc(db, 'users', user.uid), { email: user.email, id: user.uid,userName: values.userName })
+          // AsyncStorage.setItem("@user", JSON.stringify(user));
+          navigate("/../base")
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorMessage)
+        });
   }
 
   return (
@@ -111,11 +99,28 @@ export default function Login() {
               Olá,
             </p>
             <p className="font-title font-semibold text-[#2A416F] text-[30px]  leading-tight">
-              Hora do Login!
+              Hora do Cadastro!
             </p>
           </div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="userName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Nome de Usuario</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Albert Einstein"
+                        className="bg-[#EFEFEF] focus:bg-[#fff] rounded-3xl mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="email"
@@ -124,7 +129,7 @@ export default function Login() {
                     <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="albert.einstain@etec.sp.gov.br"
+                        placeholder="albert.einstein@etec.sp.gov.br"
                         className="bg-[#EFEFEF] focus:bg-[#fff] rounded-3xl mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
                         {...field}
                       />
@@ -154,12 +159,12 @@ export default function Login() {
                 type="submit"
                 className="w-full text-center rounded-[20px] bg-[#4A92FF] py-6 text-white font-medium text-[21px]"
               >
-                Login
+                Cadastrar
               </Button>
             </form>
           </Form>
-          <Link to={"/../register"}>
-            Nao tem conta, Cadastra se ja!!
+          <Link to={"/../login"}>
+            Ja tem conta, Faca Login ja!!
           </Link>
         </div>
       </div>
