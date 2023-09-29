@@ -19,9 +19,8 @@ export default function Quiz() {
 
 
   // Store
-  const { user } = useUserStore()
-  if (!user) navigate('/')
-  const { addAnswer, curAnswers } = useCurAnswersStore()
+  const { user } = useUserStore();
+  const { addAnswer, curAnswers } = useCurAnswersStore();
   const quiz = useQuizStore(
     (store) => store.quizes.filter((task) => task.id === id)[0]
   );
@@ -47,6 +46,7 @@ export default function Quiz() {
     })
 
     if (Number(questionIndex) == length) {
+      if (!user.uid) return navigate(-(length + 1))
       updateAnswerHistory();
       navigate(-(length+1))
     } else {
