@@ -66,7 +66,17 @@ export default function Menu() {
                                         <p className="text-[#7CFC00] text-[10px]">+3 acertos</p>
                                     </div>
                                 </div>
-                                <p className="flex flex-col font-title text-xl text-[#2A416F] font-bold">{userPastAnswers ? totalCorrectAnswer[totalCorrectAnswer.length - 1].sum : '0'} / {quiz.Questions.length} </p>
+                                {totalCorrectAnswer
+                                    ? (
+                                        <p className="flex flex-col font-title text-xl text-[#2A416F] font-bold">
+                                            {userPastAnswers ? totalCorrectAnswer[totalCorrectAnswer.length - 1].sum : '0'} / {quiz.Questions.length}
+                                        </p>
+                                    )
+                                    : (
+                                        <p className="flex flex-col font-title text-xl text-[#2A416F] font-bold">
+                                            0 / {quiz.Questions.length}
+                                        </p>
+                                    )}
                                 <p className="text-[#888] font-body text-sm">Total de acertos</p>
                             </div>
                             <div className="flex flex-col bg-white rounded-xl px-4 pt-4 pb-5 shadow">
@@ -94,7 +104,7 @@ export default function Menu() {
                                             <p className="text-[#7CFC00] text-[10px]">+3 acertos</p>
                                         </div>
                                     </div>
-                                    <p className="font-title text-xl text-[#2A416F] font-bold">{item.sum} / {userPastAnswers[userPastAnswers.length - 1].questions.length} </p>
+                                    <p className="font-title text-xl text-[#2A416F] font-bold">{item.sum} / {quiz.Questions.length} </p>
                                     <p className="text-[#888] font-body text-sm">Total de acertos</p>
                                 </div>
                             ))

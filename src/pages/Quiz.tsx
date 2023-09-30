@@ -6,6 +6,7 @@ import { useCurAnswersStore, useQuizStore, useQuizeAnswersStore, useUserStore } 
 import { useSearchParams } from "react-router-dom";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../lib/firebaseConfig";
+import { useUserStorage } from "@/useHook/useUserStorage";
 
 export default function Quiz() {
   // react hooks
@@ -19,7 +20,8 @@ export default function Quiz() {
 
 
   // Store
-  const { user } = useUserStore();
+  const { user } = useUserStore(); // zustand
+  // const { user } = useUserStorage();// local storage
   const { addAnswer, curAnswers } = useCurAnswersStore();
   const quiz = useQuizStore(
     (store) => store.quizes.filter((task) => task.id === id)[0]
@@ -46,7 +48,7 @@ export default function Quiz() {
     })
 
     if (Number(questionIndex) == length) {
-      if (!user.uid) return navigate(-(length + 1))
+      if (!user?.uid) return navigate(-(length + 1))
       updateAnswerHistory();
       navigate(-(length+1))
     } else {
@@ -65,7 +67,7 @@ export default function Quiz() {
     let answer = userPastAnswers;
     if (!selectedAnswer) return
 
-    if (userPastAnswers.filter(u => u.userId == user.uid).length == 0) {
+    if (userPastAnswers.filter(u => u.userId == user?.uid).length == 0) {
       answer.push(
         {
           pastAnswers: [
@@ -90,15 +92,15 @@ export default function Quiz() {
       return
     }
 
-    answer = userPastAnswers.filter(u => u.userId !== user.uid)
+    answer = userPastAnswers.filter(u => u.userId !== user?.uid)
 
-    if (userPastAnswers.filter(u => u.userId == user.uid)[0].pastAnswers.length == 4) {
+    if (userPastAnswers.filter(u => u.userId == user?.uid)[0].pastAnswers.length == 4) {
       answer.push(
         {
           pastAnswers: [
-            userPastAnswers.filter(u => u.userId == user.uid)[0].pastAnswers[0],
-            userPastAnswers.filter(u => u.userId == user.uid)[0].pastAnswers[1],
-            userPastAnswers.filter(u => u.userId == user.uid)[0].pastAnswers[2],
+            userPastAnswers.filter(u => u.userId == user?.uid)[0].pastAnswers[0],
+            userPastAnswers.filter(u => u.userId == user?.uid)[0].pastAnswers[1],
+            userPastAnswers.filter(u => u.userId == user?.uid)[0].pastAnswers[2],
             {
               questions: [...curAnswers, {
                 id: selectedAnswer.id,
@@ -110,7 +112,7 @@ export default function Quiz() {
               }]
             }
           ],
-          userId: user.uid
+          userId: user?.uid
         }
       )
       await updateDoc(col, {
@@ -122,7 +124,7 @@ export default function Quiz() {
     answer.push(
       {
         pastAnswers: [
-          ...userPastAnswers.filter(u => u.userId == user.uid)[0].pastAnswers,
+          ...userPastAnswers.filter(u => u.userId == user?.uid)[0].pastAnswers,
           {
             questions: [...curAnswers, {
               id: selectedAnswer.id,
@@ -134,7 +136,7 @@ export default function Quiz() {
             }]
           }
         ],
-        userId: user.uid
+        userId: user?.uid
       }
     )
     await updateDoc(col, {

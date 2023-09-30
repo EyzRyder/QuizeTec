@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { Drivers, Storage } from "@ionic/storage";
 import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver'
+import { useUserStore } from "@/lib/store";
 const MODE_KEY = 'userData';
 
 
 export function useUserStorage() {
   const [store, setStore] = useState<Storage>();
   const [user, setUser] = useState<any>(null);
+  const { updateUser } = useUserStore()
 
   useEffect(() => {
     const initStorage = async () => {
@@ -31,7 +33,8 @@ export function useUserStorage() {
   const updateUserStorage = async (item: any) => {
     const updatedTodos = item;
     setUser(updatedTodos);
-    console.log(updatedTodos)
+    updateUser(updatedTodos);
+    console.log(updatedTodos);
     await store?.set(MODE_KEY, updatedTodos);
   }
 

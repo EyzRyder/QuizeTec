@@ -25,7 +25,8 @@ export default function Base() {
   const navigate = useNavigate();
 
   const { quizes } = useQuizStore();
-  const { user ,updateUserStorage} = useUserStorage();
+  const { user, updateUserStorage} = useUserStorage(); // local storage
+  // const { user } = useUserStore(); //zustand
 
 
   useQuizesList();
