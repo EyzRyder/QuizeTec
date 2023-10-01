@@ -1,23 +1,26 @@
 // react
-import { IonContent } from '@ionic/react'
+import { IonContent } from "@ionic/react";
 
 // Assets
-import fallgirl from '../assets/FallGirl.png'
+import fallgirl from "../assets/FallGirl.png";
 
 // Dependencies
-import { useNavigate } from 'react-router';
-import { useUserStore } from '../lib/store';
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
+import { useNavigate } from "react-router";
+import { useUserStore } from "../lib/store";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
 // DB
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../lib/firebaseConfig';
-import { doc, setDoc } from 'firebase/firestore';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth, db } from "../lib/firebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
 
 // Componentes
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -26,10 +29,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Link } from 'react-router-dom';
-import { useUserStorage } from '@/useHook/useUserStorage';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Link } from "react-router-dom";
+import { useUserStorage } from "@/useHook/useUserStorage";
 
 // type
 const formSchema = z.object({
@@ -49,7 +52,7 @@ const formSchema = z.object({
 export default function Login() {
   //storage
   const { updateUserStorage } = useUserStorage();
-  const { updateUser } = useUserStore()
+  const { updateUser } = useUserStore();
 
   // form
   const form = useForm<z.infer<typeof formSchema>>({
@@ -58,7 +61,7 @@ export default function Login() {
       email: "",
       senha: "",
     },
-  })
+  });
 
   // react router
   const navigate = useNavigate();
@@ -70,14 +73,14 @@ export default function Login() {
     await signInWithEmailAndPassword(auth, values.email, values.senha)
       .then(async (userCredential) => {
         const user = userCredential.user;
-        updateUser(user)
-        await updateUserStorage(user.toJSON())
-        navigate("/base")
+        updateUser(user);
+        await updateUserStorage(user.toJSON());
+        navigate("/base");
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorMessage)
+        console.log(errorMessage);
       });
   }
 
@@ -85,11 +88,7 @@ export default function Login() {
     <IonContent>
       <div className="flex flex-col flex-1 items-center px-10 h-full justify-center sm:grid sm:grid-cols-2">
         <div className="flex flex-col">
-          <img
-            src={fallgirl}
-            className='w-[800px] '
-            alt='fall'
-          />
+          <img src={fallgirl} className="w-[800px] " alt="fall" />
         </div>
 
         <div className="flex flex-col w-full py-10 ">
@@ -108,11 +107,11 @@ export default function Login() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    {/* <FormLabel>Email</FormLabel> */}
                     <FormControl>
                       <Input
                         placeholder="albert.einstain@etec.sp.gov.br"
-                        className="bg-[#EFEFEF] focus:bg-[#fff] rounded-3xl mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
+                        className="bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
                         {...field}
                       />
                     </FormControl>
@@ -125,13 +124,14 @@ export default function Login() {
                 name="senha"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Senha</FormLabel>
+                    {/* <FormLabel>Senha</FormLabel> */}
                     <FormControl>
                       <Input
                         placeholder="******"
-                        type='password'
-                        className="bg-[#EFEFEF] focus:bg-[#fff] rounded-3xl mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
-                        {...field} />
+                        type="password"
+                        className="bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -139,17 +139,20 @@ export default function Login() {
               />
               <Button
                 type="submit"
-                className="w-full text-center rounded-[20px] bg-[#4A92FF] py-6 text-white font-medium text-[21px]"
+                className="w-full text-center rounded-[18px] bg-[#4A92FF] py-7 text-white font-medium text-[21px]"
               >
                 Login
               </Button>
             </form>
           </Form>
-          <Link to={"/../register"}>
-            Nao tem conta, Cadastra se ja!!
+          <Link
+            to={"/../register"}
+            className="w-full text-center rounded-[20px] py-6 text-[#000] font-medium text-[18px]"
+          >
+            Não Possui Conta? Registrar
           </Link>
         </div>
       </div>
     </IonContent>
-  )
+  );
 }

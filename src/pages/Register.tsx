@@ -122,7 +122,7 @@ export default function Register() {
                     <FormControl>
                       <Input
                         placeholder="Albert Einstein"
-                        className="bg-[#EFEFEF] focus:bg-[#fff] rounded-3xl mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
+                        className="bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
                         {...field}
                       />
                     </FormControl>
@@ -139,7 +139,7 @@ export default function Register() {
                     <FormControl>
                       <Input
                         placeholder="albert.einstein@etec.sp.gov.br"
-                        className="bg-[#EFEFEF] focus:bg-[#fff] rounded-3xl mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
+                        className="bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
                         {...field}
                       />
                     </FormControl>
@@ -157,7 +157,7 @@ export default function Register() {
                       <Input
                         placeholder="******"
                         type='password'
-                        className="bg-[#EFEFEF] focus:bg-[#fff] rounded-3xl mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
+                        className="bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
                         {...field} />
                     </FormControl>
                     <FormMessage />
@@ -166,14 +166,14 @@ export default function Register() {
               />
               <Button
                 type="submit"
-                className="w-full text-center rounded-[20px] bg-[#4A92FF] py-6 text-white font-medium text-[21px]"
+                className="w-full text-center rounded-[18px] bg-[#4A92FF] py-7 text-white font-medium text-[21px]"
               >
                 Cadastrar
               </Button>
             </form>
           </Form>
-          <Link to={"/../login"}>
-            Ja tem conta, Faca Login ja!!
+          <Link to={"/../login"}  className="w-full text-center rounded-[20px] py-6 text-[#000] font-medium text-[18px]">
+           Possui Conta? Entrar
           </Link>
         </div>
       </div>
