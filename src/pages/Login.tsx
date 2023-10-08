@@ -1,4 +1,4 @@
-// react
+// Ionic React
 import { IonContent } from "@ionic/react";
 
 // Assets

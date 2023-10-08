@@ -1,6 +1,13 @@
-import { Link } from 'react-router-dom';
-import PhoneGirl from "../assets/PhoneGirl.png";
+// Ionic React
 import { IonContent } from '@ionic/react';
+
+// Dependencies
+import { Link } from 'react-router-dom';
+
+// assets
+import PhoneGirl from "../assets/PhoneGirl.png";
+
+// Hook
 import { useUserStorage } from '@/useHook/useUserStorage';
 
 export default function Home() {

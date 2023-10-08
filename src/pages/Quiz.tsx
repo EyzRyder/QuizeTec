@@ -1,12 +1,21 @@
-import { useNavigate, useParams } from "react-router";
-import useQuizAnswers from "../useHook/useQuizAnswers";
+// Ionic React
 import { useState } from "react";
+
+// Dependencies
+import { useNavigate, useParams } from "react-router";
+import { useSearchParams } from "react-router-dom";
+
+// Hook
+import useQuizAnswers from "../useHook/useQuizAnswers";
+import { useUserStorage } from "@/useHook/useUserStorage";
+
+// Lib
 import { AnswersType } from "../lib/type";
 import { useCurAnswersStore, useQuizStore, useQuizeAnswersStore, useUserStore } from "../lib/store";
-import { useSearchParams } from "react-router-dom";
+
+// DB
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../lib/firebaseConfig";
-import { useUserStorage } from "@/useHook/useUserStorage";
 
 export default function Quiz() {
   // react hooks

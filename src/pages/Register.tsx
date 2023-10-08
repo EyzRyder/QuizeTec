@@ -5,11 +5,15 @@ import { IonContent } from '@ionic/react'
 import fallgirl from '../assets/FallGirl.png'
 
 // Dependencies
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router';
-import { useUserStore } from '../lib/store';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
+
+// Lib
+import { useUserStore } from '../lib/store';
+import { useUserStorage } from '@/useHook/useUserStorage';
 
 // DB
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
@@ -28,8 +32,6 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Link } from 'react-router-dom';
-import { useUserStorage } from '@/useHook/useUserStorage';
 
 // type
 const formSchema = z.object({

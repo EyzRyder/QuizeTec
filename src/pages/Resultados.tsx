@@ -1,13 +1,21 @@
+// Ionic React
 import { IonContent } from "@ionic/react";
+
+// Dependencies
 import { useNavigate, useParams } from "react-router";
+
+// Libs
+import { useQuizeAnswersStore, useUserStore } from "../lib/store";
+import { AnsweringType } from "@/lib/type";
+
+// Hooks
 import useQuizAnswers from "../useHook/useQuizAnswers";
 import useUsersList from "../useHook/useUsersList";
-import { useQuizeAnswersStore, useUserStore } from "../lib/store";
-import { Progress } from "@/components/ui/progress"
 
+// Components
+import { Progress } from "@/components/ui/progress"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { AnsweringType } from "@/lib/type";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Resultados() {

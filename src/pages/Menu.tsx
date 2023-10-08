@@ -1,6 +1,13 @@
+// Ionic React
 import { IonContent } from "@ionic/react";
+
+// Dependence
 import { useNavigate, useParams } from "react-router";
+
+// Hook
 import useQuizAnswers from "../useHook/useQuizAnswers";
+
+// Lib
 import {
   useCurAnswersStore,
   useQuizStore,

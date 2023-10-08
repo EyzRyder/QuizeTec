@@ -1,13 +1,22 @@
+// Ionic React
 import { IonContent, IonIcon } from '@ionic/react'
 import { useState } from 'react';
+import { ellipsisVerticalOutline } from 'ionicons/icons';
+
+// DB
 import { signOut } from 'firebase/auth';
 import { auth, db } from '../lib/firebaseConfig';
-import { useQuizStore, useUserStore } from '../lib/store';
-import useQuizesList from '../useHook/useQuiz';
 import { deleteDoc, doc } from 'firebase/firestore';
-import { useNavigate } from 'react-router';
+
+// Lib
+import { useQuizStore, useUserStore } from '../lib/store';
+
+// Hook
+import useQuizesList from '../useHook/useQuiz';
 import useQuizAnswers from '../useHook/useQuizAnswers';
-import { ellipsisVerticalOutline } from 'ionicons/icons';
+
+// Dependencies
+import { useNavigate } from 'react-router';
 
 import {
   Popover,
@@ -17,10 +26,10 @@ import {
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useUserStorage } from '@/useHook/useUserStorage';
+import { Link } from 'react-router-dom';
+import { PlusCircle } from 'lucide-react';
 
 export default function Base() {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [alertVisible, setAlertVisible] = useState(false);
 
   const navigate = useNavigate();
 
@@ -34,7 +43,7 @@ export default function Base() {
 
   return (
     <IonContent className='min-h-screen h-full' style={{ height: '100%' }}>
-      <div className="flex flex-col flex-1 w-full">
+      <div className="flex-1 flex flex-col h-full  w-full">
         <div className="flex pt-11 pb-11 px-6 flex-row justify-between items-center bg-blue-500 rounded-b-3xl">
           <div className="flex flex-col justify-center">
             <p className="text-white text-2xl">Ola,</p>
@@ -59,10 +68,10 @@ export default function Base() {
             </PopoverContent>
           </Popover>
         </div>
-        <div className="flex flex-col flex-1 px-8 py-10 space-y-2 w-full">
+        <div className="flex-1 flex flex-col px-8 py-10 space-y-2 w-full">
           <p className="text-3xl font-title text-[#2A416F] font-semibold">Quizes Base</p>
 
-          <div className='flex flex-col flex-1 overflow-y-scroll justify-between h-full space-y-4'>
+          <div className='flex-1 flex flex-col overflow-y-scroll justify-between h-full space-y-4'>
             {
               quizes.map((item) => (<>
                 <div
@@ -83,8 +92,8 @@ export default function Base() {
                   </div>
 
                   {
-                    // item.createdBy == user.uid
-                    true && (
+                    item.createdBy == user.uid
+                     && (
                     <Popover>
                       <PopoverTrigger asChild className='absolute  top-2 right-2'>
                         <Button variant="outline" className='rounded-full justify-center items-center hover:shadow-md hover:text-slate-800 text-slate-50'>
@@ -92,7 +101,7 @@ export default function Base() {
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-[80%] ">
-                        {/* <Dialog>
+                        <Dialog>
                           <DialogTrigger asChild>
                             <Button variant="outline" className="w-full">Deletar</Button>
                           </DialogTrigger>
@@ -113,7 +122,7 @@ export default function Base() {
                               }}>Confirmar</Button>
                             </DialogFooter>
                           </DialogContent>
-                        </Dialog> */}
+                        </Dialog>
                         <Button
                           variant="outline"
                           onClick={() => { navigate(`../quiz/resultados/${item.id}`) }}
@@ -123,15 +132,22 @@ export default function Base() {
                         </Button>
                       </PopoverContent>
                     </Popover>
-                  )}
+                    )}
+
                 </div >
               </>
               ))
             }
 
           </div>
-        </div>
 
+          <Link
+            to="/addQuiz"
+            className="w-full flex flex-row items-center justify-center rounded-xl bg-blue-500 py-4 gap-2 text-white text-center text-2xl">
+            Criar Quiz
+            <PlusCircle/>
+          </Link>
+        </div>
       </div>
     </IonContent >
   )

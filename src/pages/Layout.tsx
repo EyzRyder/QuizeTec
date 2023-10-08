@@ -1,13 +1,14 @@
 import { IonContent } from "@ionic/react";
-import { useUserStore } from "../lib/store";
-import { ReactNode, useEffect } from 'react';
 import { Outlet } from 'react-router-dom'
-import { useUserStorage } from "@/useHook/useUserStorage";
+// import { useUserStore } from "../lib/store";
+// import { ReactNode, useEffect } from 'react';
+// import { useUserStorage } from "@/useHook/useUserStorage";
 
 export default function Layout() {
   return (
     <IonContent
-      className="flex flex-col relative flex-1 bg-slate-50"
+      className="flex-1 flex flex-col relative bg-slate-50"
+      style={{ height: '100%', flex: '1 1 0%' }}
     >
       <Outlet />
     </IonContent>

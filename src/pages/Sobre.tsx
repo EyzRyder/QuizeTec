@@ -1,9 +1,14 @@
-
+// React ionic
 import { IonIcon, IonContent } from '@ionic/react';
 import { arrowBackOutline } from 'ionicons/icons';
+
+// dependence
 import { useNavigate } from "react-router-dom";
 
+// assets
 import book from "../assets/book.png";
+
+// Components
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export default function Sobre() {
