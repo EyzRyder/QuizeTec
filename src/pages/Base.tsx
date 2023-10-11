@@ -77,7 +77,7 @@ export default function Base() {
                   className={`relative flex flex-col`}
                 >
                   <div
-                    className={` flex flex-col rounded-lg w-full px-6 py-4 bg-blue-500`}
+                    className={` flex flex-col rounded-xl w-full px-6 py-4 bg-blue-500`}
                     onClick={() => navigate(`../quiz/menu/${item.id}`)}
                   >
 
