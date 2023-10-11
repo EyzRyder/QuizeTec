@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-
+import { devtools, persist } from 'zustand/middleware';
 import { AnsweringType, QuestionType, QuizType, quizAnswers } from './type';
 
 
@@ -26,11 +26,7 @@ type QuestionsStoreType = {
 }
 type UserStoreType = {
   user: any | []
-  users: any | []
-  isUserAuthenticated: boolean 
   updateUser: (userData: any) => void
-  updateUsersList: (usersData: any) => void
-  setIsUserAuthenticated: (data: any) => void
 }
 
 type CurAnswersStoreType = {
@@ -50,20 +46,21 @@ export const useQuizStore = create<QuizStoreType>((set) => ({
   addQuiz: (item) => set((state) => ({ quizes: [...state.quizes, item] }),),
   addQuizes: (item) => set((state) => ({ quizes: [...item] }),),
   deleteQuiz: (id) => set((state) => ({ quizes: state.quizes.filter(quiz => quiz.id !== id) }))
-}))
+}));
+
 export const useQuizeAnswersStore = create<useQuizeAnswersType>((set) => ({
   quizeAnswers: [],
   userAnswerList: [],
   addQuizeAnswers: (item) => set((state) => ({ quizeAnswers: [...item] }),),
   addCurUserAnswers: (item) => set((state) => ({ userAnswerList: [...item] }),),
+}));
 
-}))
 export const useQuestionsStore = create<QuestionsStoreType>((set) => ({
   questions: [],
   addQuestion: (item) => set((state) => ({ questions: [...state.questions, item] }),),
   deleteQuestion: (id) => set((state) => ({ questions: state.questions.filter(question => question.id !== id) })),
   resetQuestion: () => set((state) => ({ questions: [] }),),
-}))
+}));
 
 export const useNewQuiz = create<AddingQuizStoreType>((set) => ({
   quiz: {
@@ -80,19 +77,22 @@ export const useNewQuiz = create<AddingQuizStoreType>((set) => ({
   addMateria: (materia) => set((state) => ({ quiz: { ...state.quiz, materia } }),),
   addQuestions: (questions) => set((state) => ({ quiz: { ...state.quiz, questions } }),),
   resetQuiz: () => set((state) => ({ quiz: { id: '', title: '', opened: false, level: '', materia: '', Questions: [], createdBy: '' } }),),
-}))
+}));
 
-export const useUserStore = create<UserStoreType>(
-    (set) => (
+export const useUserStore = create<UserStoreType>()(
+  devtools(
+    persist(
+      (set) => (
+        {
+          user: null,
+          updateUser: (userData) => set((state) => ({ user: userData })),
+        }
+      ),
       {
-        user: null,
-        users: [],
-        isUserAuthenticated: false,
-        updateUser: (userData) => set((state) => ({ user: userData })),
-        updateUsersList: (usersData) => set((state) => ({ users: usersData })),
-        setIsUserAuthenticated: (data) => set((state) => ({ isUserAuthenticated: data }))
+        name: 'user-storage',
       }
     )
+  )
 );
 
 export const useCurAnswersStore = create<CurAnswersStoreType>((set) => ({

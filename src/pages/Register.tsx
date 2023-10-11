@@ -82,7 +82,7 @@ export default function Register() {
           (err) => console.log(err)
         );
         updateUser(user)
-        await updateUserStorage(user.toJSON())
+        // await updateUserStorage(user.toJSON())
         // AsyncStorage.setItem("@user", JSON.stringify(user));
         navigate("/../base")
       })
@@ -174,8 +174,8 @@ export default function Register() {
               </Button>
             </form>
           </Form>
-          <Link to={"/../login"}  className="w-full text-center rounded-[20px] py-6 text-[#000] font-medium text-[18px]">
-           Possui Conta? Entrar
+          <Link to={"/../login"} className="w-full text-center rounded-[20px] py-6 text-[#000] font-medium text-[18px]">
+            Possui Conta? Entrar
           </Link>
         </div>
       </div>

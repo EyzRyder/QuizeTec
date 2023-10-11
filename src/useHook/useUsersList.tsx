@@ -1,11 +1,11 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { collection, onSnapshot, query } from "firebase/firestore"
 import { db } from "../lib/firebaseConfig"
-import { QuizType } from "../lib/type"
-import { useUserStore } from "../lib/store"
+// import { useUserStore } from "../lib/store"
 
 const useUsersList = () => {
-  const { updateUsersList } = useUserStore();
+  // const { updateUsersList } = useUserStore();
+  const [usersList, setUserList] = useState<any[] | []>([]);
   useEffect(() => {
     const col = collection(db, 'users')
     const q = query(col)
@@ -14,19 +14,19 @@ const useUsersList = () => {
       querySnapshot.forEach((doc) => {
         itemsArr.push(
           {
-            id:doc.data().id,
-            email:doc.data().email,
+            id: doc.data().id,
+            email: doc.data().email,
           }
         )
       })
       // console.log(itemsArr)
-      updateUsersList(itemsArr)
+      setUserList(itemsArr)
       // console.log(quizes)
       // setData(itemsArr)
       return () => unsubscribe()
     })
   }, [])
-  return
+  return usersList
 }
 
 export default useUsersList

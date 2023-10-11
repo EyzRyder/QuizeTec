@@ -1,7 +1,5 @@
 // Ionic React
-import { IonContent, IonIcon } from '@ionic/react'
-import { useState } from 'react';
-import { ellipsisVerticalOutline } from 'ionicons/icons';
+import { IonContent } from '@ionic/react'
 
 // DB
 import { signOut } from 'firebase/auth';
@@ -25,17 +23,17 @@ import {
 } from "@/components/ui/popover"
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useUserStorage } from '@/useHook/useUserStorage';
+// import { useUserStorage } from '@/useHook/useUserStorage';
 import { Link } from 'react-router-dom';
-import { PlusCircle } from 'lucide-react';
+import { MoreVertical, PlusCircle } from 'lucide-react';
 
 export default function Base() {
 
   const navigate = useNavigate();
 
   const { quizes } = useQuizStore();
-  const { user, updateUserStorage} = useUserStorage(); // local storage
-  // const { user } = useUserStore(); //zustand
+  // const { user, updateUserStorage} = useUserStorage(); // local storage
+  const { user, updateUser } = useUserStore(); //zustand
 
 
   useQuizesList();
@@ -52,13 +50,13 @@ export default function Base() {
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" className='hover:bg-transparent hover:text-white'>
-                <IonIcon icon={ellipsisVerticalOutline} size="large"></IonIcon>
+                <MoreVertical />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[80%]">
               <Button
                 variant="outline"
-                onClick={async () => { await signOut(auth); await updateUserStorage(null); navigate('/') }}
+                onClick={async () => { await signOut(auth); await updateUser(null); navigate('/') }}
                 className={`flex-row items-center justify-between border-b-2 border-[#ddd] p-3 `}
               >
                 <p className='text-sm text-[#555]'>
@@ -93,45 +91,45 @@ export default function Base() {
 
                   {
                     item.createdBy == user.uid
-                     && (
-                    <Popover>
-                      <PopoverTrigger asChild className='absolute  top-2 right-2'>
-                        <Button variant="outline" className='rounded-full justify-center items-center hover:shadow-md hover:text-slate-800 text-slate-50'>
-                          <IonIcon icon={ellipsisVerticalOutline} className='w-5 h-5'></IonIcon>
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-[80%] ">
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button variant="outline" className="w-full">Deletar</Button>
-                          </DialogTrigger>
-                          <DialogContent className="sm:max-w-[425px]">
-                            <DialogTitle>Deletar Quiz</DialogTitle>
-                            <DialogHeader>
-                              <DialogDescription>
-                                Tem certeza que voce quer deletar.
-                              </DialogDescription>
-                            </DialogHeader>
-                            <DialogFooter>
-                              <Button type='submit'>Cancel</Button>
-                              <Button onClick={async () => {
-                                const quiz = await doc(db, 'Quizes', item.id);
-                                const quizAnswers = await doc(db, 'QuizAnswers', item.id);
-                                await deleteDoc(quiz);
-                                await deleteDoc(quizAnswers);
-                              }}>Confirmar</Button>
-                            </DialogFooter>
-                          </DialogContent>
-                        </Dialog>
-                        <Button
-                          variant="outline"
-                          onClick={() => { navigate(`../quiz/resultados/${item.id}`) }}
-                          className={` w-full`}
-                        >
+                    && (
+                      <Popover>
+                        <PopoverTrigger asChild className='absolute  top-2 right-2'>
+                          <Button variant="outline" className='rounded-full justify-center items-center hover:shadow-md hover:text-slate-800 text-slate-50'>
+                            <MoreVertical />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[80%] ">
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="outline" className="w-full">Deletar</Button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[425px]">
+                              <DialogTitle>Deletar Quiz</DialogTitle>
+                              <DialogHeader>
+                                <DialogDescription>
+                                  Tem certeza que voce quer deletar.
+                                </DialogDescription>
+                              </DialogHeader>
+                              <DialogFooter>
+                                <Button type='submit'>Cancel</Button>
+                                <Button onClick={async () => {
+                                  const quiz = await doc(db, 'Quizes', item.id);
+                                  const quizAnswers = await doc(db, 'QuizAnswers', item.id);
+                                  await deleteDoc(quiz);
+                                  await deleteDoc(quizAnswers);
+                                }}>Confirmar</Button>
+                              </DialogFooter>
+                            </DialogContent>
+                          </Dialog>
+                          <Button
+                            variant="outline"
+                            onClick={() => { navigate(`../quiz/resultados/${item.id}`) }}
+                            className={` w-full`}
+                          >
                             Ver resultados
-                        </Button>
-                      </PopoverContent>
-                    </Popover>
+                          </Button>
+                        </PopoverContent>
+                      </Popover>
                     )}
 
                 </div >
@@ -145,7 +143,7 @@ export default function Base() {
             to="/addQuiz"
             className="w-full flex flex-row items-center justify-center rounded-xl bg-blue-500 py-4 gap-2 text-white text-center text-2xl">
             Criar Quiz
-            <PlusCircle/>
+            <PlusCircle />
           </Link>
         </div>
       </div>

@@ -13,11 +13,9 @@ import * as z from "zod";
 
 // DB
 import {
-  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth, db } from "../lib/firebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
+import { auth } from "../lib/firebaseConfig";
 
 // Componentes
 import { Button } from "@/components/ui/button";
@@ -51,7 +49,7 @@ const formSchema = z.object({
 
 export default function Login() {
   //storage
-  const { updateUserStorage } = useUserStorage();
+  // const { updateUserStorage } = useUserStorage();
   const { updateUser } = useUserStore();
 
   // form
@@ -74,7 +72,7 @@ export default function Login() {
       .then(async (userCredential) => {
         const user = userCredential.user;
         updateUser(user);
-        await updateUserStorage(user.toJSON());
+        // await updateUserStorage(user.toJSON());
         navigate("/base");
       })
       .catch((error) => {

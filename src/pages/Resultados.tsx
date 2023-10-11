@@ -22,10 +22,10 @@ export default function Resultados() {
     const navigate = useNavigate();
     const { id } = useParams();
 
-    useUsersList();
+    const users = useUsersList();
     useQuizAnswers();
 
-    const { users } = useUserStore()
+    // const { users } = useUserStore()
 
     const quizAnswers = useQuizeAnswersStore((store) => store.quizeAnswers.filter(q => q.quizId == id)[0]);
 
@@ -39,7 +39,7 @@ export default function Resultados() {
                         {" " + quizAnswers?.title}
                     </span>
                 </h1>
-                <h2>{quizAnswers?.usersAnswer.length } Respostas</h2>
+                <h2>{quizAnswers?.usersAnswer.length} Respostas</h2>
                 <div className="w-full flex flex-col items-center gap-4">
                     {quizAnswers?.usersAnswer?.map(item => {
                         const userEmail = users.filter((user: any) => user.id == item.userId)[0]?.email;
@@ -67,9 +67,9 @@ export default function Resultados() {
                                                 <div
                                                     key={item.pastAnswers.indexOf(answers)}
                                                     className="bg-slate-50 shadow-md rounded-lg px-2 py-2 mt-5">
-                                                <span className="text-lg">
-                                                        Tentativa { sum }/{total} <Progress value={(Number(sum) / total) * 100} className="w-full" />
-                                                </span>
+                                                    <span className="text-lg">
+                                                        Tentativa {sum}/{total} <Progress value={(Number(sum) / total) * 100} className="w-full" />
+                                                    </span>
                                                     {answers?.questions?.map((q: AnsweringType) => (
                                                         <div key={q.id} className="flex flex-col ">
                                                             <span>
@@ -81,7 +81,8 @@ export default function Resultados() {
                                                         </div>
                                                     ))}
                                                 </div>
-                                        )})}
+                                            )
+                                        })}
                                     </ScrollArea>
                                 </DialogContent>
                             </Dialog>

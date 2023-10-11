@@ -7,7 +7,6 @@ import { useSearchParams } from "react-router-dom";
 
 // Hook
 import useQuizAnswers from "../useHook/useQuizAnswers";
-import { useUserStorage } from "@/useHook/useUserStorage";
 
 // Lib
 import { AnswersType } from "../lib/type";
@@ -43,8 +42,6 @@ export default function Quiz() {
 
   function confirmeAnswer() {
     if (!selectedAnswer) return alert("Selecione uma resposta")
-    // if (selectedAnswer?.isRight) {
-    // }
     const length = quiz.Questions.length - 1;
     if (!selectedAnswer) return
     addAnswer({
@@ -59,14 +56,14 @@ export default function Quiz() {
     if (Number(questionIndex) == length) {
       if (!user?.uid) return navigate(-(length + 1))
       updateAnswerHistory();
-      navigate(-(length+1))
+      navigate(-(length + 1))
     } else {
       // questionIndex = String(Number(questionIndex) + 1)
       // const queryParamValue = searchParams;
       // console.log(queryParamValue)
       // setSearchParams({ queryParamValue:String(Number(questionIndex) + 1)})
 
-      navigate(`/quiz/${id}/${String(Number(questionIndex) + 1) }`)
+      navigate(`/quiz/${id}/${String(Number(questionIndex) + 1)}`)
     }
     setSelectedAnswer(null)
   }
@@ -170,8 +167,8 @@ export default function Quiz() {
               onClick={() => setSelectedAnswer(answer)}
             >
 
-                <p className={`bg-blue-300 rounded-full w-6 h-6 text-center text-white`}>{answer?.letra}</p>
-                <p className={`font-title text-lg  ${answer.id == selectedAnswer?.id ? "text-white" : 'text-black'} `}>{answer.title}</p>
+              <p className={`bg-blue-300 rounded-full w-6 h-6 text-center text-white`}>{answer?.letra}</p>
+              <p className={`font-title text-lg  ${answer.id == selectedAnswer?.id ? "text-white" : 'text-black'} `}>{answer.title}</p>
             </div>
           ))}
         </div>
