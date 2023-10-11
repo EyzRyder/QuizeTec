@@ -90,7 +90,7 @@ export default function Base() {
                   </div>
 
                   {
-                    item.createdBy == user.uid
+                    item?.createdBy == user?.uid
                     && (
                       <Popover>
                         <PopoverTrigger asChild className='absolute  top-2 right-2'>
