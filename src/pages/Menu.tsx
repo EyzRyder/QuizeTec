@@ -61,7 +61,7 @@ export default function Menu() {
             onClick={() => {
               navigate(-1);
             }}
-            className="flex flex-col absolute top-10 left-6 h-10 w-10 items-center justify-center bg-white rounded-full"
+            className="flex flex-col absolute top-10 left-6 h-10 w-10 items-center justify-center bg-white rounded-full cursor-pointer"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -169,12 +169,12 @@ export default function Menu() {
               resetAnswer();
               navigate(`/quiz/${id}/0`);
             }}
-            className={"flex flex-col w-full rounded-2xl py-4 bg-blue-500 cursor-pointer"}
+            className={"flex flex-col w-full rounded-2xl py-4 transition-all bg-blue-500 hover:bg-blue-400 cursor-pointer"}
           >
             <p className={`text-2xl font-body text-center text-white`}>Jogar</p>
           </div>
           <div onClick={() => navigate(-1)}>
-            <p className="text-xl font-body text-center py-4 text-[#2A416F] cursor-pointer">
+            <p className="text-xl font-body text-center py-4 text-[#2A416F] cursor-pointer hover:underline">
               Voltar ao Menu
             </p>
           </div>
