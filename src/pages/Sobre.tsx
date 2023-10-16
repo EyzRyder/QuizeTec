@@ -53,7 +53,7 @@ export default function Sobre() {
                 alt="book"
               />
             </div>
-         </div>
+          </div>
           <div>
             <p className="text-2xl text-[#2A416F] font-semibold text-center mb-6">
               Por Quem?
@@ -77,26 +77,39 @@ export default function Sobre() {
                   </p>
                 </div>
                 <div className="flex  gap-2 flex-row mr-16">
-                  <div className="w-5 h-5 flex-col rounded-full bg-[#4A92FF] flex justify-center items-center">
+                  <a
+                    href='https://www.linkedin.com/in/gabriel-bessi-5b0160230/'
+                    target='_blank'
+                    rel='noopener'
+                    className="w-5 h-5 flex-col rounded-full bg-[#4A92FF] flex justify-center items-center cursor-pointer hover:animate-pulse hover:scale-150 transition-all">
                     <img
                       src="https://i.postimg.cc/J0RZC4LT/linked-in.png"
-                      alt="linkedin"
+                      alt="LinkedIn"
+                      className="h-3 w-3"
                     />
-                  </div>
-                  <div className="w-5 h-5 rounded-full bg-[#4A92FF] flex justify-center items-center flex-col">
+                  </a>
+                  <a
+                    href='https://www.instagram.com/eyz_ryder/'
+                    target='_blank'
+                    rel='noopener'
+                    className="w-5 h-5 flex-col rounded-full bg-[#4A92FF] flex justify-center items-center cursor-pointer hover:animate-pulse hover:scale-150 transition-all">
                     <img
                       src="https://i.postimg.cc/ZRnz769j/instagram.png"
-                      alt="inta"
+                      alt="Instagram"
                       className="h-3 w-3"
                     />
-                  </div>
-                  <div className="w-5 h-5 rounded-full bg-[#4A92FF] flex flex-col justify-center items-center">
+                  </a>
+                  <a
+                    href='https://github.com/EyzRyder'
+                    target='_blank'
+                    rel='noopener'
+                    className="w-5 h-5 flex-col rounded-full bg-[#4A92FF] flex justify-center items-center cursor-pointer hover:animate-pulse hover:scale-150 transition-all">
                     <img
                       src="https://i.postimg.cc/15JTT8Qj/Group-9.png"
-                      alt="g"
+                      alt="Github_Icon"
                       className="h-3 w-3"
                     />
-                  </div>
+                  </a>
                 </div>
               </div>
               <div className="flex flex-col space-y-2 justify-center items-center">
@@ -117,30 +130,43 @@ export default function Sobre() {
                   </p>
                 </div>
                 <div className="flex gap-2 flex-row mr-16">
-                  <div className="w-5 h-5 flex-col rounded-full bg-[#4A92FF] flex justify-center items-center">
+                  <a
+                    href='https://www.linkedin.com/in/kauã-miguel-a107b71b9/'
+                    target='_blank'
+                    rel='noopener'
+                    className="w-5 h-5 flex-col rounded-full bg-[#4A92FF] flex justify-center items-center cursor-pointer hover:animate-pulse hover:scale-150 transition-all">
                     <img
                       src="https://i.postimg.cc/J0RZC4LT/linked-in.png"
-                      alt="linkedin"
+                      alt="LinkedIn"
+                      className="h-3 w-3"
                     />
-                  </div>
-                  <div className="w-5 h-5 rounded-full bg-[#4A92FF] flex justify-center items-center flex-col">
+                  </a>
+                  <a
+                    href='https://www.instagram.com/kaua_mtds/?hl=af'
+                    target='_blank'
+                    rel='noopener'
+                    className="w-5 h-5 flex-col rounded-full bg-[#4A92FF] flex justify-center items-center cursor-pointer hover:animate-pulse hover:scale-150 transition-all">
                     <img
                       src="https://i.postimg.cc/ZRnz769j/instagram.png"
-                      alt="inta"
+                      alt="Instagram"
                       className="h-3 w-3"
                     />
-                  </div>
-                  <div className="w-5 h-5 rounded-full bg-[#4A92FF] flex flex-col justify-center items-center">
+                  </a>
+                  <a
+                    href='https://github.com/Kc1t'
+                    target='_blank'
+                    rel='noopener'
+                    className="w-5 h-5 flex-col rounded-full bg-[#4A92FF] flex justify-center items-center cursor-pointer hover:animate-pulse hover:scale-150 transition-all">
                     <img
                       src="https://i.postimg.cc/15JTT8Qj/Group-9.png"
-                      alt="g"
+                      alt="Github_Icon"
                       className="h-3 w-3"
                     />
-                  </div>
+                  </a>
                 </div>
               </div>
             </div>
-     </div>
+          </div>
         </div>
       </div>
     </IonContent>
