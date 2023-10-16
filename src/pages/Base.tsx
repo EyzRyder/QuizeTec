@@ -23,16 +23,14 @@ import {
 } from "@/components/ui/popover"
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-// import { useUserStorage } from '@/useHook/useUserStorage';
 import { Link } from 'react-router-dom';
-import { MoreVertical, PlusCircle } from 'lucide-react';
+import { MoreVertical, Play, PlusCircle } from 'lucide-react';
 
 export default function Base() {
 
   const navigate = useNavigate();
 
   const { quizes } = useQuizStore();
-  // const { user, updateUserStorage} = useUserStorage(); // local storage
   const { user, updateUser } = useUserStore(); //zustand
 
 
@@ -56,7 +54,7 @@ export default function Base() {
             <PopoverContent className="w-[80%]">
               <Button
                 variant="outline"
-                onClick={async () => { await signOut(auth); await updateUser(null); navigate('/') }}
+                onClick={async () => { await signOut(auth); updateUser(null); navigate('/') }}
                 className={`flex-row items-center justify-between border-b-2 border-[#ddd] p-3 `}
               >
                 <p className='text-sm text-[#555]'>
@@ -69,21 +67,20 @@ export default function Base() {
         <div className="flex-1 flex flex-col px-8 py-10 space-y-2 w-full">
           <p className="text-3xl font-title text-[#2A416F] font-semibold">Quizes Base</p>
 
-          <div className='flex-1 flex flex-col overflow-y-scroll justify-between h-full space-y-4'>
+          <div className='flex-1 flex flex-col justify-between h-full space-y-4'>
             {
               quizes.map((item) => (<>
                 <div
                   key={item.id}
-                  className={`relative flex flex-col`}
+                  className={`relative flex flex-col transition-all hover:cursor-pointer `}
                 >
                   <div
                     className={` flex flex-col rounded-xl w-full px-6 py-4 bg-blue-500`}
                     onClick={() => navigate(`../quiz/menu/${item.id}`)}
                   >
 
-                    <div className="flex flex-col border-2 border-white rounded-md h-8 w-8 justify-center items-center">
-                      {/* <Icon name="play" size={16} color="#FFF" /> */}
-                      {/* {false ? <Icon name="play" size={16} color="#FFF" /> : <Icon name="check" size={16} color="#FFF" />} */}
+                    <div className="flex flex-col border-2 border-white rounded-xl h-8 w-8 justify-center items-center">
+                      <Play className='text-white h-4 w-4'/>
                     </div>
                     <p className="font-bold text-xl text-white">Nível {item.level}</p>
                     <p className="font-bold text-2xl text-white">{item.materia} - {item.title}</p>
@@ -94,7 +91,10 @@ export default function Base() {
                     && (
                       <Popover>
                         <PopoverTrigger asChild className='absolute  top-2 right-2'>
-                          <Button variant="outline" className='rounded-full justify-center items-center hover:shadow-md hover:text-slate-800 text-slate-50'>
+                          <Button
+                            variant="outline"
+                            size='icon'
+                            className='rounded-full justify-center items-center hover:shadow-md hover:text-slate-800 text-slate-50'>
                             <MoreVertical />
                           </Button>
                         </PopoverTrigger>
@@ -113,8 +113,8 @@ export default function Base() {
                               <DialogFooter>
                                 <Button type='submit'>Cancel</Button>
                                 <Button onClick={async () => {
-                                  const quiz = await doc(db, 'Quizes', item.id);
-                                  const quizAnswers = await doc(db, 'QuizAnswers', item.id);
+                                  const quiz = doc(db, 'Quizes', item.id);
+                                  const quizAnswers = doc(db, 'QuizAnswers', item.id);
                                   await deleteDoc(quiz);
                                   await deleteDoc(quizAnswers);
                                 }}>Confirmar</Button>
@@ -124,7 +124,7 @@ export default function Base() {
                           <Button
                             variant="outline"
                             onClick={() => { navigate(`../quiz/resultados/${item.id}`) }}
-                            className={` w-full`}
+                            className={`w-full`}
                           >
                             Ver resultados
                           </Button>

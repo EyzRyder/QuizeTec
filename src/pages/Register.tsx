@@ -13,10 +13,9 @@ import * as z from "zod"
 
 // Lib
 import { useUserStore } from '../lib/store';
-import { useUserStorage } from '@/useHook/useUserStorage';
 
 // DB
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth, db } from '../lib/firebaseConfig';
 import { doc, setDoc } from 'firebase/firestore';
 
@@ -25,7 +24,6 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -67,14 +65,13 @@ export default function Register() {
 
   // store
   const { updateUser } = useUserStore()
-  const { updateUserStorage } = useUserStorage();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // console.log(values)
     await createUserWithEmailAndPassword(auth, values.email, values.senha)
       .then(async (userCredential) => {
         const user = userCredential.user;
         await setDoc(doc(db, 'users', user.uid), { email: user.email, id: user.uid, userName: values.userName });
+        //do verification later
         // await sendEmailVerification(auth.currentUser).catch((err) =>
         //   console.log(err)
         // );
@@ -82,12 +79,9 @@ export default function Register() {
           (err) => console.log(err)
         );
         updateUser(user)
-        // await updateUserStorage(user.toJSON())
-        // AsyncStorage.setItem("@user", JSON.stringify(user));
         navigate("/../base")
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorMessage)
       });
@@ -120,7 +114,7 @@ export default function Register() {
                 name="userName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nome de Usuario</FormLabel>
+                    <FormLabel>Nome de Usuário</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Albert Einstein"
@@ -175,7 +169,7 @@ export default function Register() {
             </form>
           </Form>
           <Link to={"/../login"} className="w-full text-center rounded-[20px] py-6 text-[#000] font-medium text-[18px]">
-            Possui Conta? Entrar
+            Possui Conta? <span className="text-indigo-600 hover:underline">Entrar</span>
           </Link>
         </div>
       </div>

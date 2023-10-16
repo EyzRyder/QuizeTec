@@ -22,15 +22,12 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
-import { useUserStorage } from "@/useHook/useUserStorage";
 
 // type
 const formSchema = z.object({
@@ -48,8 +45,7 @@ const formSchema = z.object({
 });
 
 export default function Login() {
-  //storage
-  // const { updateUserStorage } = useUserStorage();
+
   const { updateUser } = useUserStore();
 
   // form
@@ -67,16 +63,13 @@ export default function Login() {
   //functions
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // console.log(values)
     await signInWithEmailAndPassword(auth, values.email, values.senha)
       .then(async (userCredential) => {
         const user = userCredential.user;
         updateUser(user);
-        // await updateUserStorage(user.toJSON());
         navigate("/base");
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorMessage);
       });
@@ -147,7 +140,7 @@ export default function Login() {
             to={"/../register"}
             className="w-full text-center rounded-[20px] py-6 text-[#000] font-medium text-[18px]"
           >
-            Não Possui Conta? Registrar
+            Não Possui Conta? <span className="text-indigo-600 hover:underline">Registrar</span>
           </Link>
         </div>
       </div>
