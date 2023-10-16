@@ -2,10 +2,10 @@
 import { IonContent } from "@ionic/react";
 
 // Dependencies
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 
 // Libs
-import { useQuizeAnswersStore, useUserStore } from "../lib/store";
+import { useQuizeAnswersStore } from "../lib/store";
 import { AnsweringType } from "@/lib/type";
 
 // Hooks
@@ -19,17 +19,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Resultados() {
-    const navigate = useNavigate();
     const { id } = useParams();
 
-    const users = useUsersList();
     useQuizAnswers();
-
-    // const { users } = useUserStore()
+    const users = useUsersList();
 
     const quizAnswers = useQuizeAnswersStore((store) => store.quizeAnswers.filter(q => q.quizId == id)[0]);
 
-    // console.log(quizAnswers?.usersAnswer[0]?.pastAnswers[0])
     return (
         <IonContent className='min-h-screen h-full' style={{ height: '100%' }}>
             <div className="flex-1 w-full py-4 bg-slate-50 space-y-6">

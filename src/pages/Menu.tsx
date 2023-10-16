@@ -13,7 +13,8 @@ import {
   useQuizStore,
   useQuizeAnswersStore,
   useUserStore,
-} from "../lib/store";
+} from "@/lib/store";
+import { getBGLinearGradientByMateria } from "@/lib/data";
 
 export default function Menu() {
   //react
@@ -54,7 +55,7 @@ export default function Menu() {
     <IonContent>
       <div className="flex flex-col flex-1">
         <div
-          className={`flex bg-blue-500 relative flex-row px-2 pt-20 pb-12 justify-center items-center rounded-b-3xl `}
+          className={`flex ${getBGLinearGradientByMateria(quiz.materia)} relative flex-row px-2 pt-20 pb-12 justify-center items-center rounded-b-3xl `}
         >
           <div
             onClick={() => {
@@ -77,10 +78,10 @@ export default function Menu() {
             {/* <div className="flex flex-col h-32 w-32 bg-gray-500"></div> */}
             <p className="text-white text-xl font-title">{quiz.title}</p>
             <div className="flex flex-row space-x-2">
-              <div className="flex flex-col rounded-[8px] mix-blend-soft-light bg-[#1e293b66] py-1 px-4">
+              <div className="flex flex-col rounded-[8px] mix-blend-soft-light bg-slate-700 py-1 px-4">
                 <p className="text-white font-body text-base">{quiz.materia}</p>
               </div>
-              <div className="flex flex-col  rounded-[8px] mix-blend-soft-light bg-[#35353666] py-1 px-4">
+              <div className="flex flex-col  rounded-[8px] mix-blend-soft-light bg-slate-700 py-1 px-4">
                 <p className="text-white font-body text-base">
                   Nível {quiz.level}
                 </p>
@@ -168,7 +169,7 @@ export default function Menu() {
               resetAnswer();
               navigate(`/quiz/${id}/0`);
             }}
-            className={"flex flex-col w-full rounded-2xl py-4 bg-blue-500"}
+            className={"flex flex-col w-full rounded-2xl py-4 bg-blue-500 cursor-pointer"}
           >
             <p className={`text-2xl font-body text-center text-white`}>Jogar</p>
           </div>

@@ -3,43 +3,47 @@ import { useState } from "react";
 
 // Dependencies
 import { useNavigate, useParams } from "react-router";
-import { useSearchParams } from "react-router-dom";
 
 // Hook
 import useQuizAnswers from "../useHook/useQuizAnswers";
 
 // Lib
 import { AnswersType } from "../lib/type";
-import { useCurAnswersStore, useQuizStore, useQuizeAnswersStore, useUserStore } from "../lib/store";
+import {
+  useCurAnswersStore,
+  useQuizStore,
+  useQuizeAnswersStore,
+  useUserStore
+} from "../lib/store";
 
 // DB
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../lib/firebaseConfig";
+import { Progress } from "@/components/ui/progress";
+import { getBGLinearGradientByMateria } from "@/lib/data";
 
 export default function Quiz() {
-  // react hooks
+  // react hook
   useQuizAnswers();
+
   //react
   const navigate = useNavigate();
   const { id, questionIndex } = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
-
   const [selectedAnswer, setSelectedAnswer] = useState<AnswersType | null>(null);
 
 
   // Store
   const { user } = useUserStore(); // zustand
-  // const { user } = useUserStorage();// local storage
   const { addAnswer, curAnswers } = useCurAnswersStore();
   const quiz = useQuizStore(
     (store) => store.quizes.filter((task) => task.id === id)[0]
   );
-
-
-
-  const CurQuestion = quiz.Questions[Number(questionIndex)];
   const userPastAnswers = useQuizeAnswersStore((store) => store.quizeAnswers.filter(q => q.quizId == quiz.id)[0].usersAnswer);
 
+  const CurQuestion = quiz.Questions[Number(questionIndex)];
+
+
+  // Factions
   function confirmeAnswer() {
     if (!selectedAnswer) return alert("Selecione uma resposta")
     const length = quiz.Questions.length - 1;
@@ -58,10 +62,6 @@ export default function Quiz() {
       updateAnswerHistory();
       navigate(-(length + 1))
     } else {
-      // questionIndex = String(Number(questionIndex) + 1)
-      // const queryParamValue = searchParams;
-      // console.log(queryParamValue)
-      // setSearchParams({ queryParamValue:String(Number(questionIndex) + 1)})
 
       navigate(`/quiz/${id}/${String(Number(questionIndex) + 1)}`)
     }
@@ -69,7 +69,7 @@ export default function Quiz() {
   }
 
   async function updateAnswerHistory() {
-    const col = await doc(db, 'QuizAnswers', quiz.id)
+    const col = doc(db, 'QuizAnswers', quiz.id)
     let answer = userPastAnswers;
     if (!selectedAnswer) return
 
@@ -151,30 +151,30 @@ export default function Quiz() {
 
   }
   return (
-    <div>
       <div className="flex-1 flex flex-col pb-6 pt-10 px-5 items-center h-full">
-        <div className="w-full h-10 bg-white shadow-md rounded-2xl mb-6"></div>
+        <div className="w-full h-10 flex justify-center items-center bg-white shadow-md rounded-2xl mb-6">
+          <Progress value={5 * 10} className={`w-[97%] `} />
+        </div>
         <div className="w-full mb-8">
           <p className="text-[#00000099] text-xl font-normal text-left w-full">{quiz.materia} - {quiz.title}</p>
           <p className="text-mainTitle font-title text-2xl text-left w-full">{CurQuestion.title}</p>
         </div>
         <div className="flex-1 w-full space-y-2">
-          {searchParams}
           {CurQuestion.answers.map((answer) => (
             <div
               key={`${answer.id}`}
-              className={`flex flex-row rounded-xl shadow-md py-6 px-7 space-x-3 items-center w-full  ${answer.id == selectedAnswer?.id ? "bg-blue-500" : 'bg-none'} `}
+              className={`flex flex-row rounded-xl shadow-md py-6 px-7 space-x-3 items-center w-full  ${answer.id == selectedAnswer?.id ? getBGLinearGradientByMateria(quiz.materia) : 'bg-none'} `}
               onClick={() => setSelectedAnswer(answer)}
             >
 
-              <p className={`bg-blue-300 rounded-full w-6 h-6 text-center text-white`}>{answer?.letra}</p>
+              <p className={` rounded-full w-6 h-6 text-center  ${answer.id == selectedAnswer?.id ? "bg-white text-slate-800" : 'bg-slate-400 text-white'}`}>{answer?.letra}</p>
               <p className={`font-title text-lg  ${answer.id == selectedAnswer?.id ? "text-white" : 'text-black'} `}>{answer.title}</p>
             </div>
           ))}
         </div>
         <button
           onClick={confirmeAnswer}
-          className={`py-4 mt-5 rounded-3xl w-60 flex flex-col items-center bg-blue-500`}
+          className={`py-4 mt-5 rounded-3xl w-full flex flex-col items-center ${getBGLinearGradientByMateria(quiz.materia)}`}
         >
 
           <p className="text-white text-2xl">
@@ -182,6 +182,5 @@ export default function Quiz() {
           </p>
         </button>
       </div>
-    </div>
   )
 }

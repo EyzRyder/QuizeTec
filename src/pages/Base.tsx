@@ -25,6 +25,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Link } from 'react-router-dom';
 import { MoreVertical, Play, PlusCircle } from 'lucide-react';
+import { getBGLinearGradientByMateria } from '@/lib/data';
 
 export default function Base() {
 
@@ -72,10 +73,10 @@ export default function Base() {
               quizes.map((item) => (<>
                 <div
                   key={item.id}
-                  className={`relative flex flex-col transition-all hover:cursor-pointer `}
+                  className={`relative flex flex-col transition-all  `}
                 >
                   <div
-                    className={` flex flex-col rounded-xl w-full px-6 py-4 bg-blue-500`}
+                    className={`flex flex-col rounded-xl w-full px-6 py-4 ${getBGLinearGradientByMateria(item.materia)} hover:cursor-pointer`}
                     onClick={() => navigate(`../quiz/menu/${item.id}`)}
                   >
 
