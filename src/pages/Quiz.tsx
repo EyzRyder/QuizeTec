@@ -28,19 +28,19 @@ export default function Quiz() {
 
   //react
   const navigate = useNavigate();
-  const { id, questionIndex } = useParams();
+  const { id } = useParams();
   const [selectedAnswer, setSelectedAnswer] = useState<AnswersType | null>(null);
 
 
   // Store
   const { user } = useUserStore(); // zustand
-  const { addAnswer, curAnswers } = useCurAnswersStore();
+  const { addAnswer, curAnswers, curQuestionIndex, NextQuestion } = useCurAnswersStore();
   const quiz = useQuizStore(
     (store) => store.quizes.filter((task) => task.id === id)[0]
   );
   const userPastAnswers = useQuizeAnswersStore((store) => store.quizeAnswers.filter(q => q.quizId == quiz.id)[0].usersAnswer);
 
-  const CurQuestion = quiz.Questions[Number(questionIndex)];
+  const CurQuestion = quiz.Questions[curQuestionIndex];
 
 
   // Factions
@@ -57,13 +57,12 @@ export default function Quiz() {
       questionId: CurQuestion.id
     })
 
-    if (Number(questionIndex) == length) {
-      if (!user?.uid) return navigate(-(length + 1))
+    if (curQuestionIndex == length) {
+      if (!user?.uid) return navigate(-1)
       updateAnswerHistory();
-      navigate(-(length + 1))
+      navigate(-1)
     } else {
-
-      navigate(`/quiz/${id}/${String(Number(questionIndex) + 1)}`)
+      NextQuestion();
     }
     setSelectedAnswer(null)
   }
@@ -152,8 +151,8 @@ export default function Quiz() {
   }
   return (
       <div className="flex-1 flex flex-col pb-6 pt-10 px-5 items-center h-full">
-        <div className="w-full h-10 flex justify-center items-center bg-white shadow-md rounded-2xl mb-6">
-          <Progress value={5 * 10} className={`w-[97%] `} />
+        <div className="w-full h-10 flex flex-col justify-center items-center bg-white shadow-md rounded-2xl mb-6">
+        <Progress value={(curQuestionIndex / (quiz.Questions.length - 1)) * 100} className={`w-[97%] `} />
         </div>
         <div className="w-full mb-8">
           <p className="text-[#00000099] text-xl font-normal text-left w-full">{quiz.materia} - {quiz.title}</p>

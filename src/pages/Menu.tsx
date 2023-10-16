@@ -26,7 +26,7 @@ export default function Menu() {
 
   // store
   const { user } = useUserStore();
-  const { resetAnswer } = useCurAnswersStore();
+  const { resetAnswer, startQuiz } = useCurAnswersStore();
   const quiz = useQuizStore(
     (store) => store.quizes.filter((task) => task.id === id)[0]
   );
@@ -167,7 +167,8 @@ export default function Menu() {
           <div
             onClick={() => {
               resetAnswer();
-              navigate(`/quiz/${id}/0`);
+              navigate(`/quiz/${id}`);
+              startQuiz()
             }}
             className={"flex flex-col w-full rounded-2xl py-4 transition-all bg-blue-500 hover:bg-blue-400 cursor-pointer"}
           >

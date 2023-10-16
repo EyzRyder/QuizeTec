@@ -30,8 +30,11 @@ type UserStoreType = {
 }
 
 type CurAnswersStoreType = {
+  curQuestionIndex: number,
   curAnswers: AnsweringType[] | [],
   addAnswer: (answer: AnsweringType) => void,
+  startQuiz: () => void,
+  NextQuestion: () => void,
   resetAnswer: () => void,
 }
 type useQuizeAnswersType = {
@@ -96,7 +99,10 @@ export const useUserStore = create<UserStoreType>()(
 );
 
 export const useCurAnswersStore = create<CurAnswersStoreType>((set) => ({
+  curQuestionIndex: 0,
   curAnswers: [],
   addAnswer: (answer) => set((state) => ({ curAnswers: [...state.curAnswers, answer] })),
   resetAnswer: () => set((state) => ({ curAnswers: [] })),
+  startQuiz: () => set((state) => ({ curQuestionIndex: 0 })),
+  NextQuestion: () => set((state) => ({ curQuestionIndex: (state.curQuestionIndex+1) })),
 }))

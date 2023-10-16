@@ -28,7 +28,7 @@ const Routing = () => {
             <Route path="base" element={<Base />} />
             <Route path="addQuiz" element={<AddQuiz />} />
             <Route path="quiz" element={<Outlet />}>
-              <Route path=":id/:questionIndex" element={<Quiz />} />
+              <Route path=":id" element={<Quiz />} />
               <Route path="menu/:id" element={<Menu />} />
               <Route path="resultados/:id" element={<Resultados />} />
             </Route>
