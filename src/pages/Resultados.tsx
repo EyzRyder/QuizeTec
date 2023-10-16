@@ -57,7 +57,7 @@ export default function Resultados() {
                                     <ScrollArea className="h-[100%]">
                                         {item?.pastAnswers?.map((answers: any) => {
                                             let sum: boolean | number = false;
-                                            const total = answers.questions.length
+                                            const total = answers.questions.length;
                                             answers.questions?.map((data: any) => sum = (+sum) + (+data.isRight));
                                             return (
                                                 <div

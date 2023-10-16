@@ -16,6 +16,7 @@ import useQuizAnswers from '../useHook/useQuizAnswers';
 // Dependencies
 import { useNavigate } from 'react-router';
 
+// Components
 import {
   Popover,
   PopoverContent,
@@ -26,6 +27,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Link } from 'react-router-dom';
 import { MoreVertical, Play, PlusCircle } from 'lucide-react';
 import { getBGLinearGradientByMateria } from '@/lib/data';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function Base() {
 
@@ -40,7 +42,7 @@ export default function Base() {
 
   return (
     <IonContent className='min-h-screen h-full' style={{ height: '100%' }}>
-      <div className="flex-1 flex flex-col h-full  w-full">
+      <div className="flex-1 flex flex-col h-full w-full">
         <div className="flex pt-11 pb-11 px-6 flex-row justify-between items-center bg-blue-500 rounded-b-3xl">
           <div className="flex flex-col justify-center">
             <p className="text-white text-2xl">Ola,</p>
@@ -65,15 +67,15 @@ export default function Base() {
             </PopoverContent>
           </Popover>
         </div>
-        <div className="flex-1 flex flex-col px-8 py-10 space-y-2 w-full">
+        <div className="flex-1 flex flex-col justify-between px-8 py-10 space-y-2 h-full w-full">
           <p className="text-3xl font-title text-[#2A416F] font-semibold">Quizes Base</p>
 
-          <div className='flex-1 flex flex-col justify-between h-full space-y-4'>
+          <ScrollArea className='h-[400px]'>
             {
               quizes.map((item) => (<>
                 <div
                   key={item.id}
-                  className={`relative flex flex-col transition-all  `}
+                  className={`relative flex flex-col transition-all mb-4`}
                 >
                   <div
                     className={`flex flex-col rounded-xl w-full px-6 py-4 ${getBGLinearGradientByMateria(item.materia)} hover:cursor-pointer`}
@@ -138,7 +140,7 @@ export default function Base() {
               ))
             }
 
-          </div>
+          </ScrollArea>
 
           <Link
             to="/addQuiz"
