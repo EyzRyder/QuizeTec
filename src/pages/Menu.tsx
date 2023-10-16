@@ -100,7 +100,7 @@ export default function Menu() {
                   </div>
                   <div className="flex flex-row items-center justify-center bg-[#7cfc0033] px-2 py-1 rounded">
                     {/* <Icon name="chevron-down" size={12} color={'#7CFC00'} /> */}
-                    <p className="text-[#7CFC00] text-[10px]">+3 acertos</p>
+                    <p className="text-[#7CFC00] text-[10px]">Pontuação Atual</p>
                   </div>
                 </div>
                 {totalCorrectAnswer ? (
@@ -119,13 +119,12 @@ export default function Menu() {
                   Total de acertos
                 </p>
               </div>
-              <div className="flex flex-col bg-white rounded-xl px-4 pt-4 pb-5 shadow">
+              {/* <div className="flex flex-col bg-white rounded-xl px-4 pt-4 pb-5 shadow">
                 <div className="flex flex-row justify-between items-center space-x-8">
                 <div className="flex flex-col h-9 w-9  rounded-full items-center justify-center">
                     <img src="https://i.postimg.cc/2STnJdNN/Clock.png" alt="" className="w-full h-full"/>
                   </div>
                   <div className="flex flex-row items-center justify-center bg-[#ffa2005d] px-2 py-1 rounded">
-                    {/* <Icon name="chevron-down" size={12} color={'#FFA200'} /> */}
                     <p className="text-[#FFA200] text-[10px]">+3 min</p>
                   </div>
                 </div>
@@ -133,7 +132,7 @@ export default function Menu() {
                   14 min
                 </p>
                 <p className="text-[#888] font-body text-sm">Total de temp</p>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="flex flex-col space-y-2">
@@ -149,8 +148,7 @@ export default function Menu() {
                   <div className="flex flex-row justify-between items-center space-x-8">
                     <div className="h-9 w-9 bg-slate-300 rounded-full"></div>
                     <div className="flex flex-row items-center justify-center bg-[#7cfc0033] px-2 py-1 rounded">
-                      {/* <Icon name="chevron-down" size={12} color={'#7CFC00'} /> */}
-                      <p className="text-[#7CFC00] text-[10px]">+3 acertos</p>
+                      <p className="text-[#7CFC00] text-[10px]">+1</p>
                     </div>
                   </div>
                   <p className="font-title text-xl text-[#2A416F] font-bold">
