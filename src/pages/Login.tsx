@@ -15,7 +15,8 @@ import * as z from "zod";
 import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "../lib/firebaseConfig";
+import { auth, db } from "../lib/firebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
 
 // Componentes
 import { Button } from "@/components/ui/button";
@@ -66,7 +67,8 @@ export default function Login() {
     await signInWithEmailAndPassword(auth, values.email, values.senha)
       .then(async (userCredential) => {
         const user = userCredential.user;
-        updateUser(user);
+        const docSnap = await getDoc(doc(db, 'users', user.uid));
+        updateUser({ ...user, userName: docSnap?.data()?.userName });
         navigate("/base");
       })
       .catch((error) => {

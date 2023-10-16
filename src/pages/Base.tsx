@@ -46,7 +46,7 @@ export default function Base() {
         <div className="flex pt-11 pb-11 px-6 flex-row justify-between items-center bg-blue-500 rounded-b-3xl">
           <div className="flex flex-col justify-center">
             <p className="text-white text-2xl">Ola,</p>
-            <p className="text-white text-2xl">Bem Vindo(a) {user?.email}</p>
+            <p className="text-white text-2xl">Bem Vindo(a) {user?.userName}</p>
           </div>
           <Popover>
             <PopoverTrigger asChild>

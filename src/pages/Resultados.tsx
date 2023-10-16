@@ -38,7 +38,9 @@ export default function Resultados() {
                 <h2>{quizAnswers?.usersAnswer.length} Respostas</h2>
                 <div className="w-full flex flex-col items-center gap-4">
                     {quizAnswers?.usersAnswer?.map(item => {
-                        const userEmail = users.filter((user: any) => user.id == item.userId)[0]?.email;
+                        const userData = users.filter((user: any) => user.id == item.userId)[0];
+                        const userEmail = userData?.email;
+                        const username = userData?.userName;
                         return (
                             <Dialog key={item.userId}>
                                 <DialogTrigger asChild>
@@ -47,7 +49,7 @@ export default function Resultados() {
                                     >
                                         <CardHeader>
                                             <CardTitle>Usuário</CardTitle>
-                                            <CardDescription className="text-slate-200"> {userEmail}</CardDescription>
+                                            <CardDescription className="text-slate-200">{username} - {userEmail}</CardDescription>
                                         </CardHeader>
 
                                     </Card>

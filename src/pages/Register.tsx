@@ -78,7 +78,7 @@ export default function Register() {
         await updateProfile(user, { displayName: values.userName }).catch(
           (err) => console.log(err)
         );
-        updateUser(user)
+        updateUser({ ...user, userName:values.userName })
         navigate("/../base")
       })
       .catch((error) => {
