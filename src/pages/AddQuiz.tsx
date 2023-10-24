@@ -120,7 +120,7 @@ export default function AddQuiz() {
         animate={{ opacity: 1, transition: { delay: 0.2, duration: 0.2 } }}
         exit={{ opacity: 0.2, transition: { duration: 0.2 } }}
       >
-        <div className="flex-1 flex flex-col h-[100vh] w-full">
+        <div className="flex-1 flex flex-col h-[100vh] w-full bg-[#F5F9FC]">
           <div className="flex flex-row px-2 py-6 justify-start items-center bg-blue-500 rounded-b-3xl gap-4">
             <Button
               onClick={() => {

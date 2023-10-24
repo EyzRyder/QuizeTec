@@ -22,7 +22,7 @@ export default function Sobre() {
         exit={{ opacity: 0, scale: 0.8 }}
         transition={{ duration: 1 }}
       >
-        <div className="flex flex-col flex-1 h-[105vh] items-center">
+        <div className="flex flex-col flex-1 h-[105vh] items-center bg-[#F5F9FC]">
           <div className="flex flex-row pt-10 w-full justify-between items-center">
             <div
               onClick={() => navigate(-1)}

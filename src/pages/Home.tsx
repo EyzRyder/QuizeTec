@@ -20,7 +20,7 @@ export default function Home() {
         exit={{ opacity: 0, scale: 0.8 }}
         transition={{ duration: 1 }}
       >
-        <div className="flex flex-col flex-1 items-center px-5 h-full  justify-center sm:grid sm:grid-cols-2 ">
+        <div className="flex flex-col flex-1 items-center px-5 h-full  justify-center sm:grid sm:grid-cols-2 bg-[#F5F9FC]">
           <div className="flex justify-center items-center pr-14 w-[600px]">
             <img src="https://i.postimg.cc/JhsqzN1p/Phone-Girl.png" alt="phonegirl" loading="lazy" />
           </div>

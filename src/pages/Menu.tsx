@@ -59,7 +59,7 @@ export default function Menu() {
         animate={{ opacity: 1, transition: { delay: 0.2, duration: 0.2 } }}
         exit={{ opacity: 0.2, transition: { duration: 0.2 } }}
       >
-        <div className="flex flex-col flex-1 h-screen">
+        <div className="flex flex-col flex-1 h-screen bg-[#fff]">
           <div
             className={`flex ${getBGLinearGradientByMateria(
               quiz.materia
@@ -92,7 +92,7 @@ export default function Menu() {
                   loading="lazy"
                 />
               </div>
-              <p className="text-white text-xl font-title">{quiz.title}</p>
+              <p className="text-white text-xl font-medium text-center">{quiz.title}</p>
               <div className="flex flex-row space-x-2">
                 <div className="flex flex-col rounded-[8px] mix-blend-soft-light bg-slate-700 py-1 px-4">
                   <p className="text-white font-body text-base">
@@ -109,7 +109,7 @@ export default function Menu() {
           </div>
           <div className="flex flex-col flex-1 px-5 pt-5 pb-9 gap-7 ">
             <div className="flex flex-col gap-4">
-              <p className="text-[#888] font-body text-lg">Resultados</p>
+              <p className="text-[#888] text-lg font-medium">Resultados</p>
               <div className="flex flex-row justify-center space-x-5">
                 <div className="flex flex-col bg-white rounded-xl px-4 pt-4 pb-5 shadow">
                   <div className="flex flex-row justify-between items-center space-x-8">
@@ -166,7 +166,7 @@ export default function Menu() {
               {userPastAnswers &&
                 totalCorrectAnswer?.map((item) => (
                   <div
-                    className="flex flex-col bg-white rounded-xl px-4 pt-4 pb-5 shadow"
+                    className="flex flex-col bg-white rounded-xl px-4 pt-4 pb-5 shadow-g"
                     key={item.index}
                   >
                     <div className="flex flex-row justify-between items-center space-x-8">
