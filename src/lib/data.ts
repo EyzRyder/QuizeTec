@@ -48,6 +48,7 @@ export function getBGColorByMateria(subject: string): string {
   if (subject === materia.Portuguese) return "#0083FE";
   return "#4A92FF";
 }
+
 export function getBGLinearGradientByMateria(subject: string): string {
   if (subject === materia.Matematica)
     return "bg-gradient-to-r from-amber-500 to-rose-300";
@@ -63,7 +64,28 @@ export function getBGLinearGradientByMateria(subject: string): string {
     return "bg-gradient-to-r from-[#32C665] to-[#73E49A]";
   if (subject === materia.Historia)
     return "bg-gradient-to-r from-[#A95CEC] to-[#DA22FF]";
+  if (subject === materia.Geografia)
+    return "bg-gradient-to-r from-[#4CB8C4] to-[#3CD3AD]";
   return "bg-indigo-500";
+}
+
+export function materiaImages(subject: string): string {
+  if (subject === materia.Matematica)
+    return "https://i.postimg.cc/dVF5skXC/Calculator.png"; //Ok
+  if (subject === materia.Biologia)
+    return "https://i.postimg.cc/c1DYzK7h/Dna.png"; // Ok
+  if (subject === materia.Fisica)
+    return "https://i.postimg.cc/d3XhVy4K/Fisica.png"; // Ok
+  if (subject === materia.Portuguese)
+    return "https://i.postimg.cc/mD5Nftx0/Book.png"; // Ok
+  if (subject === materia.Art)
+    return "https://i.postimg.cc/sfSPMf54/Palette.png"; // OK
+  if (subject === materia.Quimica)
+    return "https://i.postimg.cc/7LGGjXVn/eye-dropper.png"; // Ok
+  if (subject === materia.Historia)
+    return "https://i.postimg.cc/wvxK74Gh/globe.png"; // Ok
+  if (subject === materia.Geografia) return "";
+  return "https://i.postimg.cc/wvxK74Gh/globe.png"; // Ok
 }
 
 export { materiaOptions, levelsOptions };

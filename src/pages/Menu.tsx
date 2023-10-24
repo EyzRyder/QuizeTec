@@ -15,7 +15,7 @@ import {
   useQuizeAnswersStore,
   useUserStore,
 } from "@/lib/store";
-import { getBGLinearGradientByMateria } from "@/lib/data";
+import { getBGLinearGradientByMateria, materiaImages } from "@/lib/data";
 
 export default function Menu() {
   //react
@@ -63,7 +63,7 @@ export default function Menu() {
           <div
             className={`flex ${getBGLinearGradientByMateria(
               quiz.materia
-            )} relative flex-row px-2 pt-20 pb-12 justify-center items-center rounded-b-3xl `}
+            )} relative flex-row px-2 pt-14 pb-12 justify-center items-center rounded-b-3xl `}
           >
             <div
               onClick={() => {
@@ -84,6 +84,13 @@ export default function Menu() {
             </div>
             <div className="flex flex-col justify-center items-center space-y-3">
               {/* <div className="flex flex-col h-32 w-32 bg-gray-500"></div> */}
+              <div>
+                <img
+                  src={materiaImages(quiz.materia)}
+                  alt="Book"
+                  className="w-[6rem] h-[6rem]"
+                />
+              </div>
               <p className="text-white text-xl font-title">{quiz.title}</p>
               <div className="flex flex-row space-x-2">
                 <div className="flex flex-col rounded-[8px] mix-blend-soft-light bg-slate-700 py-1 px-4">
