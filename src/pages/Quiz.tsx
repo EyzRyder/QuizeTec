@@ -164,9 +164,10 @@ export default function Quiz() {
   }
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1, transition: { delay: 0.2, duration: 0.2 } }}
-      exit={{ opacity: 0.2, transition: { duration: 0.2 } }}
+      initial={{ x: "100vw" }}
+      animate={{ x: 0 }}
+      exit={{ x: "-100vw" }}
+      transition={{ duration: 0.5 }}
     >
       <div className="flex-1 flex flex-col pb-6 pt-10 px-5 items-center transition-shadow ease-in-out duration-500 h-[100vh]">
         <div className="w-full h-10 flex flex-col justify-center items-center bg-white shadow-md rounded-2xl mb-6">

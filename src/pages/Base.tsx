@@ -53,10 +53,9 @@ export default function Base() {
       style={{ height: "100%" }}
     >
       <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.8 }}
-        transition={{ duration: 1 }}
+        initial={{ opacity: 0.1 }}
+        animate={{ opacity: 1, transition: { delay: 0.2, duration: 0.3 } }}
+        exit={{ opacity: 0.1, transition: { duration: 0.2 } }}
       >
         <div className="flex-1 flex flex-col h-[100vh] w-full">
           <div className="flex pt-11 pb-11 px-6 flex-row justify-between items-center bg-blue-500 rounded-b-3xl">

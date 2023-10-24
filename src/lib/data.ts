@@ -5,12 +5,12 @@ interface OptionsType {
 
 const materia = {
   Biologia: "Biologia",
-  Portuguese: "Portuguese",
+  Portuguese: "Português",
   Fisica: "Física",
   Quimica: "Química",
   Matematica: "Matemática",
-  Art: "Art",
-  Historia: "Historia",
+  Art: "Artes",
+  Historia: "História",
   Geografia: "Geografia",
 };
 
@@ -56,7 +56,7 @@ export function getBGLinearGradientByMateria(subject: string): string {
   if (subject === materia.Fisica)
     return "bg-gradient-to-r from-[#FC67FA] to-[#F4C4F3]";
   if (subject === materia.Portuguese)
-    return "bg-gradient-to-r from-[#0083FE] to-[#97BEFA]";
+    return "bg-gradient-to-r from-[#0C79DF] to-[#97BEFA]";
   if (subject === materia.Art)
     return "bg-gradient-to-r from-[#FF9068] via-[#EE9CA7] to-[#FFDDE1]";
   if (subject === materia.Quimica)

@@ -34,13 +34,13 @@ const formSchema = z.object({
   email: z
     .string()
     .min(1, {
-      message: "Por favar digite seu email.",
+      message: "Informe um e-mail para efetuar o registro 😉",
     })
     .email({
       message: "Insira email valido.",
     }),
   senha: z.string().min(6, {
-    message: "Senha deve conter no mínimo 6 caracteres.",
+    message: "Senha deve conter no mínimo 6 caracteres 🔑",
   }),
 });
 
@@ -78,16 +78,16 @@ export default function Login() {
   return (
     <IonContent>
       <motion.div
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.8 }}
-      transition={{ duration: 1 }}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.8 }}
+        transition={{ duration: 1 }}
       >
         <div className="flex flex-col flex-1 items-center px-10 h-full justify-center sm:grid sm:grid-cols-2">
           <div className="flex justify-center items-center pr-14 w-[480px]">
             <img
               src="https://i.postimg.cc/csvMYcSm/FallGirl.png"
-              alt="phonegirl"
+              alt="FallGirl"
             />
           </div>
           <div className="flex flex-col w-full py-10 ">
@@ -112,7 +112,7 @@ export default function Login() {
                       {/* <FormLabel>Email</FormLabel> */}
                       <FormControl>
                         <Input
-                          placeholder="albert.einstain@etec.sp.gov.br"
+                          placeholder="AlbertEinstein@etec.sp.gov.br"
                           className="bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
                           {...field}
                         />
@@ -152,7 +152,9 @@ export default function Login() {
               className="w-full text-center rounded-[20px] py-6 text-[#000] font-medium text-[18px]"
             >
               Não Possui Conta?{" "}
-              <span className="text-indigo-600 hover:underline">Registrar</span>
+              <span className="text-[#4A92FF] hover:underline font-semibold">
+                Registrar
+              </span>
             </Link>
           </div>
         </div>

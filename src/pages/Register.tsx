@@ -35,18 +35,19 @@ import { Input } from "@/components/ui/input";
 // type
 const formSchema = z.object({
   userName: z.string().min(2, {
-    message: "Nome de usuário deve conter no mínimo 2 caracteres.",
+    message:
+      "Vamos lá! Seu nome de usuário deve ter pelo menos 2 caracteres 😊",
   }),
   email: z
     .string()
     .min(1, {
-      message: "Por favar digite seu email.",
+      message: "Informe um e-mail para efetuar o registro 😉",
     })
     .email({
       message: "Insira email valido.",
     }),
   senha: z.string().min(6, {
-    message: "Senha deve conter no mínimo 6 caracteres.",
+    message: "Senha deve conter no mínimo 6 caracteres 🔑",
   }),
 });
 
@@ -100,12 +101,14 @@ export default function Register() {
         exit={{ opacity: 0, scale: 0.8 }}
         transition={{ duration: 1 }}
       >
-        <div className="flex flex-col flex-1 items-center px-10 h-full justify-center sm:grid sm:grid-cols-2">
-          <div className="flex flex-col">
-            <img src={fallgirl} className="w-[800px] " alt="fall" />
+        <div className="flex flex-col flex-1 items-center px-10 h-screen justify-center sm:grid sm:grid-cols-2">
+          <div className="flex justify-center items-center pr-14 w-[450px]">
+            <img
+              src="https://i.postimg.cc/csvMYcSm/FallGirl.png"
+              alt="FallGirl"
+            />
           </div>
-
-          <div className="flex flex-col w-full py-10 ">
+          <div className="flex flex-col w-full  ">
             <div className="flex flex-col pb-7 w-full">
               <p className="font-title font-semibold text-[#2A416F] text-[30px] leading-tight">
                 Olá,
@@ -144,7 +147,7 @@ export default function Register() {
                       <FormLabel>Email</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="albert.einstein@etec.sp.gov.br"
+                          placeholder="AlbertEinstein@etec.sp.gov.br"
                           className="bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
                           {...field}
                         />
@@ -184,7 +187,7 @@ export default function Register() {
               className="w-full text-center rounded-[20px] py-6 text-[#000] font-medium text-[18px]"
             >
               Possui Conta?{" "}
-              <span className="text-indigo-600 hover:underline">Entrar</span>
+              <span className="text-[#4A92FF] hover:underline font-semibold">Entrar</span>
             </Link>
           </div>
         </div>
