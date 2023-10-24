@@ -83,9 +83,10 @@ export function materiaImages(subject: string): string {
   if (subject === materia.Quimica)
     return "https://i.postimg.cc/7LGGjXVn/eye-dropper.png"; // Ok
   if (subject === materia.Historia)
-    return "https://i.postimg.cc/wvxK74Gh/globe.png"; // Ok
-  if (subject === materia.Geografia) return "";
-  return "https://i.postimg.cc/wvxK74Gh/globe.png"; // Ok
+    return "https://i.postimg.cc/xdtxFf6z/Apple.png"; // Ok
+  if (subject === materia.Geografia)
+    return "https://i.postimg.cc/wvxK74Gh/globe.png";
+  return "https://i.postimg.cc/mD5Nftx0/Book.png"; // Ok
 }
 
 export { materiaOptions, levelsOptions };

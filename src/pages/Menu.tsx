@@ -89,6 +89,7 @@ export default function Menu() {
                   src={materiaImages(quiz.materia)}
                   alt="Book"
                   className="w-[6rem] h-[6rem]"
+                  loading="lazy"
                 />
               </div>
               <p className="text-white text-xl font-title">{quiz.title}</p>
