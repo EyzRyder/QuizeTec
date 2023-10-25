@@ -22,7 +22,7 @@ export default function Home() {
       >
         <div className="flex flex-col flex-1 items-center px-5 h-full  justify-center sm:grid sm:grid-cols-2 bg-[#F5F9FC]">
           <div className="flex justify-center items-center pr-14 w-[600px]">
-            <img src="https://i.postimg.cc/JhsqzN1p/Phone-Girl.png" alt="phonegirl" loading="lazy" />
+            <img src={PhoneGirl} alt="phonegirl" loading="lazy" />
           </div>
           <div className="flex flex-col items-center w-full gap-3 ">
             <p className="text-center font-title text-[25px] leading-tight font-semibold text-[#2A416F] py-4">

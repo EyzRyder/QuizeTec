@@ -86,7 +86,7 @@ export default function Login() {
         <div className="flex flex-col flex-1 items-center px-10 h-full justify-center sm:grid sm:grid-cols-2 bg-[#F5F9FC]">
           <div className="flex justify-center items-center pr-14 w-[480px]">
             <img
-              src="https://i.postimg.cc/csvMYcSm/FallGirl.png"
+              src={fallgirl}
               alt="FallGirl"
             />
           </div>
