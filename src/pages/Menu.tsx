@@ -58,6 +58,8 @@ export default function Menu() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, transition: { delay: 0.2, duration: 0.2 } }}
         exit={{ opacity: 0.2, transition: { duration: 0.2 } }}
+        className="h-full "
+
       >
         <div className="flex flex-col flex-1 h-screen bg-[#fff]">
           <div
@@ -166,7 +168,7 @@ export default function Menu() {
               {userPastAnswers &&
                 totalCorrectAnswer?.map((item) => (
                   <div
-                    className="flex flex-col bg-white rounded-xl px-4 pt-4 pb-5 shadow-g"
+                    className="flex flex-col bg-white rounded-xl px-4 pt-4 pb-5 shadow-lg"
                     key={item.index}
                   >
                     <div className="flex flex-row justify-between items-center space-x-8">

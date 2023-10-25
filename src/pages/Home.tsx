@@ -19,6 +19,7 @@ export default function Home() {
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.8 }}
         transition={{ duration: 1 }}
+        className="h-full "
       >
         <div className="flex flex-col flex-1 items-center px-5 h-full  justify-center sm:grid sm:grid-cols-2 bg-[#F5F9FC]">
           <div className="flex justify-center items-center pr-14 w-[600px]">

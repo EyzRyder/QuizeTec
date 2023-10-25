@@ -168,6 +168,8 @@ export default function Quiz() {
       animate={{ x: 0 }}
       exit={{ x: "-100vw" }}
       transition={{ duration: 0.5 }}
+      className="h-full "
+
     >
       <div className="flex-1 flex flex-col pb-6 pt-10 px-5 items-center transition-shadow ease-in-out duration-500 h-[100vh] bg-[#F5F9FC]">
         <div className="w-full h-10 flex flex-col justify-center items-center bg-white shadow-md rounded-2xl mb-6">
