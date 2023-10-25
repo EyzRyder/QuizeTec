@@ -71,21 +71,21 @@ export function getBGLinearGradientByMateria(subject: string): string {
 
 export function materiaImages(subject: string): string {
   if (subject === materia.Matematica)
-    return "https://i.postimg.cc/dVF5skXC/Calculator.png"; //Ok
+    return "https://cdn3d.iconscout.com/3d/premium/thumb/sketchbook-3981409-3297347.png"; //Ok
   if (subject === materia.Biologia)
-    return "https://i.postimg.cc/c1DYzK7h/Dna.png"; // Ok
+    return "https://cdn3d.iconscout.com/3d/premium/thumb/sketchbook-3981409-3297347.png"; // Ok
   if (subject === materia.Fisica)
-    return "https://i.postimg.cc/d3XhVy4K/Fisica.png"; // Ok
+    return "https://cdn3d.iconscout.com/3d/premium/thumb/sketchbook-3981409-3297347.png"; // Ok
   if (subject === materia.Portuguese)
-    return "https://i.postimg.cc/mD5Nftx0/Book.png"; // Ok
+    return "https://cdn3d.iconscout.com/3d/premium/thumb/sketchbook-3981409-3297347.png"; // Ok
   if (subject === materia.Art)
-    return "https://i.postimg.cc/sfSPMf54/Palette.png"; // OK
+    return "https://cdn3d.iconscout.com/3d/premium/thumb/sketchbook-3981409-3297347.png"; // OK
   if (subject === materia.Quimica)
-    return "https://i.postimg.cc/7LGGjXVn/eye-dropper.png"; // Ok
+    return "https://cdn3d.iconscout.com/3d/premium/thumb/sketchbook-3981409-3297347.png"; // Ok
   if (subject === materia.Historia)
-    return "https://i.postimg.cc/xdtxFf6z/Apple.png"; // Ok
+    return "https://cdn3d.iconscout.com/3d/premium/thumb/sketchbook-3981409-3297347.png"; // Ok
   if (subject === materia.Geografia)
-    return "https://i.postimg.cc/wvxK74Gh/globe.png";
+    return "https://cdn3d.iconscout.com/3d/premium/thumb/sketchbook-3981409-3297347.png";
   return "https://i.postimg.cc/mD5Nftx0/Book.png"; // Ok
 }
 
