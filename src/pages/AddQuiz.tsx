@@ -31,8 +31,6 @@ import { Switch } from "@/components/ui/switch";
 import {
   useNewQuiz,
   useQuestionsStore,
-  useQuizStore,
-  useUserStore,
 } from "@/lib/store";
 import { levelsOptions, materiaOptions } from "@/lib/data";
 import { useUserStorage } from "@/useHook/useUserStorage";
@@ -47,10 +45,8 @@ import { useNavigate } from "react-router";
 import { ChevronLeft, PlusCircle, Trash2 } from "lucide-react";
 
 export default function AddQuiz() {
-  //Store
-  // const { user } = useUserStore();
+  // store
   const { user } = useUserStorage(); // local storage
-  const { addQuiz } = useQuizStore();
   const { questions, addQuestion, deleteQuestion, resetQuestion } =
     useQuestionsStore();
   const { quiz, addLevel, addMateria, addTitle, resetQuiz } = useNewQuiz();
@@ -75,16 +71,16 @@ export default function AddQuiz() {
     if (!quiz.level) return alert("Falta Selecionar o Nível");
     if (!quiz.materia) return alert("Falta Selecionar o Materia");
     if (!quiz.Questions) return alert("Falta Adicionar o Questoes");
-    // addQuiz({ ...quiz, id: String(uuid()), Questions: questions, createdBy: user?.uid })
     const id = uuid().toString();
-    const col = await doc(db, "Quizes", id);
+    const col = doc(db, "Quizes", id);
     await setDoc(col, {
       ...quiz,
       id,
       Questions: questions,
       createdBy: user?.uid,
     });
-    await setDoc(await doc(db, "QuizAnswers", id), {
+    const colAns = doc(db, "QuizAnswers", id);
+    await setDoc(colAns, {
       quizId: id,
       title: quiz.title,
       usersAnswer: [],
@@ -119,8 +115,9 @@ export default function AddQuiz() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, transition: { delay: 0.2, duration: 0.2 } }}
         exit={{ opacity: 0.2, transition: { duration: 0.2 } }}
+        className="h-full"
       >
-        <div className="flex-1 flex flex-col h-[100vh] w-full bg-[#F5F9FC]">
+        <div className="flex-1 flex flex-col h-screen w-full bg-[#F5F9FC]">
           <div className="flex flex-row px-2 py-6 justify-start items-center bg-blue-500 rounded-b-3xl gap-4">
             <Button
               onClick={() => {
@@ -215,7 +212,7 @@ export default function AddQuiz() {
                         <p className="font-title text-2xl text-[#2A416F]">
                           Alternativas
                         </p>
-                        <ScrollArea className="flex flex-col items-center space-y-6 h-76 px-3">
+                        <ScrollArea className="flex flex-col items-center space-y-6 h-72 px-3">
                           <div className="px-2">
                             <div className="flex flex-row justify-between items-center">
                               <p className="font-normal text-lg">A.</p>

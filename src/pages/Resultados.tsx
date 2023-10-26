@@ -28,7 +28,7 @@ export default function Resultados() {
 
     return (
         <IonContent className='min-h-screen h-full' style={{ height: '100%' }}>
-            <div className="flex-1 w-full py-4 bg-slate-50 space-y-6">
+            <div className="flex-1 w-full h-full py-4 bg-slate-50 space-y-6">
                 <h1 className="text-2xl text-center">
                     Resultados da Quiz
                     <span className="text-blue-500">
