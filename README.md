@@ -48,7 +48,12 @@ npm run dev
 
 2. Abra o arquivo `.env` com um editor de texto e adicione as seguintes variáveis de ambiente:
 ```
-Vite_Key
+VITE_FIREBASE_apiKey=""
+VITE_FIREBASE_authDomain=""
+VITE_FIREBASE_projectId=""
+VITE_FIREBASE_storageBucket=""
+VITE_FIREBASE_messagingSenderId=""
+VITE_FIREBASE_appId=""
 ```
 ## Planos de Atualizações
 
@@ -66,6 +71,6 @@ Vite_Key
 
 
 <a href="https://github.com/Kc1t">
-<img src="https://avatars.githubusercontent.com/u/98243777?v=4" alt="Gabriel" width="90" height="90"/>
+<img src="https://avatars.githubusercontent.com/u/98243777?v=4" alt="Kaua" width="90" height="90"/>
 </a>
 
