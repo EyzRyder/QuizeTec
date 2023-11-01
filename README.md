@@ -24,8 +24,7 @@ Antes de iniciar, certifique-se de que você tenha o Node.js instalado em sua m�
 Use o gerenciador de pacotes da sua preferencia, mas para ter o mesmo resultados que da gente use [npm](https://www.npmjs.com)
 
 ## Instalação
-1. Clone este rep
-2. ositório em sua máquina local:
+1. Clone este repositório em sua máquina local:
 ```bash
   git clone https://github.com/EyzRyder/Quiz-Etec.git
 ```
