@@ -36,7 +36,7 @@ cd Quiz-Etec
 ```bash
 npm i
 ```
-3. Execute o codigo:
+4. Execute o codigo:
 
 ```bash
 npm run dev
