@@ -1,5 +1,5 @@
 # Quiz Etec
-Quiz Etec é uma plataforma online que permite aos professores criar quizzes interativos e personalizados para avaliar o aprendizado dos seus alunos. Com Quiz Etec, os professores podem.
+Quiz Etec é uma plataforma online que permite aos professores criar quizzes interativos e personalizados para avaliar o aprendizado dos seus alunos.
 Quiz Etec também é uma ferramenta divertida e eficaz para os alunos que querem revisar os conteúdos estudados.
 Quiz Etec é uma plataforma gratuita e fácil de usar, que se adapta a qualquer dispositivo e sistema operacional. Para começar a usar, basta se cadastrar com seu e-mail. Experimente hoje mesmo e descubra como ele pode transformar sua experiência de ensino e aprendizagem.
 
