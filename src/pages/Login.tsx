@@ -60,7 +60,6 @@ export default function Login() {
   const navigate = useNavigate();
 
   //functions
-
   async function onSubmit(values: z.infer<typeof formSchema>) {
     await signInWithEmailAndPassword(auth, values.email, values.senha)
       .then(async (userCredential) => {
@@ -71,7 +70,7 @@ export default function Login() {
       })
       .catch((error) => {
         const errorMessage = error.message;
-        console.log(errorMessage);
+        console.error("Error atempetd login: ", errorMessage);
       });
   }
 
@@ -83,14 +82,10 @@ export default function Login() {
         exit={{ opacity: 0, scale: 0.8 }}
         transition={{ duration: 1 }}
         className="h-full "
-
       >
         <div className="flex flex-col flex-1 items-center px-10 h-full justify-center sm:grid sm:grid-cols-2 bg-[#F5F9FC]">
           <div className="flex justify-center items-center pr-14 w-[480px]">
-            <img
-              src={fallgirl}
-              alt="FallGirl"
-            />
+            <img src={fallgirl} alt="FallGirl" />
           </div>
           <div className="flex flex-col w-full py-10 ">
             <div className="flex flex-col pb-7 w-full">

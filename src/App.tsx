@@ -1,4 +1,3 @@
-import { RouterProvider } from "react-router-dom";
 import { IonApp, setupIonicReact } from "@ionic/react";
 
 /* Core CSS required for Ionic components to work properly */
@@ -20,7 +19,6 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.scss";
 import "./themes/globals.scss";
-// import { router } from "./Router";
 import Routing from "./Routes";
 
 setupIonicReact();
@@ -28,7 +26,6 @@ setupIonicReact();
 const App: React.FC = () => (
   <IonApp>
     <Routing />
-    {/* <RouterProvider router={router} /> */}
   </IonApp>
 );
 
