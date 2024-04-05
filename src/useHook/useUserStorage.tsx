@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Drivers, Storage } from "@ionic/storage";
-import * as CordovaSQLiteDriver from "localforage-cordovasqlitedriver";
+import {  Storage } from "@ionic/storage";
 import { useUserStore } from "@/lib/store";
 
 const MODE_KEY = "userData";
@@ -15,14 +14,9 @@ export function useUserStorage() {
       try {
         const newStore: Storage = new Storage({
           name: "QUIZETEC",
-          driverOrder: [
-            CordovaSQLiteDriver._driver,
-            Drivers.IndexedDB,
-            Drivers.LocalStorage,
-          ],
+          driverOrder: ["indexeddb", "sqlite", "localstorage"],
         });
 
-        await newStore.defineDriver(CordovaSQLiteDriver);
 
         const storeInstance = await newStore.create();
         setStore(storeInstance);

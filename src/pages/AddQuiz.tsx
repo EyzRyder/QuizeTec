@@ -28,9 +28,9 @@ import {
 import { Switch } from "@/components/ui/switch";
 
 // Libs
-import { useNewQuiz, useQuestionsStore } from "@/lib/store";
+import { useNewQuiz, useQuestionsStore, useUserStore } from "@/lib/store";
 import { levelsOptions, materiaOptions } from "@/lib/data";
-import { useUserStorage } from "@/useHook/useUserStorage";
+// import { useUserStorage } from "@/useHook/useUserStorage";
 //firebase
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
@@ -43,7 +43,8 @@ import { ChevronLeft, PlusCircle, Trash2 } from "lucide-react";
 
 export default function AddQuiz() {
   // store
-  const { user } = useUserStorage(); // local storage
+  //const { user } = useUserStorage(); // local storage do ionic
+  const { user } = useUserStore(); // local storage do zustand
   const { questions, addQuestion, deleteQuestion, resetQuestion } =
     useQuestionsStore();
   const { quiz, addLevel, addMateria, addTitle, resetQuiz } = useNewQuiz();
@@ -68,20 +69,33 @@ export default function AddQuiz() {
     if (!quiz.level) return alert("Falta Selecionar o Nível");
     if (!quiz.materia) return alert("Falta Selecionar o Materia");
     if (!quiz.Questions) return alert("Falta Adicionar o Questoes");
+
     const id = uuid().toString();
-    const col = doc(db, "Quizes", id);
-    await setDoc(col, {
-      ...quiz,
-      id,
-      Questions: questions,
-      createdBy: user?.uid,
-    });
-    const colAns = doc(db, "QuizAnswers", id);
-    await setDoc(colAns, {
-      quizId: id,
-      title: quiz.title,
-      usersAnswer: [],
-    });
+
+    try {
+      const col = doc(db, "Quizes", id);
+
+      await setDoc(col, {
+        ...quiz,
+        id,
+        Questions: questions,
+        createdBy: user?.uid,
+      });
+    } catch (err) {
+      console.error("Failed to set Quiz col: ", err);
+    }
+    try {
+      const colAns = doc(db, "QuizAnswers", id);
+
+      await setDoc(colAns, {
+        quizId: id,
+        title: quiz.title,
+        usersAnswer: [],
+      });
+    } catch (err) {
+      console.error("Failed to set QuizAnswers col: ", err);
+    }
+
     goBack();
   }
   function fullReset() {
