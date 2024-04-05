@@ -106,7 +106,7 @@ export default function Base() {
                   >
                     <div
                       className={`flex flex-col rounded-xl w-full px-6 py-5 ${getBGLinearGradientByMateria(
-                        item.materia
+                        item.materia,
                       )} hover:cursor-pointer`}
                       onClick={() => navigate(`../quiz/menu/${item.id}`)}
                     >
@@ -157,7 +157,7 @@ export default function Base() {
                                     const quizAnswers = doc(
                                       db,
                                       "QuizAnswers",
-                                      item.id
+                                      item.id,
                                     );
                                     await deleteDoc(quiz);
                                     await deleteDoc(quizAnswers);

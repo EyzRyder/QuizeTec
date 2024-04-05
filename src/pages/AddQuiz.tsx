@@ -28,10 +28,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 
 // Libs
-import {
-  useNewQuiz,
-  useQuestionsStore,
-} from "@/lib/store";
+import { useNewQuiz, useQuestionsStore } from "@/lib/store";
 import { levelsOptions, materiaOptions } from "@/lib/data";
 import { useUserStorage } from "@/useHook/useUserStorage";
 //firebase
@@ -406,7 +403,7 @@ export default function AddQuiz() {
                       <AlertDialogTrigger
                         onClick={() => {
                           const q = questions.filter(
-                            (question) => question.id === item.id
+                            (question) => question.id === item.id,
                           );
                           // console.log(q[0].answers);
                           setQuestaoId(q[0].id);
