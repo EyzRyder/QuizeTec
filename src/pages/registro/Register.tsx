@@ -2,7 +2,7 @@
 import { IonContent } from "@ionic/react";
 
 // Assets
-import fallgirl from "../assets/FallGirl.png";
+import fallgirl from "../../assets/FallGirl.png";
 
 // Dependencies
 import { Link } from "react-router-dom";
@@ -13,11 +13,11 @@ import { motion } from "framer-motion";
 import * as z from "zod";
 
 // Lib
-import { useUserStore } from "../lib/store";
+import { useUserStore } from "../../lib/store";
 
 // DB
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth, db } from "../lib/firebaseConfig";
+import { auth, db } from "../../lib/firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 
 // Componentes

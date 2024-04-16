@@ -1,21 +1,24 @@
-// Ionic React
+// react
 import { IonContent } from "@ionic/react";
 
 // Assets
 import fallgirl from "../assets/FallGirl.png";
 
 // Dependencies
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
-import { useUserStore } from "../lib/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import * as z from "zod";
 
+// Lib
+import { useUserStore } from "../../lib/store";
+
 // DB
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../lib/firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth, db } from "../../lib/firebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
 
 // Componentes
 import { Button } from "@/components/ui/button";
@@ -24,14 +27,17 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
-import { toast, useToast } from "@/components/ui/use-toast";
 
 // type
 const formSchema = z.object({
+  userName: z.string().min(2, {
+    message:
+      "Vamos lá! Seu nome de usuário deve ter pelo menos 2 caracteres 😊",
+  }),
   email: z
     .string()
     .min(1, {
@@ -45,15 +51,12 @@ const formSchema = z.object({
   }),
 });
 
-export default function Login() {
-  const { toast } = useToast()
-
-  const { updateUser } = useUserStore();
-
+export default function Register() {
   // form
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      userName: "",
       email: "",
       senha: "",
     },
@@ -62,27 +65,31 @@ export default function Login() {
   // react router
   const navigate = useNavigate();
 
-  //functions
+  // store
+  const { updateUser } = useUserStore();
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await signInWithEmailAndPassword(auth, values.email, values.senha)
+    await createUserWithEmailAndPassword(auth, values.email, values.senha)
       .then(async (userCredential) => {
-        toast({
-          title: "Sucesso",
-          description: "Logado com sucesso!",
-        })
         const user = userCredential.user;
-        const docSnap = await getDoc(doc(db, "users", user.uid));
-        updateUser({ ...user, userName: docSnap?.data()?.userName });
-        navigate("/base");
+        await setDoc(doc(db, "users", user.uid), {
+          email: user.email,
+          id: user.uid,
+          userName: values.userName,
+        });
+        //do verification later
+        // await sendEmailVerification(auth.currentUser).catch((err) =>
+        //   console.log(err)
+        // );
+        await updateProfile(user, { displayName: values.userName }).catch(
+          (err) => console.log(err)
+        );
+        updateUser({ ...user, userName: values.userName });
+        navigate("/../base");
       })
       .catch((error) => {
-        toast({
-          title: "Error",
-          variant: "destructive",
-          description: "Email ou/e Senha esta incorreta ou não existe!",
-        })
         const errorMessage = error.message;
-        console.error("Error atempetd login: ", errorMessage);
+        console.log(errorMessage);
       });
   }
 
@@ -94,18 +101,22 @@ export default function Login() {
         exit={{ opacity: 0, scale: 0.8 }}
         transition={{ duration: 1 }}
         className="h-full "
+
       >
-        <div className="flex flex-col flex-1 items-center px-10 h-full justify-center sm:grid sm:grid-cols-2 bg-[#F5F9FC]">
-          <div className="flex justify-center items-center pr-14 w-[480px]">
-            <img src={fallgirl} alt="FallGirl" />
+        <div className="flex flex-col flex-1 items-center px-10 h-screen justify-center sm:grid sm:grid-cols-2 bg-[#F5F9FC]">
+          <div className="flex justify-center items-center pr-14 w-[450px]">
+            <img
+              src={fallgirl}
+              alt="FallGirl"
+            />
           </div>
-          <div className="flex flex-col w-full py-10 ">
+          <div className="flex flex-col w-full  ">
             <div className="flex flex-col pb-7 w-full">
               <p className="font-title font-semibold text-[#2A416F] text-[30px] leading-tight">
                 Olá,
               </p>
               <p className="font-title font-semibold text-[#2A416F] text-[30px]  leading-tight">
-                Hora do Login!
+                Hora do Cadastro!
               </p>
             </div>
             <Form {...form}>
@@ -115,10 +126,27 @@ export default function Login() {
               >
                 <FormField
                   control={form.control}
+                  name="userName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nome de Usuário</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Albert Einstein"
+                          className="bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      {/* <FormLabel>Email</FormLabel> */}
+                      <FormLabel>Email</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="AlbertEinstein@etec.sp.gov.br"
@@ -135,7 +163,7 @@ export default function Login() {
                   name="senha"
                   render={({ field }) => (
                     <FormItem>
-                      {/* <FormLabel>Senha</FormLabel> */}
+                      <FormLabel>Senha</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="******"
@@ -152,33 +180,17 @@ export default function Login() {
                   type="submit"
                   className="w-full text-center rounded-[18px] bg-[#4A92FF] py-7 text-white font-medium text-[21px]"
                 >
-                  Login
+                  Cadastrar
                 </Button>
               </form>
             </Form>
-            <div className="py-6 flex flex-col w-full gap-2">
-
             <Link
-              to={"/../register"}
-              className="w-full text-center rounded-[20px] text-[#000] font-medium text-[18px]"
+              to={"/../login"}
+              className="w-full text-center rounded-[20px] py-6 text-[#000] font-medium text-[18px]"
             >
-              Não Possui Conta?{" "}
-              <span className="text-[#4A92FF] hover:underline font-semibold">
-                Registrar
-              </span>
+              Possui Conta?{" "}
+              <span className="text-[#4A92FF] hover:underline font-semibold">Entrar</span>
             </Link>
-
-            <Link
-              to={"/../esqueceuSenha"}
-              className="w-full text-center rounded-[20px] text-[#000] font-medium text-[18px]"
-            >
-              Esqueceu a senha?{" "}
-              <span className="text-[#4A92FF] hover:underline font-semibold">
-                Click Aqui
-              </span>
-            </Link>
-
-            </div>
           </div>
         </div>
       </motion.div>

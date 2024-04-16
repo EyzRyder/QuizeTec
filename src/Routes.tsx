@@ -8,7 +8,9 @@ import AddQuiz from "./pages/AddQuiz";
 import Menu from "./pages/Menu";
 import Quiz from "./pages/Quiz";
 import Resultados from "./pages/Resultados";
-import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
+import Register from "./pages/registro/Register";
+import RegisterTeacher from "./pages/registro/RegisterTeacher";
 
 const Routing = () => {
   return (
@@ -19,7 +21,11 @@ const Routing = () => {
             <Route index element={<Home />} />
             <Route path="sobre" element={<Sobre />} />
             <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
+            <Route path="esqueceuSenha" element={<ForgotPassword />} />
+            <Route path="register" element={<Outlet />}>
+              <Route index element={<Register />}/>
+              <Route path="admProfessor" element={<Register />}/>
+            </Route>
             <Route path="base" element={<Base />} />
             <Route path="addQuiz" element={<AddQuiz />} />
             <Route path="quiz" element={<Outlet />}>

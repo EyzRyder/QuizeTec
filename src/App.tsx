@@ -20,12 +20,14 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.scss";
 import "./themes/globals.scss";
 import Routing from "./Routes";
+import { Toaster } from "@/components/ui/toaster"
 
 setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp>
     <Routing />
+    <Toaster />
   </IonApp>
 );
 
