@@ -185,13 +185,15 @@ export default function Base() {
               ))}
             </ScrollArea>
 
-            <Link
+
+            {/* <Link
               to="/addQuiz"
               className="w-[80%] flex flex-row items-center justify-center rounded-[20px] bg-blue-500 py-4 gap-2 text-white text-center text-2xl"
             >
               Criar Quiz
               <PlusCircle />
-            </Link>
+            </Link> */}
+
           </div>
         </div>
       </motion.div>
