@@ -24,7 +24,7 @@ const Routing = () => {
             <Route path="esqueceuSenha" element={<ForgotPassword />} />
             <Route path="register" element={<Outlet />}>
               <Route index element={<Register />}/>
-              <Route path="admProfessor" element={<Register />}/>
+              <Route path="admProfessor" element={<RegisterTeacher />}/>
             </Route>
             <Route path="base" element={<Base />} />
             <Route path="addQuiz" element={<AddQuiz />} />
