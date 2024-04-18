@@ -26,6 +26,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/components/ui/use-toast";
 
 // Libs
 import { useNewQuiz, useQuestionsStore, useUserStore } from "@/lib/store";
@@ -42,6 +43,8 @@ import { useNavigate } from "react-router";
 import { ChevronLeft, PlusCircle, Trash2 } from "lucide-react";
 
 export default function AddQuiz() {
+  const { toast } = useToast()
+
   // store
   //const { user } = useUserStorage(); // local storage do ionic
   const { user } = useUserStore(); // local storage do zustand
@@ -81,10 +84,6 @@ export default function AddQuiz() {
         Questions: questions,
         createdBy: user?.uid,
       });
-    } catch (err) {
-      console.error("Failed to set Quiz col: ", err);
-    }
-    try {
       const colAns = doc(db, "QuizAnswers", id);
 
       await setDoc(colAns, {
@@ -92,11 +91,21 @@ export default function AddQuiz() {
         title: quiz.title,
         usersAnswer: [],
       });
+
+      toast({
+        title: "Sucesso",
+        description: `Quiz ${quiz.title} foi criada`,
+      })
+
+      goBack();
     } catch (err) {
+      toast({
+        title: "Error",
+        variant: "destructive",
+        description: `Houve um error ao criar seu quiz`,
+      })
       console.error("Failed to set QuizAnswers col: ", err);
     }
-
-    goBack();
   }
   function fullReset() {
     resetQuiz();

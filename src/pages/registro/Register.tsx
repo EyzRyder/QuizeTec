@@ -2,7 +2,7 @@
 import { IonContent } from "@ionic/react";
 
 // Assets
-import fallgirl from "../assets/FallGirl.png";
+import fallgirl from "../../assets/FallGirl.png";
 
 // Dependencies
 import { Link } from "react-router-dom";
@@ -13,11 +13,11 @@ import { motion } from "framer-motion";
 import * as z from "zod";
 
 // Lib
-import { useUserStore } from "../lib/store";
+import { useUserStore } from "../../lib/store";
 
 // DB
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth, db } from "../lib/firebaseConfig";
+import { auth, db } from "../../lib/firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 
 // Componentes
@@ -31,6 +31,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 
 // type
 const formSchema = z.object({
@@ -52,6 +53,8 @@ const formSchema = z.object({
 });
 
 export default function Register() {
+  const { toast } = useToast()
+
   // form
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -81,6 +84,10 @@ export default function Register() {
         // await sendEmailVerification(auth.currentUser).catch((err) =>
         //   console.log(err)
         // );
+        toast({
+          title: "Sucesso",
+          description: `Conta ${values.userName} criada`,
+        })
         await updateProfile(user, { displayName: values.userName }).catch(
           (err) => console.log(err)
         );
@@ -88,6 +95,11 @@ export default function Register() {
         navigate("/../base");
       })
       .catch((error) => {
+        toast({
+          title: "Error",
+          variant: "destructive",
+          description: "Não foi possível criar sua conta agora!",
+        })
         const errorMessage = error.message;
         console.log(errorMessage);
       });

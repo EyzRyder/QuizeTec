@@ -1,21 +1,24 @@
-// Ionic React
+// react
 import { IonContent } from "@ionic/react";
 
 // Assets
 import fallgirl from "../assets/FallGirl.png";
 
 // Dependencies
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
-import { useUserStore } from "../lib/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import * as z from "zod";
 
+// Lib
+import { useUserStore } from "../lib/store";
+
 // DB
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail } from "firebase/auth";
 import { auth, db } from "../lib/firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 // Componentes
 import { Button } from "@/components/ui/button";
@@ -24,11 +27,11 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
-import { toast, useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast"
 
 // type
 const formSchema = z.object({
@@ -39,50 +42,39 @@ const formSchema = z.object({
     })
     .email({
       message: "Insira email valido.",
-    }),
-  senha: z.string().min(6, {
-    message: "Senha deve conter no mínimo 6 caracteres 🔑",
-  }),
+    })
 });
 
-export default function Login() {
+export default function Register() {
   const { toast } = useToast()
-
-  const { updateUser } = useUserStore();
 
   // form
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
-      senha: "",
     },
   });
 
   // react router
   const navigate = useNavigate();
 
-  //functions
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await signInWithEmailAndPassword(auth, values.email, values.senha)
-      .then(async (userCredential) => {
+    await sendPasswordResetEmail(auth, values.email)
+      .then(() => {
         toast({
           title: "Sucesso",
-          description: "Logado com sucesso!",
+          description: "Email de mudar senha foi enviada, verifique se ele caiu no span.",
         })
-        const user = userCredential.user;
-        const docSnap = await getDoc(doc(db, "users", user.uid));
-        updateUser({ ...user, userName: docSnap?.data()?.userName, role: docSnap?.data()?.role  });
-        navigate("/base");
-      })
+      }
+      )
       .catch((error) => {
+        const errorMessage = error.message;
         toast({
           title: "Error",
-          variant: "destructive",
-          description: "Email ou/e Senha esta incorreta!",
+          description: "Não foi possível enviar email de mudar senha.",
         })
-        const errorMessage = error.message;
-        console.error("Error attempted login: ", errorMessage);
+        console.log(errorMessage);
       });
   }
 
@@ -94,18 +86,22 @@ export default function Login() {
         exit={{ opacity: 0, scale: 0.8 }}
         transition={{ duration: 1 }}
         className="h-full "
+
       >
-        <div className="flex flex-col flex-1 items-center px-10 h-full justify-center sm:grid sm:grid-cols-2 bg-[#F5F9FC]">
-          <div className="flex justify-center items-center pr-14 w-[480px]">
-            <img src={fallgirl} alt="FallGirl" />
+        <div className="flex flex-col flex-1 items-center px-10 h-screen justify-center sm:grid sm:grid-cols-2 bg-[#F5F9FC]">
+          <div className="flex justify-center items-center pr-14 w-[450px]">
+            <img
+              src={fallgirl}
+              alt="FallGirl"
+            />
           </div>
-          <div className="flex flex-col w-full py-10 ">
+          <div className="flex flex-col w-full  ">
             <div className="flex flex-col pb-7 w-full">
               <p className="font-title font-semibold text-[#2A416F] text-[30px] leading-tight">
                 Olá,
               </p>
               <p className="font-title font-semibold text-[#2A416F] text-[30px]  leading-tight">
-                Hora do Login!
+                Vamos mudar senha?
               </p>
             </div>
             <Form {...form}>
@@ -118,28 +114,10 @@ export default function Login() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      {/* <FormLabel>Email</FormLabel> */}
+                      <FormLabel>Email</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="AlbertEinstein@etec.sp.gov.br"
-                          className="bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="senha"
-                  render={({ field }) => (
-                    <FormItem>
-                      {/* <FormLabel>Senha</FormLabel> */}
-                      <FormControl>
-                        <Input
-                          placeholder="******"
-                          type="password"
                           className="bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
                           {...field}
                         />
@@ -152,33 +130,17 @@ export default function Login() {
                   type="submit"
                   className="w-full text-center rounded-[18px] bg-[#4A92FF] py-7 text-white font-medium text-[21px]"
                 >
-                  Login
+                  Mudar Senha
                 </Button>
               </form>
             </Form>
-            <div className="py-6 flex flex-col w-full gap-2">
-
             <Link
               to={"/../register"}
-              className="w-full text-center rounded-[20px] text-[#000] font-medium text-[18px]"
+              className="w-full text-center rounded-[20px] py-6 text-[#000] font-medium text-[18px]"
             >
-              Não Possui Conta?{" "}
-              <span className="text-[#4A92FF] hover:underline font-semibold">
-                Registrar
-              </span>
+              Não possui Conta?{" "}
+              <span className="text-[#4A92FF] hover:underline font-semibold">Registrar</span>
             </Link>
-
-            <Link
-              to={"/../esqueceuSenha"}
-              className="w-full text-center rounded-[20px] text-[#000] font-medium text-[18px]"
-            >
-              Esqueceu a senha?{" "}
-              <span className="text-[#4A92FF] hover:underline font-semibold">
-                Click Aqui
-              </span>
-            </Link>
-
-            </div>
           </div>
         </div>
       </motion.div>
