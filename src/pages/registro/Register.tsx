@@ -31,6 +31,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 
 // type
 const formSchema = z.object({
@@ -52,6 +53,8 @@ const formSchema = z.object({
 });
 
 export default function Register() {
+  const { toast } = useToast()
+
   // form
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -81,6 +84,10 @@ export default function Register() {
         // await sendEmailVerification(auth.currentUser).catch((err) =>
         //   console.log(err)
         // );
+        toast({
+          title: "Sucesso",
+          description: `Conta ${values.userName} criada`,
+        })
         await updateProfile(user, { displayName: values.userName }).catch(
           (err) => console.log(err)
         );
@@ -88,6 +95,11 @@ export default function Register() {
         navigate("/../base");
       })
       .catch((error) => {
+        toast({
+          title: "Error",
+          variant: "destructive",
+          description: "Não foi possível criar sua conta agora!",
+        })
         const errorMessage = error.message;
         console.log(errorMessage);
       });

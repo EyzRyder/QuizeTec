@@ -2,7 +2,7 @@
 import { IonContent } from "@ionic/react";
 
 // Assets
-import fallgirl from "../assets/FallGirl.png";
+import fallgirl from "../../assets/FallGirl.png";
 
 // Dependencies
 import { Link } from "react-router-dom";
@@ -31,6 +31,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 
 // type
 const formSchema = z.object({
@@ -52,6 +53,8 @@ const formSchema = z.object({
 });
 
 export default function Register() {
+  const { toast } = useToast()
+
   // form
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -76,7 +79,12 @@ export default function Register() {
           email: user.email,
           id: user.uid,
           userName: values.userName,
+          role: "teacher",
         });
+        toast({
+          title: "Sucesso",
+          description: `Conta ${values.userName} criada`,
+        })
         //do verification later
         // await sendEmailVerification(auth.currentUser).catch((err) =>
         //   console.log(err)
@@ -84,7 +92,7 @@ export default function Register() {
         await updateProfile(user, { displayName: values.userName }).catch(
           (err) => console.log(err)
         );
-        updateUser({ ...user, userName: values.userName });
+        updateUser({ ...user, userName: values.userName, role: "teacher" });
         navigate("/../base");
       })
       .catch((error) => {
@@ -113,7 +121,7 @@ export default function Register() {
           <div className="flex flex-col w-full  ">
             <div className="flex flex-col pb-7 w-full">
               <p className="font-title font-semibold text-[#2A416F] text-[30px] leading-tight">
-                Olá,
+                Olá Professor,
               </p>
               <p className="font-title font-semibold text-[#2A416F] text-[30px]  leading-tight">
                 Hora do Cadastro!

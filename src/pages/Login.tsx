@@ -72,17 +72,17 @@ export default function Login() {
         })
         const user = userCredential.user;
         const docSnap = await getDoc(doc(db, "users", user.uid));
-        updateUser({ ...user, userName: docSnap?.data()?.userName });
+        updateUser({ ...user, userName: docSnap?.data()?.userName, role: docSnap?.data()?.role  });
         navigate("/base");
       })
       .catch((error) => {
         toast({
           title: "Error",
           variant: "destructive",
-          description: "Email ou/e Senha esta incorreta ou não existe!",
+          description: "Email ou/e Senha esta incorreta!",
         })
         const errorMessage = error.message;
-        console.error("Error atempetd login: ", errorMessage);
+        console.error("Error attempted login: ", errorMessage);
       });
   }
 
