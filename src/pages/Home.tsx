@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 // assets
-import PhoneGirl from "../assets/PhoneGirl.png";
+import Logo from "../assets/Logo.svg";
 
 import { useUserStore } from "@/lib/store";
 
@@ -19,27 +19,27 @@ export default function Home() {
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.8 }}
         transition={{ duration: 1 }}
-        className="h-full "
+        className="h-full bg-blue-500 text-white  grid place-items-center"
       >
-        <div className="flex flex-col flex-1 items-center px-5 h-full  justify-center sm:grid sm:grid-cols-2 bg-[#F5F9FC]">
-          <div className="flex justify-center items-center pr-14 w-[600px]">
-            <img src={PhoneGirl} alt="phonegirl" loading="lazy" />
-          </div>
+        <div className="flex flex-col flex-1 items-center px-5 h-full w-96 justify-center ">
           <div className="flex flex-col items-center w-full gap-3 ">
-            <p className="text-center font-title text-[25px] leading-tight font-semibold text-[#2A416F] py-4">
-              Hora de começar a se {"\n"} aventurar no aprendizado!
+            <div className="flex justify-center items-center">
+              <img src={Logo} alt="Logo QuizeTec" loading="lazy" />
+            </div>
+            <p className="text-center font-title text-[25px] leading-tight font-semibold  py-4">
+              Comece a se <br /> aventurar no aprendizado!
             </p>
             <Link
               to={user ? "/base" : "/login"}
-              className="w-full items-center flex justify-center rounded-[20px] bg-[#4A92FF] py-4 text-white font-medium text-lg"
+              className="w-full items-center flex justify-center rounded-[20px] bg-blue-100 font-bold  py-4 text-slate-800 text-lg"
             >
               Começar
             </Link>
             <Link
               to="/sobre"
-              className="w-full flex items-center justify-center rounded-lg py-2 text-[#2A416F] text-lg"
+              className="w-full flex  border-2 rounded-[20px]  border-blue-100 items-center justify-center  py-4 text-lg"
             >
-              Sobre Nós
+              Sobre
             </Link>
           </div>
         </div>
