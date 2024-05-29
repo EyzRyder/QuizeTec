@@ -31,13 +31,13 @@ export default function Home() {
             </p>
             <Link
               to={user ? "/base" : "/login"}
-              className="w-full items-center flex justify-center rounded-[20px] bg-blue-100 font-bold  py-4 text-slate-800 text-lg"
+              className="min-w-[20em]  items-center flex justify-center rounded-[20px] bg-blue-100 font-bold  py-4 text-slate-800 text-lg"
             >
               Começar
             </Link>
             <Link
               to="/sobre"
-              className="w-full flex  border-2 rounded-[20px]  border-blue-100 items-center justify-center  py-4 text-lg"
+              className="min-w-[20em] flex  border-2 rounded-[20px]  border-blue-100 items-center justify-center  py-4 text-lg"
             >
               Sobre
             </Link>

@@ -2,7 +2,8 @@
 import { IonContent } from "@ionic/react";
 
 // Assets
-import fallgirl from "../assets/FallGirl.png";
+// import fallgirl from "../assets/FallGirl.png";
+import EmailA from "../assets/svg/email-a.tsx";
 
 // Dependencies
 import { useNavigate } from "react-router";
@@ -46,7 +47,7 @@ const formSchema = z.object({
 });
 
 export default function Login() {
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   const { updateUser } = useUserStore();
 
@@ -69,10 +70,14 @@ export default function Login() {
         toast({
           title: "Sucesso",
           description: "Logado com sucesso!",
-        })
+        });
         const user = userCredential.user;
         const docSnap = await getDoc(doc(db, "users", user.uid));
-        updateUser({ ...user, userName: docSnap?.data()?.userName, role: docSnap?.data()?.role  });
+        updateUser({
+          ...user,
+          userName: docSnap?.data()?.userName,
+          role: docSnap?.data()?.role,
+        });
         navigate("/base");
       })
       .catch((error) => {
@@ -80,7 +85,7 @@ export default function Login() {
           title: "Error",
           variant: "destructive",
           description: "Email ou/e Senha esta incorreta!",
-        })
+        });
         const errorMessage = error.message;
         console.error("Error attempted login: ", errorMessage);
       });
@@ -93,19 +98,13 @@ export default function Login() {
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.8 }}
         transition={{ duration: 1 }}
-        className="h-full "
+        className="h-full bg-blue-100 grid place-items-center"
       >
-        <div className="flex flex-col flex-1 items-center px-10 h-full justify-center sm:grid sm:grid-cols-2 bg-[#F5F9FC]">
-          <div className="flex justify-center items-center pr-14 w-[480px]">
-            <img src={fallgirl} alt="FallGirl" />
-          </div>
+        <div className="flex flex-col flex-1 items-center px-10 h-full min-w-[500px]  justify-center ">
           <div className="flex flex-col w-full py-10 ">
             <div className="flex flex-col pb-7 w-full">
-              <p className="font-title font-semibold text-[#2A416F] text-[30px] leading-tight">
-                Olá,
-              </p>
               <p className="font-title font-semibold text-[#2A416F] text-[30px]  leading-tight">
-                Hora do Login!
+                Acesse sua conta
               </p>
             </div>
             <Form {...form}>
@@ -117,12 +116,12 @@ export default function Login() {
                   control={form.control}
                   name="email"
                   render={({ field }) => (
-                    <FormItem>
-                      {/* <FormLabel>Email</FormLabel> */}
-                      <FormControl>
+                    <FormItem className="flex gap-3 items-center justify-center bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] p-4 text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black ">
+                      <EmailA className="grid place-content-center " />
+                      <FormControl className="m-0">
                         <Input
-                          placeholder="AlbertEinstein@etec.sp.gov.br"
-                          className="bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
+                          className="h-fit  w-full flex-1  text-lg placeholder-slate-500 border-transparent border-0 bg-transparent m-0 p-0 mt-0  ring-0 focus:border-0"
+                          placeholder="E-mail"
                           {...field}
                         />
                       </FormControl>
@@ -138,7 +137,7 @@ export default function Login() {
                       {/* <FormLabel>Senha</FormLabel> */}
                       <FormControl>
                         <Input
-                          placeholder="******"
+                          placeholder="Senha"
                           type="password"
                           className="bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
                           {...field}
@@ -148,36 +147,33 @@ export default function Login() {
                     </FormItem>
                   )}
                 />
+                <Link
+                  to={"/../esqueceuSenha"}
+                  className="w-full text-center rounded-[20px] text-[#000] font-medium text-[18px] hover:underline "
+                >
+                  Esqueceu a senha?{" "}
+                  <span className="text-[#4A92FF] font-semibold text-right">
+                    Click Aqui
+                  </span>
+                </Link>
                 <Button
                   type="submit"
                   className="w-full text-center rounded-[18px] bg-[#4A92FF] py-7 text-white font-medium text-[21px]"
                 >
-                  Login
+                  Entrar
                 </Button>
               </form>
             </Form>
             <div className="py-6 flex flex-col w-full gap-2">
-
-            <Link
-              to={"/../register"}
-              className="w-full text-center rounded-[20px] text-[#000] font-medium text-[18px]"
-            >
-              Não Possui Conta?{" "}
-              <span className="text-[#4A92FF] hover:underline font-semibold">
-                Registrar
-              </span>
-            </Link>
-
-            <Link
-              to={"/../esqueceuSenha"}
-              className="w-full text-center rounded-[20px] text-[#000] font-medium text-[18px]"
-            >
-              Esqueceu a senha?{" "}
-              <span className="text-[#4A92FF] hover:underline font-semibold">
-                Click Aqui
-              </span>
-            </Link>
-
+              <Link
+                to={"/../register"}
+                className="w-full text-center rounded-[20px] text-[#000] font-medium text-[18px] hover:underline "
+              >
+                <span className="text-[#4A92FF]  font-semibold">
+                  Novo por aqui?
+                </span>{" "}
+                Faça o cadastro
+              </Link>
             </div>
           </div>
         </div>
