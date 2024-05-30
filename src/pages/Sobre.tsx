@@ -39,7 +39,7 @@ export default function Sobre() {
             </div>
           </div>
           <div className="flex-1 lg:grid lg:place-content-center ">
-            <div className="flex max-lg:flex-col  gap-4 px-8 ">
+            <div className="flex max-lg:flex-col gap-4 px-8 py-12 ">
               <div className="min-w-96 lg:w-96 max-lg:w-full  flex flex-col gap-8">
                 <p className="text-3xl font-semibold text-left text-blue-800 ">
                   Motivo do {"\n"}desenvolvimento
@@ -60,7 +60,7 @@ export default function Sobre() {
                   />
                 </div>
               </div>
-              <div className="flex flex-col  gap-8">
+              <div className="flex flex-col gap-8">
                 <p className="text-2xl text-blue-800 font-bold text-left mb-6">
                   Por Quem?
                 </p>

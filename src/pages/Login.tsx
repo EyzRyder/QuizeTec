@@ -3,7 +3,7 @@ import { IonContent } from "@ionic/react";
 
 // Assets
 // import fallgirl from "../assets/FallGirl.png";
-import EmailA from "../assets/svg/email-a";
+// import EmailA from "../assets/svg/email-a";
 
 // Dependencies
 import { useNavigate } from "react-router";
@@ -30,6 +30,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { toast, useToast } from "@/components/ui/use-toast";
+import { AtSign } from "lucide-react";
 
 // type
 const formSchema = z.object({
@@ -117,7 +118,7 @@ export default function Login() {
                   name="email"
                   render={({ field }) => (
                     <FormItem className="flex gap-3 items-center justify-center bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] p-4 text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black ">
-                      <EmailA className="grid place-content-center " />
+                      <AtSign />
                       <FormControl className="m-0">
                         <Input
                           className="h-fit  w-full flex-1  text-lg placeholder-slate-500 border-transparent border-0 bg-transparent m-0 p-0 mt-0  ring-0 focus:border-0"
@@ -156,10 +157,7 @@ export default function Login() {
                     Click Aqui
                   </span>
                 </Link>
-                <Button
-                  type="submit"
-                  className="w-full text-center rounded-[18px] bg-[#4A92FF] py-7 text-white font-medium text-[21px]"
-                >
+                <Button type="submit" className="w-full">
                   Entrar
                 </Button>
               </form>
