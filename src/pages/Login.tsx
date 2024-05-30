@@ -30,7 +30,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { toast, useToast } from "@/components/ui/use-toast";
-import { AtSign } from "lucide-react";
+import { AtSign, KeyRound } from "lucide-react";
+import InputTxt from "@/components/Input";
 
 // type
 const formSchema = z.object({
@@ -117,12 +118,11 @@ export default function Login() {
                   control={form.control}
                   name="email"
                   render={({ field }) => (
-                    <FormItem className="flex gap-3 items-center justify-center bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] p-4 text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black ">
-                      <AtSign />
+                    <FormItem>
                       <FormControl className="m-0">
-                        <Input
-                          className="h-fit  w-full flex-1  text-lg placeholder-slate-500 border-transparent border-0 bg-transparent m-0 p-0 mt-0  ring-0 focus:border-0"
+                        <InputTxt
                           placeholder="E-mail"
+                          icon={AtSign}
                           {...field}
                         />
                       </FormControl>
@@ -137,10 +137,10 @@ export default function Login() {
                     <FormItem>
                       {/* <FormLabel>Senha</FormLabel> */}
                       <FormControl>
-                        <Input
+                        <InputTxt
                           placeholder="Senha"
                           type="password"
-                          className="bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
+                          icon={KeyRound}
                           {...field}
                         />
                       </FormControl>
