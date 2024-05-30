@@ -3,7 +3,7 @@ import { IonContent } from "@ionic/react";
 
 // Assets
 // import fallgirl from "../assets/FallGirl.png";
-import EmailA from "../assets/svg/email-a.tsx";
+import EmailA from "../assets/svg/email-a";
 
 // Dependencies
 import { useNavigate } from "react-router";
