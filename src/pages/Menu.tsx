@@ -65,9 +65,9 @@ export default function Menu() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, transition: { delay: 0.2, duration: 0.2 } }}
         exit={{ opacity: 0.2, transition: { duration: 0.2 } }}
-        className="h-full flex justify-center  bg-blue-50 "
+        className="min-h-screen flex justify-center  bg-blue-50 "
       >
-        <div className="flex flex-col flex-1 h-screen max-w-5xl ">
+        <div className="flex flex-col flex-1 h-full max-w-5xl ">
           <header
             className={`sm:flex sm:bg-slate-50 sm:flex-row max-sm:grid max-sm:grid-cols-4 px-5 pt-8 pb-5 gap-6 justify-center items-center rounded-b-3xl `}
           >
@@ -84,13 +84,15 @@ export default function Menu() {
                 {quiz?.title}
               </p>
             </div>
-            {quiz?.createdBy == user?.uid && (
+            {quiz?.createdBy == user?.uid ? (
               <Button
                 variant="outline"
                 className="max-sm:col-span-5 max-sm:w-full sm:w-fit"
               >
                 Edit Quiz
               </Button>
+            ) : (
+              <div className="max-sm:col-span-5"></div>
             )}
           </header>
           <div className="flex flex-col flex-1 px-5 pt-5 pb-9 gap-7 ">

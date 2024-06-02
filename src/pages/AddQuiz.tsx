@@ -43,7 +43,7 @@ import { useNavigate } from "react-router";
 import { ChevronLeft, PlusCircle, Trash2 } from "lucide-react";
 
 export default function AddQuiz() {
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   // store
   //const { user } = useUserStorage(); // local storage do ionic
@@ -95,7 +95,7 @@ export default function AddQuiz() {
       toast({
         title: "Sucesso",
         description: `Quiz ${quiz.title} foi criada`,
-      })
+      });
 
       goBack();
     } catch (err) {
@@ -103,7 +103,7 @@ export default function AddQuiz() {
         title: "Error",
         variant: "destructive",
         description: `Houve um error ao criar seu quiz`,
-      })
+      });
       console.error("Failed to set QuizAnswers col: ", err);
     }
   }
@@ -638,10 +638,7 @@ export default function AddQuiz() {
               </div>
             </div>
           </ScrollArea>
-          <Button
-            onClick={adicionarQuiz}
-            className="flex flex-row items-center justify-center font-medium rounded-2xl bg-blue-500 py-8 mx-4 my-3 text-white text-2xl"
-          >
+          <Button onClick={adicionarQuiz} className="w-full">
             Finalizar Quiz
           </Button>
         </div>
