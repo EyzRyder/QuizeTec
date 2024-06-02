@@ -4,6 +4,7 @@ import { IonContent } from "@ionic/react";
 // Assets
 // import fallgirl from "../assets/FallGirl.png";
 // import EmailA from "../assets/svg/email-a";
+import { ChevronLeft } from "lucide-react";
 
 // Dependencies
 import { useNavigate } from "react-router";
@@ -99,8 +100,15 @@ export default function Login() {
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.8 }}
         transition={{ duration: 1 }}
-        className="h-full bg-blue-100 grid place-items-center"
+        className="h-full bg-blue-100 grid place-items-center relative"
       >
+        <Button
+          onClick={() => navigate(-1)}
+          className="absolute left-10 top-3 h-12 w-12"
+          variant="outline"
+        >
+          <ChevronLeft className="text-blue-600 " />
+        </Button>
         <div className="flex flex-col flex-1 items-center px-10 h-full min-w-20   justify-center">
           <div className="flex flex-col w-full py-10 ">
             <div className="flex flex-col pb-7 w-full">
