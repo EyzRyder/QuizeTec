@@ -24,7 +24,7 @@ export default function Sobre() {
         <BackButton />
         <div className="flex flex-col flex-1 h-full  bg-blue-100 ">
           <div className="flex-1 lg:grid lg:place-content-center ">
-            <div className="flex max-lg:flex-col gap-4 px-8 pt-12 pb-28  ">
+            <div className="flex max-lg:flex-col gap-4 px-8 pt-20 pb-28  ">
               <div className="min-w-96 lg:w-96 max-lg:w-full  flex flex-col gap-8">
                 <p className="text-3xl font-semibold text-left text-blue-800 ">
                   Motivo do {"\n"}desenvolvimento

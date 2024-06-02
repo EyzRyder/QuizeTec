@@ -89,7 +89,7 @@ export default function Base() {
               </PopoverContent>
             </Popover>
           </div>
-          <div className="flex-1 flex flex-col justify-between px-8 pt-10 pb-20 space-y-2 h-full w-full items-center">
+          <div className="flex-1 flex flex-col justify-between px-8 pt-10 pb-28 space-y-2 h-full w-full items-center">
             <div className="flex w-full justify-start">
               <p className="text-3xl font-title text-[#2A416F] font-semibold">
                 Quizes Base
