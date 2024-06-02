@@ -34,7 +34,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Link } from "react-router-dom";
-import { MoreVertical, Play, PlusCircle } from "lucide-react";
+import { LogIn, MoreVertical, Play, PlusCircle } from "lucide-react";
 import { getBGLinearGradientByMateria } from "@/lib/data";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -45,8 +45,8 @@ export default function Base() {
   const { user, updateUser } = useUserStore(); //zustand
 
   if (!user) {
-  navigate("/")
-}
+    navigate("/");
+  }
 
   useQuizesList();
   useQuizAnswers();
@@ -65,23 +65,18 @@ export default function Base() {
         <div className="flex-1 flex flex-col h-full w-full ">
           <div className="flex pt-11 pb-11 px-6 flex-row justify-between items-center bg-blue-500 rounded-b-3xl">
             <div className="flex flex-col justify-center">
-              <p className="text-white text-2xl">Olá</p>
-              <p className="text-white text-2xl">
-                Bem Vindo(a)👋 {user?.userName}
-              </p>
+              <p className="text-white text-2xl">Olá {user?.userName}</p>
+              <p className="text-white text-2xl">Bem Vindo(a)👋</p>
             </div>
             <Popover>
               <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="hover:bg-transparent hover:text-white"
-                >
-                  <MoreVertical />
+                <Button variant="outlineWhite" className="h-12 w-12">
+                  <LogIn />
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-[80%] flex bg-transparent border-none shadow-none">
                 <Button
-                  variant="outline"
+                  variant="white"
                   onClick={async () => {
                     await signOut(auth);
                     updateUser(null);
@@ -94,7 +89,7 @@ export default function Base() {
               </PopoverContent>
             </Popover>
           </div>
-          <div className="flex-1 flex flex-col justify-between px-8 py-10 space-y-2 h-full w-full items-center">
+          <div className="flex-1 flex flex-col justify-between px-8 pt-10 pb-20 space-y-2 h-full w-full items-center">
             <div className="flex w-full justify-start">
               <p className="text-3xl font-title text-[#2A416F] font-semibold">
                 Quizes Base
@@ -189,17 +184,15 @@ export default function Base() {
               ))}
             </ScrollArea>
 
-
-            {
-              user?.role == "teacher" && <Link
-              to="/addQuiz"
-              className="w-[80%] flex flex-row items-center justify-center rounded-[20px] bg-blue-500 py-4 gap-2 text-white text-center text-2xl"
-            >
-              Criar Quiz
-              <PlusCircle />
-            </Link>
-            }
-
+            {user?.role == "teacher" && (
+              <Link
+                to="/addQuiz"
+                className="w-[80%] flex flex-row items-center justify-center rounded-[20px] bg-blue-500 py-4 gap-2 text-white text-center text-2xl"
+              >
+                Criar Quiz
+                <PlusCircle />
+              </Link>
+            )}
           </div>
         </div>
       </motion.div>

@@ -1,20 +1,17 @@
 // React ionic
-import { IonIcon, IonContent } from "@ionic/react";
-import { arrowBackOutline } from "ionicons/icons";
+import { IonContent } from "@ionic/react";
 
 // dependence
-import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 // assets
 import book from "../assets/book.png";
 
 // Components
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import AvatarCard from "@/components/AvatarCard";
+import BackButton from "@/components/BackButton";
 
 export default function Sobre() {
-  const navigate = useNavigate();
   return (
     <IonContent>
       <motion.div
@@ -22,24 +19,12 @@ export default function Sobre() {
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.8 }}
         transition={{ duration: 1 }}
-        className="h-screen  w-full flex flex-col overflow-y-scroll  bg-blue-100"
+        className="h-screen absolute  w-full flex flex-col overflow-y-scroll  bg-blue-100"
       >
+        <BackButton />
         <div className="flex flex-col flex-1 h-full  bg-blue-100 ">
-          <div className="flex flex-row pt-10  w-full justify-left items-center">
-            <div
-              onClick={() => navigate(-1)}
-              className="flex flex-col h-8 w-[10%] items-center justify-center cursor-pointer"
-            >
-              <IonIcon
-                icon={arrowBackOutline}
-                className=""
-                size="large"
-                color="primary"
-              />
-            </div>
-          </div>
           <div className="flex-1 lg:grid lg:place-content-center ">
-            <div className="flex max-lg:flex-col gap-4 px-8 py-12 ">
+            <div className="flex max-lg:flex-col gap-4 px-8 pt-12 pb-28  ">
               <div className="min-w-96 lg:w-96 max-lg:w-full  flex flex-col gap-8">
                 <p className="text-3xl font-semibold text-left text-blue-800 ">
                   Motivo do {"\n"}desenvolvimento
