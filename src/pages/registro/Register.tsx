@@ -30,8 +30,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import BackButton from "@/components/BackButton";
+import InputTxt from "@/components/Input";
+import { AtSign, KeyRound, User2 } from "lucide-react";
 
 // type
 const formSchema = z.object({
@@ -53,7 +55,7 @@ const formSchema = z.object({
 });
 
 export default function Register() {
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   // form
   const form = useForm<z.infer<typeof formSchema>>({
@@ -87,9 +89,9 @@ export default function Register() {
         toast({
           title: "Sucesso",
           description: `Conta ${values.userName} criada`,
-        })
+        });
         await updateProfile(user, { displayName: values.userName }).catch(
-          (err) => console.log(err)
+          (err) => console.log(err),
         );
         updateUser({ ...user, userName: values.userName });
         navigate("/../base");
@@ -99,7 +101,7 @@ export default function Register() {
           title: "Error",
           variant: "destructive",
           description: "Não foi possível criar sua conta agora!",
-        })
+        });
         const errorMessage = error.message;
         console.log(errorMessage);
       });
@@ -112,23 +114,14 @@ export default function Register() {
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.8 }}
         transition={{ duration: 1 }}
-        className="h-full "
-
+        className="h-full bg-blue-100 grid place-items-center relative"
       >
-        <div className="flex flex-col flex-1 items-center px-10 h-screen justify-center sm:grid sm:grid-cols-2 bg-[#F5F9FC]">
-          <div className="flex justify-center items-center pr-14 w-[450px]">
-            <img
-              src={fallgirl}
-              alt="FallGirl"
-            />
-          </div>
+        <BackButton />
+        <div className="flex flex-col flex-1 items-center px-10 h-screen justify-center">
           <div className="flex flex-col w-full  ">
             <div className="flex flex-col pb-7 w-full">
-              <p className="font-title font-semibold text-[#2A416F] text-[30px] leading-tight">
-                Olá,
-              </p>
-              <p className="font-title font-semibold text-[#2A416F] text-[30px]  leading-tight">
-                Hora do Cadastro!
+              <p className="font-title font-extrabold text-blue-800 text-2xl leading-tight">
+                Cria sua conta
               </p>
             </div>
             <Form {...form}>
@@ -141,13 +134,8 @@ export default function Register() {
                   name="userName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nome de Usuário</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Albert Einstein"
-                          className="bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
-                          {...field}
-                        />
+                        <InputTxt icon={User2} placeholder="Nome" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -158,11 +146,10 @@ export default function Register() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="AlbertEinstein@etec.sp.gov.br"
-                          className="bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
+                        <InputTxt
+                          icon={AtSign}
+                          placeholder="E-mail"
                           {...field}
                         />
                       </FormControl>
@@ -175,12 +162,11 @@ export default function Register() {
                   name="senha"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Senha</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="******"
+                        <InputTxt
+                          placeholder="Senha"
+                          icon={KeyRound}
                           type="password"
-                          className="bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
                           {...field}
                         />
                       </FormControl>
@@ -188,21 +174,11 @@ export default function Register() {
                     </FormItem>
                   )}
                 />
-                <Button
-                  type="submit"
-                  className="w-full text-center rounded-[18px] bg-[#4A92FF] py-7 text-white font-medium text-[21px]"
-                >
+                <Button className="w-full" type="submit">
                   Cadastrar
                 </Button>
               </form>
             </Form>
-            <Link
-              to={"/../login"}
-              className="w-full text-center rounded-[20px] py-6 text-[#000] font-medium text-[18px]"
-            >
-              Possui Conta?{" "}
-              <span className="text-[#4A92FF] hover:underline font-semibold">Entrar</span>
-            </Link>
           </div>
         </div>
       </motion.div>
