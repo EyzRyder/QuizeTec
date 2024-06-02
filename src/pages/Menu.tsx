@@ -16,6 +16,7 @@ import {
   useUserStore,
 } from "@/lib/store";
 import { getBGLinearGradientByMateria, materiaImages } from "@/lib/data";
+import BackButton from "@/components/BackButton";
 
 export default function Menu() {
   //react
@@ -29,13 +30,13 @@ export default function Menu() {
   const { user } = useUserStore();
   const { resetAnswer, startQuiz } = useCurAnswersStore();
   const quiz = useQuizStore(
-    (store) => store.quizes.filter((task) => task.id === id)[0]
+    (store) => store.quizes.filter((task) => task.id === id)[0],
   );
   const userPastAnswers = useQuizeAnswersStore(
     (store) =>
       store.quizeAnswers
         .filter((q) => q.quizId == quiz.id)[0]
-        .usersAnswer.filter((u) => u.userId == user.uid)[0]?.pastAnswers
+        .usersAnswer.filter((u) => u.userId == user.uid)[0]?.pastAnswers,
   );
 
   // listing how many answers got correct
@@ -50,7 +51,7 @@ export default function Menu() {
       item.questions?.map((data) => (sum = +sum + +data.isRight));
       answerindex++;
       return { sum: String(sum), index: String(answerindex) };
-    }
+    },
   );
   return (
     <IonContent>
@@ -59,51 +60,26 @@ export default function Menu() {
         animate={{ opacity: 1, transition: { delay: 0.2, duration: 0.2 } }}
         exit={{ opacity: 0.2, transition: { duration: 0.2 } }}
         className="h-full "
-
       >
-        <div className="flex flex-col flex-1 h-screen bg-[#fff]">
+        <div className="flex flex-col flex-1 h-screen bg-blue-50">
           <div
-            className={`flex ${getBGLinearGradientByMateria(
-              quiz.materia
-            )} relative flex-row px-2 pt-14 pb-12 justify-center items-center rounded-b-3xl `}
+            className={`flex  relative flex-row px-2 pt-14 pb-12 justify-center items-center rounded-b-3xl `}
           >
-            <div
-              onClick={() => {
-                navigate(-1);
-              }}
-              className="flex flex-col absolute top-10 left-6 h-10 w-10 items-center justify-center bg-white rounded-full cursor-pointer"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="9"
-                height="14"
-                viewBox="0 0 9 14"
-                fill="none"
-              >
-                <path d="M8 1L1.5 6.5L8 13" stroke="#4D8FFF" stroke-width="2" />
-              </svg>
-              {/* <Icon name="chevron-left" size={32} color={getBGColorByMateria(quiz.materia)} /> */}
-            </div>
+            <BackButton className="relative" />
             <div className="flex flex-col justify-center items-center space-y-3">
               {/* <div className="flex flex-col h-32 w-32 bg-gray-500"></div> */}
-              <div>
-                <img
-                  src={materiaImages(quiz.materia)}
-                  alt="Book"
-                  className="w-[6rem] h-[6rem]"
-                  loading="lazy"
-                />
-              </div>
-              <p className="text-white text-xl font-medium text-center">{quiz.title}</p>
+              <p className="text-blue-800 text-xl font-medium text-center">
+                {quiz.title}
+              </p>
               <div className="flex flex-row space-x-2">
                 <div className="flex flex-col rounded-[8px] mix-blend-soft-light bg-slate-700 py-1 px-4">
-                  <p className="text-white font-body text-base">
+                  <p className="text-blue-800 font-body text-base">
                     {quiz.materia}
                   </p>
                 </div>
                 <div className="flex flex-col  rounded-[8px] mix-blend-soft-light bg-slate-700 py-1 px-4">
-                  <p className="text-white font-body text-base">
-                    Nível {quiz.level}
+                  <p className="text-blue-800 font-body text-base">
+                    {quiz.level} Ano
                   </p>
                 </div>
               </div>
@@ -111,7 +87,7 @@ export default function Menu() {
           </div>
           <div className="flex flex-col flex-1 px-5 pt-5 pb-9 gap-7 ">
             <div className="flex flex-col gap-4">
-              <p className="text-[#888] text-lg font-medium">Resultados</p>
+              <p className="text-blue-800 text-lg font-medium">Resultados</p>
               <div className="flex flex-row justify-center space-x-5">
                 <div className="flex flex-col bg-white rounded-xl px-4 pt-4 pb-5 shadow">
                   <div className="flex flex-row justify-between items-center space-x-8">

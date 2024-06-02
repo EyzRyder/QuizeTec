@@ -34,7 +34,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Link } from "react-router-dom";
-import { LogIn, MoreVertical, Play, PlusCircle } from "lucide-react";
+import { LogIn, MoreVertical, Play, Plus } from "lucide-react";
 import { getBGLinearGradientByMateria } from "@/lib/data";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -60,38 +60,56 @@ export default function Base() {
         initial={{ opacity: 0.1 }}
         animate={{ opacity: 1, transition: { delay: 0.2, duration: 0.3 } }}
         exit={{ opacity: 0.1, transition: { duration: 0.2 } }}
-        className="min-h-screen bg-[#F5F9FC]"
+        className="min-h-screen bg-blue-50"
       >
         <div className="flex-1 flex flex-col h-full w-full ">
-          <div className="flex pt-11 pb-11 px-6 flex-row justify-between items-center bg-blue-500 rounded-b-3xl">
-            <div className="flex flex-col justify-center">
-              <p className="text-white text-2xl">Olá {user?.userName}</p>
-              <p className="text-white text-2xl">Bem Vindo(a)👋</p>
+          <div className="flex flex-col bg-blue-500 gap-6 rounded-b-3xl py-10 px-6">
+            <div className="flex flex-row justify-between items-center ">
+              <div className="flex flex-col justify-center">
+                <p className="text-white text-2xl font-extrabold">
+                  Olá {user?.userName}
+                </p>
+                <p className="text-white text-2xl font-extrabold">
+                  Bem Vindo(a)👋
+                </p>
+              </div>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outlineWhite" className="h-12 w-12">
+                    <LogIn />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[80%] flex bg-transparent border-none shadow-none">
+                  <Button
+                    variant="white"
+                    onClick={async () => {
+                      await signOut(auth);
+                      updateUser(null);
+                      navigate("/");
+                    }}
+                    className={`flex items-center justify-between border-b-4 border-[#ddd] px-5 mb-7 rounded-[15px] shadow-lg`}
+                  >
+                    Sair
+                  </Button>
+                </PopoverContent>
+              </Popover>
             </div>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outlineWhite" className="h-12 w-12">
-                  <LogIn />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-[80%] flex bg-transparent border-none shadow-none">
+
+            {user?.role == "teacher" && (
+              <Link to="/addQuiz">
                 <Button
-                  variant="white"
-                  onClick={async () => {
-                    await signOut(auth);
-                    updateUser(null);
-                    navigate("/");
-                  }}
-                  className={`flex items-center justify-between border-b-4 border-[#ddd] px-5 mb-7 rounded-[15px] shadow-lg`}
+                  variant="outlineWhite"
+                  className="w-full border flex items-center justify-center gap-2 text-md font-bold"
                 >
-                  Sair
+                  <Plus />
+                  Criar Quiz
                 </Button>
-              </PopoverContent>
-            </Popover>
+              </Link>
+            )}
           </div>
-          <div className="flex-1 flex flex-col justify-between px-8 pt-10 pb-28 space-y-2 h-full w-full items-center">
+          <div className="flex-1 flex flex-col justify-between px-8 pt-4 pb-28 space-y-2 h-full w-full items-center">
             <div className="flex w-full justify-start">
-              <p className="text-3xl font-title text-[#2A416F] font-semibold">
+              <p className="text-3xl font-title text-blue-400 font-semibold">
                 Quizes Base
               </p>
             </div>
@@ -183,16 +201,6 @@ export default function Base() {
                 </>
               ))}
             </ScrollArea>
-
-            {user?.role == "teacher" && (
-              <Link
-                to="/addQuiz"
-                className="w-[80%] flex flex-row items-center justify-center rounded-[20px] bg-blue-500 py-4 gap-2 text-white text-center text-2xl"
-              >
-                Criar Quiz
-                <PlusCircle />
-              </Link>
-            )}
           </div>
         </div>
       </motion.div>
