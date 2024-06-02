@@ -32,6 +32,7 @@ import { Link } from "react-router-dom";
 import { toast, useToast } from "@/components/ui/use-toast";
 import { AtSign, KeyRound } from "lucide-react";
 import InputTxt from "@/components/Input";
+import BackButton from "@/components/BackButton";
 
 // type
 const formSchema = z.object({
@@ -102,13 +103,7 @@ export default function Login() {
         transition={{ duration: 1 }}
         className="h-full bg-blue-100 grid place-items-center relative"
       >
-        <Button
-          onClick={() => navigate(-1)}
-          className="absolute left-10 top-3 h-12 w-12"
-          variant="outline"
-        >
-          <ChevronLeft className="text-blue-600 " />
-        </Button>
+        <BackButton />
         <div className="flex flex-col flex-1 items-center px-10 h-full min-w-20   justify-center">
           <div className="flex flex-col w-full py-10 ">
             <div className="flex flex-col pb-7 w-full">
