@@ -27,7 +27,6 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { toast, useToast } from "@/components/ui/use-toast";
 import { AtSign, KeyRound } from "lucide-react";
@@ -102,17 +101,17 @@ export default function Login() {
         transition={{ duration: 1 }}
         className="h-full bg-blue-100 grid place-items-center"
       >
-        <div className="flex flex-col flex-1 items-center px-10 h-full min-w-[500px]  justify-center ">
+        <div className="flex flex-col flex-1 items-center px-10 h-full min-w-20   justify-center">
           <div className="flex flex-col w-full py-10 ">
             <div className="flex flex-col pb-7 w-full">
-              <p className="font-title font-semibold text-[#2A416F] text-[30px]  leading-tight">
+              <p className="font-title font-extrabold text-blue-800 text-2xl  leading-tight">
                 Acesse sua conta
               </p>
             </div>
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4"
+                className="space-y-4 w-full"
               >
                 <FormField
                   control={form.control}
@@ -145,18 +144,15 @@ export default function Login() {
                         />
                       </FormControl>
                       <FormMessage />
+                      <Link
+                        to={"/../esqueceuSenha"}
+                        className="w-full text-right block text-blue-800 font-bold text-sm hover:underline hover:text-blue-400"
+                      >
+                        Esqueceu a senha?
+                      </Link>
                     </FormItem>
                   )}
                 />
-                <Link
-                  to={"/../esqueceuSenha"}
-                  className="w-full text-center rounded-[20px] text-[#000] font-medium text-[18px] hover:underline "
-                >
-                  Esqueceu a senha?{" "}
-                  <span className="text-[#4A92FF] font-semibold text-right">
-                    Click Aqui
-                  </span>
-                </Link>
                 <Button type="submit" className="w-full">
                   Entrar
                 </Button>
@@ -165,9 +161,9 @@ export default function Login() {
             <div className="py-6 flex flex-col w-full gap-2">
               <Link
                 to={"/../register"}
-                className="w-full text-center rounded-[20px] text-[#000] font-medium text-[18px] hover:underline "
+                className="w-full text-center text-sm  text-blue-800 font-bold text-[18px] hover:underline "
               >
-                <span className="text-[#4A92FF]  font-semibold">
+                <span className="text-blue-400  font-semibold">
                   Novo por aqui?
                 </span>{" "}
                 Faça o cadastro
