@@ -35,8 +35,14 @@ import {
 } from "@/components/ui/dialog";
 import { Link } from "react-router-dom";
 import { LogIn, MoreVertical, Play, Plus } from "lucide-react";
-import { getBGLinearGradientByMateria } from "@/lib/data";
+import {
+  getBGLinearGradientByMateria,
+  materiaImages,
+  materiaOptions,
+} from "@/lib/data";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import MateriaCard from "@/components/MateriaCard";
+import QuizCard from "@/components/QuizCard";
 
 export default function Base() {
   const navigate = useNavigate();
@@ -108,97 +114,28 @@ export default function Base() {
             )}
           </div>
           <div className="flex-1 flex flex-col justify-between px-8 pt-4 pb-28 space-y-2 h-full w-full items-center">
+            <p className="text-blue-400 font-extrabold">
+              Selecione uma matéria
+            </p>
+            <div className="grid sm:grid-cols-[repeat(auto-fill,minmax(161px,230px))] max-sm:grid-cols-[repeat(auto-fill,minmax(120px,1fr))] max-[]:grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-6 w-full justify-center">
+              {materiaOptions.map((materia) => (
+                <MateriaCard
+                  name={materia.nome}
+                  id={materia.id}
+                  key={materia.id}
+                />
+              ))}
+            </div>
+
             <div className="flex w-full justify-start">
               <p className="text-3xl font-title text-blue-400 font-semibold">
                 Quizes Base
               </p>
             </div>
 
-            <ScrollArea className="h-[500px]">
+            <ScrollArea className="h-[500px] bg-blue-100 ">
               {quizes.map((item) => (
-                <>
-                  <div
-                    key={item.id}
-                    className={`relative flex flex-col transition-all mb-5`}
-                  >
-                    <div
-                      className={`flex flex-col rounded-xl w-full px-6 py-5 ${getBGLinearGradientByMateria(
-                        item.materia,
-                      )} hover:cursor-pointer`}
-                      onClick={() => navigate(`../quiz/menu/${item.id}`)}
-                    >
-                      <div className="flex flex-col border-2 border-white rounded-xl h-8 w-8 justify-center items-center">
-                        <Play className="text-white h-4 w-4" />
-                      </div>
-                      <p className="font-bold text-xl text-white">
-                        Nível {item.level}
-                      </p>
-                      <p className="font-bold text-2xl text-white">
-                        {item.materia} - {item.title}
-                      </p>
-                    </div>
-
-                    {item?.createdBy == user?.uid && (
-                      <Popover>
-                        <PopoverTrigger
-                          asChild
-                          className="absolute  top-2 right-2"
-                        >
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            className="rounded-full justify-center items-center hover:shadow-md hover:text-slate-800 text-slate-50"
-                          >
-                            <MoreVertical />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-[80%] ">
-                          <Dialog>
-                            <DialogTrigger asChild>
-                              <Button variant="outline" className="w-full">
-                                Deletar
-                              </Button>
-                            </DialogTrigger>
-                            <DialogContent className="sm:max-w-[425px]">
-                              <DialogTitle>Deletar Quiz</DialogTitle>
-                              <DialogHeader>
-                                <DialogDescription>
-                                  Tem certeza que voce quer deletar.
-                                </DialogDescription>
-                              </DialogHeader>
-                              <DialogFooter>
-                                <Button type="submit">Cancel</Button>
-                                <Button
-                                  onClick={async () => {
-                                    const quiz = doc(db, "Quizes", item.id);
-                                    const quizAnswers = doc(
-                                      db,
-                                      "QuizAnswers",
-                                      item.id,
-                                    );
-                                    await deleteDoc(quiz);
-                                    await deleteDoc(quizAnswers);
-                                  }}
-                                >
-                                  Confirmar
-                                </Button>
-                              </DialogFooter>
-                            </DialogContent>
-                          </Dialog>
-                          <Button
-                            variant="outline"
-                            onClick={() => {
-                              navigate(`../quiz/resultados/${item.id}`);
-                            }}
-                            className={`w-full`}
-                          >
-                            Ver resultados
-                          </Button>
-                        </PopoverContent>
-                      </Popover>
-                    )}
-                  </div>
-                </>
+                <QuizCard quiz={item} key={item.id} />
               ))}
             </ScrollArea>
           </div>
