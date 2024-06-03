@@ -69,21 +69,22 @@ export function getBGLinearGradientByMateria(subject: string): string {
   return "bg-indigo-500";
 }
 
+import MathImg from "../assets/mathHero.png";
+import ArtImg from "../assets/artHero.png";
+import BioImg from "../assets/bioHero.png";
+import FisicaImg from "../assets/fisicaHero.png";
+import HistoriaImg from "../assets/historiaHero.png";
+import PortuguesImg from "../assets/portuguesHero.png";
+
 export function materiaImages(subject: string): string {
-  if (subject === materia.Matematica)
-    return "https://cdn3d.iconscout.com/3d/premium/thumb/sketchbook-3981409-3297347.png"; //Ok
-  if (subject === materia.Biologia)
-    return "https://cdn3d.iconscout.com/3d/premium/thumb/sketchbook-3981409-3297347.png"; // Ok
-  if (subject === materia.Fisica)
-    return "https://cdn3d.iconscout.com/3d/premium/thumb/sketchbook-3981409-3297347.png"; // Ok
-  if (subject === materia.Portuguese)
-    return "https://cdn3d.iconscout.com/3d/premium/thumb/sketchbook-3981409-3297347.png"; // Ok
-  if (subject === materia.Art)
-    return "https://cdn3d.iconscout.com/3d/premium/thumb/sketchbook-3981409-3297347.png"; // OK
+  if (subject === materia.Matematica) return MathImg; //Ok
+  if (subject === materia.Biologia) return BioImg; // Ok
+  if (subject === materia.Fisica) return FisicaImg; // Ok
+  if (subject === materia.Portuguese) return PortuguesImg; // Ok
+  if (subject === materia.Art) return ArtImg; // OK
   if (subject === materia.Quimica)
     return "https://cdn3d.iconscout.com/3d/premium/thumb/sketchbook-3981409-3297347.png"; // Ok
-  if (subject === materia.Historia)
-    return "https://cdn3d.iconscout.com/3d/premium/thumb/sketchbook-3981409-3297347.png"; // Ok
+  if (subject === materia.Historia) return HistoriaImg; // Ok
   if (subject === materia.Geografia)
     return "https://cdn3d.iconscout.com/3d/premium/thumb/sketchbook-3981409-3297347.png";
   return "https://i.postimg.cc/mD5Nftx0/Book.png"; // Ok
