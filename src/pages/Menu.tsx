@@ -67,7 +67,7 @@ export default function Menu() {
         exit={{ opacity: 0.2, transition: { duration: 0.2 } }}
         className="min-h-screen flex justify-center  bg-blue-50 "
       >
-        <div className="flex flex-col flex-1 h-full max-w-5xl ">
+        <div className="flex flex-col flex-1 min-h-screen max-w-5xl ">
           <header
             className={`sm:flex sm:bg-slate-50 sm:flex-row max-sm:grid max-sm:grid-cols-4 px-5 pt-8 pb-5 gap-6 justify-center items-center rounded-b-3xl `}
           >
@@ -96,9 +96,24 @@ export default function Menu() {
             )}
           </header>
           <div className="flex flex-col flex-1 px-5 pt-5 pb-9 gap-7 ">
+            <div>
+              <p className="text-blue-800">
+                Criado por: <span className="font-extrabold">Professor(a)</span>
+              </p>
+              <p className="text-slate-800">
+                Desafie seus conhecimentos com nosso Quiz de História da Arte!
+                Explore obras-primas icônicas, estilos artísticos, e artistas
+                renomados através das épocas. Teste sua memória e aprenda
+                curiosidades fascinantes sobre os movimentos artísticos que
+                moldaram o mundo da arte. Você está pronto para essa jornada
+                cultural? Vamos começar!
+              </p>
+            </div>
             <div className="flex flex-col gap-4">
-              <p className="text-blue-800 text-xl font-extrabold">Resultados</p>
-              <div className="flex flex-row justify-center space-x-5">
+              <p className="text-blue-800 text-xl font-extrabold">
+                Resultados atual
+              </p>
+              <div className="flex flex-1 flex-row justify-center space-x-5">
                 <div className="flex flex-col justify-center  bg-blue-100 rounded-xl p-6 shadow w-[161.5px] h-[148px]">
                   <div className="flex flex-row justify-between items-center space-x-8">
                     <div className="flex flex-col h-9 w-9  rounded-full items-center justify-center">
@@ -141,14 +156,14 @@ export default function Menu() {
               </div> */}
               </div>
             </div>
-            <div className="flex flex-col space-y-2">
+            <div className="flex  flex-col gap-3">
               <p className="text-blue-800 font-body text-xl font-extrabold">
                 Resultados anteriores
               </p>
               {userPastAnswers &&
                 totalCorrectAnswer?.map((item) => (
                   <div
-                    className="flex flex-col bg-blue-100 relative  rounded-full px-4 pt-4 pb-5 shadow-lg"
+                    className="flex flex-col bg-blue-100 relative  rounded-full px-4 pt-4 pb-5"
                     key={item.index}
                   >
                     <p className="font-title text-xl text-blue-50 text-center font-bold absolute z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
