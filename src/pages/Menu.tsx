@@ -20,6 +20,8 @@ import {
 import { Progress } from "@/components/ui/progress";
 import BackButton from "@/components/BackButton";
 import { Button } from "@/components/ui/button";
+import { PencilLine, Trophy } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Menu() {
   //react
@@ -72,7 +74,7 @@ export default function Menu() {
             className={`sm:flex sm:bg-slate-50 sm:flex-row max-sm:grid max-sm:grid-cols-4 px-5 pt-8 pb-5 gap-6 justify-center items-center rounded-b-3xl `}
           >
             <BackButton className="relative top-auto left-auto" />
-            <div className="flex flex-1 flex-col justify-center max-sm:col-span-4 ">
+            <div className="flex flex-1 flex-col justify-center max-sm:col-span-3 ">
               <div className="flex flex-row">
                 <p className="text-blue-400 font-body font-semibold text-base">
                   {quiz?.materia}
@@ -85,12 +87,21 @@ export default function Menu() {
               </p>
             </div>
             {quiz?.createdBy == user?.uid ? (
-              <Button
-                variant="outline"
-                className="max-sm:col-span-5 max-sm:w-full sm:w-fit"
-              >
-                Edit Quiz
-              </Button>
+              <div className="max-sm:col-span-4 flex gap-6">
+                <Button variant="outline" className="max-sm:w-full sm:w-fit">
+                  <PencilLine />
+                  <span> Edit Quiz </span>
+                </Button>
+                <Link to={`../../quiz/resultados/${id}`}>
+                  <Button
+                    variant="outline"
+                    className="max-sm:h-12 max-sm:w-12  sm:w-fit"
+                  >
+                    <Trophy />
+                    <span className="max-sm:hidden ">Resultados</span>
+                  </Button>
+                </Link>
+              </div>
             ) : (
               <div className="max-sm:col-span-5"></div>
             )}
