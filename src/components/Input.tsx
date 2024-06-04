@@ -37,7 +37,7 @@ export default function InputTxt({
     <div className={cn(inputVariants({ variant, sise, className }))}>
       {Icon && <Icon />}
       <input
-        className="bg-transparent text-slate-800 border-0 outline-0 ring-0 file:border-0 file:bg-transparent placeholder:text-slate-400"
+        className=" w-full bg-transparent text-slate-800 border-0 outline-0 ring-0 file:border-0 file:bg-transparent placeholder:text-slate-400 active:bg-transparent focus:bg-transparent "
         type={type}
         {...props}
       />
