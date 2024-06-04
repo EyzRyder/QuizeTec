@@ -169,11 +169,11 @@ export default function Quiz() {
       animate={{ x: 0 }}
       exit={{ x: "-100vw" }}
       transition={{ duration: 0.5 }}
-      className="h-full bg-blue-50 flex justify-center relative"
+      className=" min-h-screen  bg-blue-50 flex justify-center relative "
     >
-      <div className="flex-1 flex flex-col max-w-5xl pb-6 gap-6  px-5 items-center transition-shadow ease-in-out duration-500 min-h-screen">
+      <div className="flex-1 flex flex-col max-w-5xl sm:pb-12 pb-28 gap-6  px-5 items-center transition-shadow ease-in-out duration-500 min-h-screen">
         <header className="bg-slate-50 pt-8 flex flex-col gap-8 px-6 pb-6 rounded-b-3xl w-full">
-          <div className="w-full h-6 flex flex-col justify-center items-centerrounded-2xl mb-6">
+          <div className="w-full h-6 flex flex-col justify-center items-centerrounded-2xl mb-">
             <Progress
               value={(curQuestionIndex + 1 / quiz.Questions.length) * 100}
               className={`w-[97%] h-full  bg-slate-300`}
