@@ -22,6 +22,17 @@ import BackButton from "@/components/BackButton";
 import { Button } from "@/components/ui/button";
 import { PencilLine, Trophy } from "lucide-react";
 import { Link } from "react-router-dom";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db } from "@/lib/firebaseConfig";
 
 export default function Menu() {
   //react
@@ -88,10 +99,39 @@ export default function Menu() {
             </div>
             {quiz?.createdBy == user?.uid ? (
               <div className="max-sm:col-span-4 flex gap-6">
-                <Button variant="outline" className="max-sm:w-full sm:w-fit">
-                  <PencilLine />
-                  <span> Edit Quiz </span>
-                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="max-sm:w-full sm:w-fit"
+                    >
+                      <PencilLine />
+                      <span> Deletar Quiz </span>
+                    </Button>
+                  </DialogTrigger>
+
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogTitle>Deletar Quiz</DialogTitle>
+                    <DialogHeader>
+                      <DialogDescription>
+                        Tem certeza que voce quer deletar.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <Button type="submit">Cancel</Button>
+                      <Button
+                        onClick={async () => {
+                          const quizdb = doc(db, "Quizes", quiz.id);
+                          const quizAnswers = doc(db, "QuizAnswers", quiz.id);
+                          await deleteDoc(quizdb);
+                          await deleteDoc(quizAnswers);
+                        }}
+                      >
+                        Confirmar
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
                 <Link to={`../../quiz/resultados/${id}`}>
                   <Button
                     variant="outline"
