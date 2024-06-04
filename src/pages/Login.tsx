@@ -2,7 +2,9 @@
 import { IonContent } from "@ionic/react";
 
 // Assets
-import fallgirl from "../assets/FallGirl.png";
+// import fallgirl from "../assets/FallGirl.png";
+// import EmailA from "../assets/svg/email-a";
+import { ChevronLeft } from "lucide-react";
 
 // Dependencies
 import { useNavigate } from "react-router";
@@ -26,9 +28,11 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { toast, useToast } from "@/components/ui/use-toast";
+import { AtSign, KeyRound } from "lucide-react";
+import InputTxt from "@/components/Input";
+import BackButton from "@/components/BackButton";
 
 // type
 const formSchema = z.object({
@@ -46,7 +50,7 @@ const formSchema = z.object({
 });
 
 export default function Login() {
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   const { updateUser } = useUserStore();
 
@@ -69,10 +73,14 @@ export default function Login() {
         toast({
           title: "Sucesso",
           description: "Logado com sucesso!",
-        })
+        });
         const user = userCredential.user;
         const docSnap = await getDoc(doc(db, "users", user.uid));
-        updateUser({ ...user, userName: docSnap?.data()?.userName, role: docSnap?.data()?.role  });
+        updateUser({
+          ...user,
+          userName: docSnap?.data()?.userName,
+          role: docSnap?.data()?.role,
+        });
         navigate("/base");
       })
       .catch((error) => {
@@ -80,7 +88,7 @@ export default function Login() {
           title: "Error",
           variant: "destructive",
           description: "Email ou/e Senha esta incorreta!",
-        })
+        });
         const errorMessage = error.message;
         console.error("Error attempted login: ", errorMessage);
       });
@@ -93,36 +101,30 @@ export default function Login() {
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.8 }}
         transition={{ duration: 1 }}
-        className="h-full "
+        className="h-full bg-blue-100 grid place-items-center relative"
       >
-        <div className="flex flex-col flex-1 items-center px-10 h-full justify-center sm:grid sm:grid-cols-2 bg-[#F5F9FC]">
-          <div className="flex justify-center items-center pr-14 w-[480px]">
-            <img src={fallgirl} alt="FallGirl" />
-          </div>
+        <BackButton />
+        <div className="flex flex-col flex-1 items-center px-10 h-full min-w-20   justify-center">
           <div className="flex flex-col w-full py-10 ">
             <div className="flex flex-col pb-7 w-full">
-              <p className="font-title font-semibold text-[#2A416F] text-[30px] leading-tight">
-                Olá,
-              </p>
-              <p className="font-title font-semibold text-[#2A416F] text-[30px]  leading-tight">
-                Hora do Login!
+              <p className="font-title font-extrabold text-blue-800 text-2xl  leading-tight">
+                Acesse sua conta
               </p>
             </div>
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4"
+                className="space-y-4 w-full"
               >
                 <FormField
                   control={form.control}
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      {/* <FormLabel>Email</FormLabel> */}
-                      <FormControl>
-                        <Input
-                          placeholder="AlbertEinstein@etec.sp.gov.br"
-                          className="bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
+                      <FormControl className="m-0">
+                        <InputTxt
+                          placeholder="E-mail"
+                          icon={AtSign}
                           {...field}
                         />
                       </FormControl>
@@ -137,47 +139,38 @@ export default function Login() {
                     <FormItem>
                       {/* <FormLabel>Senha</FormLabel> */}
                       <FormControl>
-                        <Input
-                          placeholder="******"
+                        <InputTxt
+                          placeholder="Senha"
                           type="password"
-                          className="bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
+                          icon={KeyRound}
                           {...field}
                         />
                       </FormControl>
                       <FormMessage />
+                      <Link
+                        to={"/../esqueceuSenha"}
+                        className="w-full text-right block text-blue-800 font-bold text-sm hover:underline hover:text-blue-400"
+                      >
+                        Esqueceu a senha?
+                      </Link>
                     </FormItem>
                   )}
                 />
-                <Button
-                  type="submit"
-                  className="w-full text-center rounded-[18px] bg-[#4A92FF] py-7 text-white font-medium text-[21px]"
-                >
-                  Login
+                <Button type="submit" className="w-full">
+                  Entrar
                 </Button>
               </form>
             </Form>
             <div className="py-6 flex flex-col w-full gap-2">
-
-            <Link
-              to={"/../register"}
-              className="w-full text-center rounded-[20px] text-[#000] font-medium text-[18px]"
-            >
-              Não Possui Conta?{" "}
-              <span className="text-[#4A92FF] hover:underline font-semibold">
-                Registrar
-              </span>
-            </Link>
-
-            <Link
-              to={"/../esqueceuSenha"}
-              className="w-full text-center rounded-[20px] text-[#000] font-medium text-[18px]"
-            >
-              Esqueceu a senha?{" "}
-              <span className="text-[#4A92FF] hover:underline font-semibold">
-                Click Aqui
-              </span>
-            </Link>
-
+              <Link
+                to={"/../register"}
+                className="w-full text-center text-sm  text-blue-800 font-bold text-[18px] hover:underline "
+              >
+                <span className="text-blue-400  font-semibold">
+                  Novo por aqui?
+                </span>{" "}
+                Faça o cadastro
+              </Link>
             </div>
           </div>
         </div>

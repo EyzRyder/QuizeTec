@@ -22,6 +22,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../lib/firebaseConfig";
 import { Progress } from "@/components/ui/progress";
 import { getBGLinearGradientByMateria } from "@/lib/data";
+import { Button } from "@/components/ui/button";
 
 export default function Quiz() {
   // react hook
@@ -31,7 +32,7 @@ export default function Quiz() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [selectedAnswer, setSelectedAnswer] = useState<AnswersType | null>(
-    null
+    null,
   );
 
   // Store
@@ -39,11 +40,11 @@ export default function Quiz() {
   const { addAnswer, curAnswers, curQuestionIndex, NextQuestion } =
     useCurAnswersStore();
   const quiz = useQuizStore(
-    (store) => store.quizes.filter((task) => task.id === id)[0]
+    (store) => store.quizes.filter((task) => task.id === id)[0],
   );
   const userPastAnswers = useQuizeAnswersStore(
     (store) =>
-      store.quizeAnswers.filter((q) => q.quizId == quiz.id)[0].usersAnswer
+      store.quizeAnswers.filter((q) => q.quizId == quiz.id)[0].usersAnswer,
   );
 
   const CurQuestion = quiz.Questions[curQuestionIndex];
@@ -168,62 +169,48 @@ export default function Quiz() {
       animate={{ x: 0 }}
       exit={{ x: "-100vw" }}
       transition={{ duration: 0.5 }}
-      className="h-full "
-
+      className=" min-h-screen  bg-blue-50 flex justify-center relative "
     >
-      <div className="flex-1 flex flex-col pb-6 pt-10 px-5 items-center transition-shadow ease-in-out duration-500 h-[100vh] bg-[#F5F9FC]">
-        <div className="w-full h-10 flex flex-col justify-center items-center bg-white shadow-md rounded-2xl mb-6">
-          <Progress
-            value={(curQuestionIndex / (quiz.Questions.length - 1)) * 100}
-            className={`w-[97%] `}
-          />
-        </div>
-        <div className="w-full mb-8">
-          <p className="text-[#00000099] text-xl font-normal text-left w-full">
-            {quiz.materia} - {quiz.title}
-          </p>
-          <p className="text-mainTitle font-title text-2xl text-left w-full">
-            {CurQuestion.title}
-          </p>
-        </div>
-        <div className="flex-1 w-full space-y-2 flex flex-col gap-3">
+      <div className="flex-1 flex flex-col max-w-5xl sm:pb-12 pb-28 gap-6  px-5 items-center transition-shadow ease-in-out duration-500 min-h-screen">
+        <header className="bg-slate-50 pt-8 flex flex-col gap-8 px-6 pb-6 rounded-b-3xl w-full">
+          <div className="w-full h-6 flex flex-col justify-center items-centerrounded-2xl mb-">
+            <Progress
+              value={(curQuestionIndex + 1 / quiz.Questions.length) * 100}
+              className={`w-[97%] h-full  bg-slate-300`}
+            />
+          </div>
+          <div className="w-full">
+            <p className="text-blue-400 text-xl font-normal text-left w-full">
+              {quiz.materia} - Série {quiz.level}
+            </p>
+            <p className="text-mainTitle font-title  text-left w-full">
+              {CurQuestion.title}
+            </p>
+          </div>
+        </header>
+        <div className="flex-1 w-full items-center flex flex-col gap-3">
           {CurQuestion.answers.map((answer) => (
-            <div
+            <Button
+              variant="outline"
               key={`${answer.id}`}
-              className={`flex flex-row rounded-xl shadow-md py-7 px-7 space-x-3 items-center w-full  ${
+              className={`flex w-full max-w-[608px] ${
                 answer.id == selectedAnswer?.id
-                  ? getBGLinearGradientByMateria(quiz.materia)
+                  ? "bg-blue-500 active:bg-blue-500 hover:bg-blue-400 text-slate-100 "
                   : "bg-none"
               } `}
               onClick={() => setSelectedAnswer(answer)}
             >
-              <p
-                className={` rounded-full w-6 h-6 text-center  ${
-                  answer.id == selectedAnswer?.id
-                    ? "bg-white text-slate-800"
-                    : "bg-slate-400 text-white"
-                }`}
-              >
-                {answer?.letra}
-              </p>
-              <p
-                className={`font-title text-lg  ${
-                  answer.id == selectedAnswer?.id ? "text-white" : "text-black"
-                } `}
-              >
-                {answer.title}
-              </p>
-            </div>
+              {answer.title}
+            </Button>
           ))}
         </div>
-        <button
+        <Button
           onClick={confirmeAnswer}
-          className={`py-4 mt-5 rounded-3xl w-full flex flex-col items-center ${getBGLinearGradientByMateria(
-            quiz.materia
-          )}`}
+          className={"sm:w-80 w-full"}
+          disabled={selectedAnswer == null}
         >
-          <p className="text-white text-2xl">Confirmar</p>
-        </button>
+          <p className="text-white font-bold">Próximo</p>
+        </Button>
       </div>
     </motion.div>
   );

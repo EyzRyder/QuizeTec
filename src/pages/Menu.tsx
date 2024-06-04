@@ -15,7 +15,24 @@ import {
   useQuizeAnswersStore,
   useUserStore,
 } from "@/lib/store";
-import { getBGLinearGradientByMateria, materiaImages } from "@/lib/data";
+
+//components
+import { Progress } from "@/components/ui/progress";
+import BackButton from "@/components/BackButton";
+import { Button } from "@/components/ui/button";
+import { PencilLine, Trophy } from "lucide-react";
+import { Link } from "react-router-dom";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db } from "@/lib/firebaseConfig";
 
 export default function Menu() {
   //react
@@ -29,13 +46,17 @@ export default function Menu() {
   const { user } = useUserStore();
   const { resetAnswer, startQuiz } = useCurAnswersStore();
   const quiz = useQuizStore(
-    (store) => store.quizes.filter((task) => task.id === id)[0]
+    (store) => store.quizes.filter((task) => task.id === id)[0],
   );
+  if (!quiz) {
+    navigate("../../base");
+  }
+
   const userPastAnswers = useQuizeAnswersStore(
     (store) =>
       store.quizeAnswers
-        .filter((q) => q.quizId == quiz.id)[0]
-        .usersAnswer.filter((u) => u.userId == user.uid)[0]?.pastAnswers
+        .filter((q) => q.quizId == quiz?.id)[0]
+        ?.usersAnswer.filter((u) => u.userId == user.uid)[0]?.pastAnswers,
   );
 
   // listing how many answers got correct
@@ -44,106 +65,131 @@ export default function Menu() {
     sum: number | string;
     index: number | string;
   };
-  const totalCorrectAnswer: totalCorrectAnswerTYPE[] = userPastAnswers?.map(
-    (item) => {
+  const totalCorrectAnswer: totalCorrectAnswerTYPE[] | null =
+    userPastAnswers?.map((item) => {
       let sum: boolean | number = false;
       item.questions?.map((data) => (sum = +sum + +data.isRight));
       answerindex++;
       return { sum: String(sum), index: String(answerindex) };
-    }
-  );
+    }) || null;
   return (
     <IonContent>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, transition: { delay: 0.2, duration: 0.2 } }}
         exit={{ opacity: 0.2, transition: { duration: 0.2 } }}
-        className="h-full "
-
+        className="min-h-screen flex justify-center  bg-blue-50 "
       >
-        <div className="flex flex-col flex-1 h-screen bg-[#fff]">
-          <div
-            className={`flex ${getBGLinearGradientByMateria(
-              quiz.materia
-            )} relative flex-row px-2 pt-14 pb-12 justify-center items-center rounded-b-3xl `}
+        <div className="flex flex-col flex-1 min-h-screen max-w-5xl ">
+          <header
+            className={`sm:flex sm:bg-slate-50 sm:flex-row max-sm:grid max-sm:grid-cols-4 px-5 pt-8 pb-5 gap-6 justify-center items-center rounded-b-3xl `}
           >
-            <div
-              onClick={() => {
-                navigate(-1);
-              }}
-              className="flex flex-col absolute top-10 left-6 h-10 w-10 items-center justify-center bg-white rounded-full cursor-pointer"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="9"
-                height="14"
-                viewBox="0 0 9 14"
-                fill="none"
-              >
-                <path d="M8 1L1.5 6.5L8 13" stroke="#4D8FFF" stroke-width="2" />
-              </svg>
-              {/* <Icon name="chevron-left" size={32} color={getBGColorByMateria(quiz.materia)} /> */}
-            </div>
-            <div className="flex flex-col justify-center items-center space-y-3">
-              {/* <div className="flex flex-col h-32 w-32 bg-gray-500"></div> */}
-              <div>
-                <img
-                  src={materiaImages(quiz.materia)}
-                  alt="Book"
-                  className="w-[6rem] h-[6rem]"
-                  loading="lazy"
-                />
+            <BackButton className="relative top-auto left-auto" />
+            <div className="flex flex-1 flex-col justify-center max-sm:col-span-3 ">
+              <div className="flex flex-row">
+                <p className="text-blue-400 font-body font-semibold text-base">
+                  {quiz?.materia}
+                  {" - "}
+                  {quiz?.level} Ano
+                </p>
               </div>
-              <p className="text-white text-xl font-medium text-center">{quiz.title}</p>
-              <div className="flex flex-row space-x-2">
-                <div className="flex flex-col rounded-[8px] mix-blend-soft-light bg-slate-700 py-1 px-4">
-                  <p className="text-white font-body text-base">
-                    {quiz.materia}
-                  </p>
-                </div>
-                <div className="flex flex-col  rounded-[8px] mix-blend-soft-light bg-slate-700 py-1 px-4">
-                  <p className="text-white font-body text-base">
-                    Nível {quiz.level}
-                  </p>
-                </div>
-              </div>
+              <p className="text-blue-800 text-xl font-extrabold">
+                {quiz?.title}
+              </p>
             </div>
-          </div>
+            {quiz?.createdBy == user?.uid ? (
+              <div className="max-sm:col-span-4 flex gap-6">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="max-sm:w-full sm:w-fit"
+                    >
+                      <PencilLine />
+                      <span> Deletar Quiz </span>
+                    </Button>
+                  </DialogTrigger>
+
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogTitle>Deletar Quiz</DialogTitle>
+                    <DialogHeader>
+                      <DialogDescription>
+                        Tem certeza que voce quer deletar.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <Button type="submit">Cancel</Button>
+                      <Button
+                        onClick={async () => {
+                          const quizdb = doc(db, "Quizes", quiz.id);
+                          const quizAnswers = doc(db, "QuizAnswers", quiz.id);
+                          await deleteDoc(quizdb);
+                          await deleteDoc(quizAnswers);
+                        }}
+                      >
+                        Confirmar
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+                <Link to={`../../quiz/resultados/${id}`}>
+                  <Button
+                    variant="outline"
+                    className="max-sm:h-12 max-sm:w-12  sm:w-fit"
+                  >
+                    <Trophy />
+                    <span className="max-sm:hidden ">Resultados</span>
+                  </Button>
+                </Link>
+              </div>
+            ) : (
+              <div className="max-sm:col-span-5"></div>
+            )}
+          </header>
           <div className="flex flex-col flex-1 px-5 pt-5 pb-9 gap-7 ">
+            <div>
+              <p className="text-blue-800">
+                Criado por: <span className="font-extrabold">Professor(a)</span>
+              </p>
+              <p className="text-slate-800">
+                Desafie seus conhecimentos com nosso Quiz de História da Arte!
+                Explore obras-primas icônicas, estilos artísticos, e artistas
+                renomados através das épocas. Teste sua memória e aprenda
+                curiosidades fascinantes sobre os movimentos artísticos que
+                moldaram o mundo da arte. Você está pronto para essa jornada
+                cultural? Vamos começar!
+              </p>
+            </div>
             <div className="flex flex-col gap-4">
-              <p className="text-[#888] text-lg font-medium">Resultados</p>
-              <div className="flex flex-row justify-center space-x-5">
-                <div className="flex flex-col bg-white rounded-xl px-4 pt-4 pb-5 shadow">
+              <p className="text-blue-800 text-xl font-extrabold">
+                Resultados atual
+              </p>
+              <div className="flex flex-1 flex-row justify-center space-x-5">
+                <div className="flex flex-col justify-center  bg-blue-100 rounded-xl p-6 shadow w-[161.5px] h-[148px]">
                   <div className="flex flex-row justify-between items-center space-x-8">
                     <div className="flex flex-col h-9 w-9  rounded-full items-center justify-center">
                       <img
                         src="https://i.postimg.cc/fbBS2MXz/Crown.png"
                         alt=""
-                        className="w-full h-full"
+                        className="w-12 h-12"
                       />
                     </div>
-                    <div className="flex flex-row items-center justify-center bg-[#7cfc0033] px-2 py-1 rounded">
-                      {/* <Icon name="chevron-down" size={12} color={'#7CFC00'} /> */}
-                      <p className="text-[#7CFC00] text-[10px]">
-                        Pontuação Atual
-                      </p>
-                    </div>
                   </div>
+                  <p className="text-blue-400 font-body text font-semibold">
+                    Acertos
+                  </p>
                   {totalCorrectAnswer ? (
                     <p className="flex flex-col font-title text-xl text-[#2A416F] font-bold">
                       {userPastAnswers
                         ? totalCorrectAnswer[totalCorrectAnswer.length - 1].sum
                         : "0"}{" "}
-                      / {quiz.Questions.length}
+                      / {quiz?.Questions.length}
                     </p>
                   ) : (
                     <p className="flex flex-col font-title text-xl text-[#2A416F] font-bold">
-                      0 / {quiz.Questions.length}
+                      0 / {quiz?.Questions.length}
                     </p>
                   )}
-                  <p className="text-[#888] font-body text-sm">
-                    Total de acertos
-                  </p>
                 </div>
                 {/* <div className="flex flex-col bg-white rounded-xl px-4 pt-4 pb-5 shadow">
                 <div className="flex flex-row justify-between items-center space-x-8">
@@ -161,52 +207,38 @@ export default function Menu() {
               </div> */}
               </div>
             </div>
-            <div className="flex flex-col space-y-2">
-              <p className="text-[#888] font-body text-lg">
-                Resultados Anteriores:{" "}
+            <div className="flex  flex-col gap-3">
+              <p className="text-blue-800 font-body text-xl font-extrabold">
+                Resultados anteriores
               </p>
               {userPastAnswers &&
                 totalCorrectAnswer?.map((item) => (
                   <div
-                    className="flex flex-col bg-white rounded-xl px-4 pt-4 pb-5 shadow-lg"
+                    className="flex flex-col bg-blue-100 relative  rounded-full px-4 pt-4 pb-5"
                     key={item.index}
                   >
-                    <div className="flex flex-row justify-between items-center space-x-8">
-                      <div className="h-9 w-9 bg-slate-300 rounded-full"></div>
-                      <div className="flex flex-row items-center justify-center bg-[#7cfc0033] px-2 py-1 rounded">
-                        <p className="text-[#7CFC00] text-[10px]">+1</p>
-                      </div>
-                    </div>
-                    <p className="font-title text-xl text-[#2A416F] font-bold">
-                      {item.sum} / {quiz.Questions.length}{" "}
+                    <p className="font-title text-xl text-blue-50 text-center font-bold absolute z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                      {item.sum} / {quiz?.Questions.length}{" "}
                     </p>
-                    <p className="text-[#888] font-body text-sm">
-                      Total de acertos
-                    </p>
+                    <Progress
+                      value={(Number(item.sum) / quiz?.Questions.length) * 100}
+                      className="w-full bg-slate-300 h-7 border border-blue-50 "
+                    />
                   </div>
                 ))}
             </div>
           </div>
-          <div className="px-9 flex flex-col ">
-            <div
+          <div className="px-9 flex flex-col max-sm:pb-28 sm:pb-6 ">
+            <Button
+              className="w-full"
               onClick={() => {
                 resetAnswer();
                 navigate(`/quiz/${id}`);
                 startQuiz();
               }}
-              className={
-                "flex flex-col w-full rounded-2xl py-4 transition-all bg-blue-500 hover:bg-blue-400 cursor-pointer"
-              }
             >
-              <p className={`text-2xl font-body text-center text-white`}>
-                Jogar
-              </p>
-            </div>
-            <div onClick={() => navigate(-1)}>
-              <p className="text-xl font-body text-center py-4 text-[#2A416F] cursor-pointer hover:underline">
-                Voltar ao Menu
-              </p>
-            </div>
+              Começar
+            </Button>
           </div>
         </div>
       </motion.div>

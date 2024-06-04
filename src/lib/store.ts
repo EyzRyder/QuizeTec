@@ -20,6 +20,7 @@ type AddingQuizStoreType = {
 type QuestionsStoreType = {
   questions: QuestionType[] | [];
   addQuestion: (item: QuestionType) => void;
+  editQuestion: (item: QuestionType, index: number) => void;
   deleteQuestion: (id: string) => void;
   resetQuestion: () => void;
 };
@@ -65,6 +66,16 @@ export const useQuestionsStore = create<QuestionsStoreType>((set) => ({
   deleteQuestion: (id) =>
     set((state) => ({
       questions: state.questions.filter((question) => question.id !== id),
+    })),
+  editQuestion: (item: QuestionType, index: number) =>
+    set((state) => ({
+      questions: state.questions.map((question, i) => {
+        if (i == index) {
+          return item;
+        } else {
+          return question;
+        }
+      }),
     })),
   resetQuestion: () => set((state) => ({ questions: [] })),
 }));

@@ -1,6 +1,7 @@
 export interface QuestionType {
   id: string;
   title: string;
+  type: string;
   answers: AnswersType[];
 }
 
