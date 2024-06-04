@@ -152,12 +152,7 @@ export default function Menu() {
                 Criado por: <span className="font-extrabold">Professor(a)</span>
               </p>
               <p className="text-slate-800">
-                Desafie seus conhecimentos com nosso Quiz de História da Arte!
-                Explore obras-primas icônicas, estilos artísticos, e artistas
-                renomados através das épocas. Teste sua memória e aprenda
-                curiosidades fascinantes sobre os movimentos artísticos que
-                moldaram o mundo da arte. Você está pronto para essa jornada
-                cultural? Vamos começar!
+                ...
               </p>
             </div>
             <div className="flex flex-col gap-4">
