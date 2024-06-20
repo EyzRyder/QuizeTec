@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/dialog";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
+import ProgressBar from "@/components/Progress";
 
 export default function Menu() {
   //react
@@ -207,20 +208,8 @@ export default function Menu() {
                 Resultados anteriores
               </p>
               {userPastAnswers &&
-                totalCorrectAnswer?.map((item) => (
-                  <div
-                    className="flex flex-col bg-blue-100 relative  rounded-full px-4 pt-4 pb-5"
-                    key={item.index}
-                  >
-                    <p className="font-title text-xl text-blue-50 text-center font-bold absolute z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                      {item.sum} / {quiz?.Questions.length}{" "}
-                    </p>
-                    <Progress
-                      value={(Number(item.sum) / quiz?.Questions.length) * 100}
-                      className="w-full bg-slate-300 h-7 border border-blue-50 "
-                    />
-                  </div>
-                ))}
+                totalCorrectAnswer?.map((item) => <ProgressBar key={item.index} count={Number(item.sum)} total={quiz?.Questions.length}/>
+                )}
             </div>
           </div>
           <div className="px-9 flex flex-col max-sm:pb-28 sm:pb-6 ">

@@ -35,7 +35,7 @@ export type quizAnswers = {
   usersAnswer: usersAnswerType[];
 };
 
-type usersAnswerType = {
+export type usersAnswerType = {
   userId: string;
   pastAnswers: pastAnswersType[];
 };

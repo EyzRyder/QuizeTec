@@ -1,20 +1,20 @@
-# Quiz Etec
-Quiz Etec é uma plataforma online que permite aos professores criar quizzes interativos e personalizados para avaliar o aprendizado dos seus alunos.
-Quiz Etec também é uma ferramenta divertida e eficaz para os alunos que querem revisar os conteúdos estudados.
-Quiz Etec é uma plataforma gratuita e fácil de usar, que se adapta a qualquer dispositivo e sistema operacional. Para começar a usar, basta se cadastrar com seu e-mail. Experimente hoje mesmo e descubra como ele pode transformar sua experiência de ensino e aprendizagem.
+# Quizetec
+Quizetec é uma plataforma online que permite aos professores criar quizzes interativos e personalizados para avaliar o aprendizado dos seus alunos.
+Quizetec também é uma ferramenta divertida e eficaz para os alunos que querem revisar os conteúdos estudados.
+Quizetec é uma plataforma gratuita e fácil de usar, que se adapta a qualquer dispositivo e sistema operacional. Para começar a usar, basta se cadastrar com seu e-mail. Experimente hoje mesmo e descubra como ele pode transformar sua experiência de ensino e aprendizagem.
 
 ## Tecnologias
-- Typescript: Linguagem 
+- Typescript: Linguagem
 - React: Biblioteca de Javascript
 - Ionic: FrameWork de Javascript
 - Tailwindcss: FrameWork de CSS
 - Framer Motion: Biblioteca de Animações
-- Shadcn: Coleção de componentes 
+- Shadcn: Coleção de componentes
 - Firebase: Banco de Dados NoSql
 - Zustand: Biblioteca de gerenciamento de estado para React
 - Zod: Biblioteca de declaração e validação de esquemas TypeScript
 
-Inicialmente usamos React Native mas fizemos a troca para Ionic React porque o Native não era tão compativel com Firebase. 
+Inicialmente usamos React Native mas fizemos a troca para Ionic React porque o Native não era tão compativel com Firebase.
 Usamos o Typescript e Zod ajudava melhorar a qualidade do código, facilitar a detecção de erros, aumentar a produtividade e a legibilidade do código, e oferecer suporte a ferramentas de edição e depuração. Typescript também permite usar recursos mais modernos do Javascript, como classes, módulos e decoradores.
 Para estilização usamos Tailwindcss , Shadcn e o Framer Motionpor garantir melhor controle, facilidade, velocidade e customizável.
 
@@ -26,11 +26,11 @@ Use o gerenciador de pacotes da sua preferencia, mas para ter o mesmo resultados
 ## Instalação
 1. Clone este repositório em sua máquina local:
 ```bash
-  git clone https://github.com/EyzRyder/Quiz-Etec.git
+  git clone https://github.com/EyzRyder/Quizetec.git
 ```
 2. Navegue até o diretório do projeto:
 ```bash
-cd Quiz-Etec
+cd Quizetec
 ```
 3. Execute o seguinte comando para instalar as dependências:
 ```bash

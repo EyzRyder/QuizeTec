@@ -11,6 +11,7 @@ import Resultados from "./pages/Resultados";
 import ForgotPassword from "./pages/ForgotPassword";
 import Register from "./pages/registro/Register";
 import RegisterTeacher from "./pages/registro/RegisterTeacher";
+import ResultDetails from "./pages/ResultDetails";
 
 const Routing = () => {
   return (
@@ -32,6 +33,7 @@ const Routing = () => {
               <Route path=":id" element={<Quiz />} />
               <Route path="menu/:id" element={<Menu />} />
               <Route path="resultados/:id" element={<Resultados />} />
+              <Route path="resultados/:id/:userId" element={<ResultDetails />} />
             </Route>
           </Route>
         </Routes>
