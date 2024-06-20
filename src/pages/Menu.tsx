@@ -17,7 +17,6 @@ import {
 } from "@/lib/store";
 
 //components
-import { Progress } from "@/components/ui/progress";
 import BackButton from "@/components/BackButton";
 import { Button } from "@/components/ui/button";
 import { PencilLine, Trophy } from "lucide-react";
@@ -152,9 +151,7 @@ export default function Menu() {
               <p className="text-blue-800">
                 Criado por: <span className="font-extrabold">Professor(a)</span>
               </p>
-              <p className="text-slate-800">
-                ...
-              </p>
+              <p className="text-slate-800">...</p>
             </div>
             <div className="flex flex-col gap-4">
               <p className="text-blue-800 text-xl font-extrabold">
@@ -208,8 +205,13 @@ export default function Menu() {
                 Resultados anteriores
               </p>
               {userPastAnswers &&
-                totalCorrectAnswer?.map((item) => <ProgressBar key={item.index} count={Number(item.sum)} total={quiz?.Questions.length}/>
-                )}
+                totalCorrectAnswer?.map((item) => (
+                  <ProgressBar
+                    key={item.index}
+                    count={Number(item.sum)}
+                    total={quiz?.Questions.length}
+                  />
+                ))}
             </div>
           </div>
           <div className="px-9 flex flex-col max-sm:pb-28 sm:pb-6 ">

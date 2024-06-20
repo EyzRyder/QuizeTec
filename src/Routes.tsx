@@ -12,6 +12,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import Register from "./pages/registro/Register";
 import RegisterTeacher from "./pages/registro/RegisterTeacher";
 import ResultDetails from "./pages/ResultDetails";
+import MateriasMenu from "./pages/MateriasMenu";
 
 const Routing = () => {
   return (
@@ -24,16 +25,20 @@ const Routing = () => {
             <Route path="login" element={<Login />} />
             <Route path="esqueceuSenha" element={<ForgotPassword />} />
             <Route path="register" element={<Outlet />}>
-              <Route index element={<Register />}/>
-              <Route path="admProfessor" element={<RegisterTeacher />}/>
+              <Route index element={<Register />} />
+              <Route path="admProfessor" element={<RegisterTeacher />} />
             </Route>
             <Route path="base" element={<Base />} />
             <Route path="addQuiz" element={<AddQuiz />} />
+            <Route path="materia/:materia" element={<MateriasMenu />} />
             <Route path="quiz" element={<Outlet />}>
               <Route path=":id" element={<Quiz />} />
               <Route path="menu/:id" element={<Menu />} />
               <Route path="resultados/:id" element={<Resultados />} />
-              <Route path="resultados/:id/:userId" element={<ResultDetails />} />
+              <Route
+                path="resultados/:id/:userId"
+                element={<ResultDetails />}
+              />
             </Route>
           </Route>
         </Routes>
