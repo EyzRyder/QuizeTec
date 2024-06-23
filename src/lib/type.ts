@@ -15,6 +15,7 @@ export interface AnswersType {
 export interface QuizType {
   id: string;
   title: string;
+  description: string;
   level: string;
   materia: string;
   Questions: QuestionType[];

@@ -6,7 +6,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "../lib/firebaseConfig";
 
 // Lib
-import { useQuizStore, useUserStore } from "../lib/store";
+import { useUserStore } from "../lib/store";
 
 // Dependencies
 import { useNavigate } from "react-router";
@@ -100,7 +100,7 @@ export default function Base() {
                   key={materia.id}
                   to={`../materia/${materia.nome}`}
                 >
-                  <MateriaCard name={materia.nome} id={materia.id} />
+                  <MateriaCard name={materia.nome} />
                 </Link>
               ))}
             </div>

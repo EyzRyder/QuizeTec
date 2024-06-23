@@ -15,6 +15,7 @@ const useQuizesList = () => {
         itemsArr.push({
           id: doc.data().id,
           title: doc.data().title,
+          description: doc.data().description,
           level: doc.data().level,
           materia: doc.data().materia,
           Questions: doc.data().Questions,
