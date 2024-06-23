@@ -6,7 +6,11 @@ import { IonContent } from "@ionic/react";
 import { motion } from "framer-motion";
 import { useParams } from "react-router";
 
+// Hook
+import useQuizesList from "../useHook/useQuiz";
+
 export default function MateriasMenu() {
+  useQuizesList();
   const { materia } = useParams();
 
   const { quizes } = useQuizStore();
