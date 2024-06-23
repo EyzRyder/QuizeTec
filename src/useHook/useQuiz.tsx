@@ -18,13 +18,16 @@ const useQuizesList = () => {
           level: doc.data().level,
           materia: doc.data().materia,
           Questions: doc.data().Questions,
+          QuestionsID: doc.data().QuestionsID,
           createdBy: doc.data().createdBy,
+          sharedWith: doc.data().sharedWith,
+          createdAt: doc.data().createdAt.toDate(),
+          updatedAt: doc.data().updatedAt.toDate(),
         });
       });
       // console.log(itemsArr)
       addQuizes(itemsArr);
       // console.log(quizes)
-      // setData(itemsArr)
       return () => unsubscribe();
     });
   }, []);
