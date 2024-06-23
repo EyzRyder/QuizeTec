@@ -18,7 +18,11 @@ export interface QuizType {
   level: string;
   materia: string;
   Questions: QuestionType[];
+  QuestionsID: string[];
   createdBy: string;
+  sharedWith: string[];
+  createdAt: Date;
+  updatedAt: Date;
 }
 export interface AnsweringType extends AnswersType {
   questionId: string;
