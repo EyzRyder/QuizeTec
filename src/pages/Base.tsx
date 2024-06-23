@@ -8,10 +8,6 @@ import { auth } from "../lib/firebaseConfig";
 // Lib
 import { useQuizStore, useUserStore } from "../lib/store";
 
-// Hook
-import useQuizesList from "../useHook/useQuiz";
-import useQuizAnswers from "../useHook/useQuizAnswers";
-
 // Dependencies
 import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
@@ -23,34 +19,19 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Link } from "react-router-dom";
-import { LogIn, MoreVertical, Play, Plus } from "lucide-react";
+import { LogIn, Plus } from "lucide-react";
 import { materiaOptions } from "@/lib/data";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import MateriaCard from "@/components/MateriaCard";
-import QuizCard from "@/components/QuizCard";
 
 export default function Base() {
   const navigate = useNavigate();
 
-  const { quizes } = useQuizStore();
   const { user, updateUser } = useUserStore(); //zustand
 
   if (!user) {
     navigate("/");
   }
-
-  useQuizesList();
-  useQuizAnswers();
 
   return (
     <IonContent
