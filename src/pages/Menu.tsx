@@ -4,23 +4,34 @@ import { IonContent } from "@ionic/react";
 // Dependence
 import { useNavigate, useParams } from "react-router";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { PencilLine, Trophy } from "lucide-react";
+import {
+  deleteDoc,
+  doc,
+  getDocs,
+  collection,
+  query,
+  where,
+  onSnapshot,
+  QuerySnapshot,
+} from "firebase/firestore";
 
 // Hook
 import useQuizAnswers from "../useHook/useQuizAnswers";
 
-// Lib
+// store
 import {
   useCurAnswersStore,
   useQuizStore,
   useQuizeAnswersStore,
   useUserStore,
 } from "@/lib/store";
+import { db } from "@/lib/firebaseConfig";
 
 //components
 import BackButton from "@/components/BackButton";
 import { Button } from "@/components/ui/button";
-import { PencilLine, Trophy } from "lucide-react";
-import { Link } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
@@ -30,15 +41,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { deleteDoc, doc } from "firebase/firestore";
-import { db } from "@/lib/firebaseConfig";
 import ProgressBar from "@/components/Progress";
+import useQuizCreator from "@/useHook/useQuizCreator";
 
 export default function Menu() {
   //react
   const navigate = useNavigate();
   const { id } = useParams();
-
   //hook
   useQuizAnswers();
 
@@ -48,10 +57,12 @@ export default function Menu() {
   const quiz = useQuizStore(
     (store) => store.quizes.filter((task) => task.id === id)[0],
   );
+
   if (!quiz) {
     navigate("../../base");
   }
 
+  const [creator] = useQuizCreator(quiz?.createdBy);
   const userPastAnswers = useQuizeAnswersStore(
     (store) =>
       store.quizeAnswers
@@ -72,6 +83,7 @@ export default function Menu() {
       answerindex++;
       return { sum: String(sum), index: String(answerindex) };
     }) || null;
+
   return (
     <IonContent>
       <motion.div
@@ -97,7 +109,8 @@ export default function Menu() {
                 {quiz?.title}
               </p>
             </div>
-            {quiz?.createdBy == user?.uid ? (
+            {quiz?.createdBy == user?.uid ||
+            quiz?.sharedWith.includes(user?.uid) ? (
               <div className="max-sm:col-span-4 flex gap-6">
                 <Dialog>
                   <DialogTrigger asChild>
@@ -149,9 +162,10 @@ export default function Menu() {
           <div className="flex flex-col flex-1 px-5 pt-5 pb-9 gap-7 ">
             <div>
               <p className="text-blue-800">
-                Criado por: <span className="font-extrabold">Professor(a)</span>
+                Criado por:{" "}
+                <span className="font-extrabold">Professor(a) {creator}</span>
               </p>
-              <p className="text-slate-800">...</p>
+              <p className="text-slate-800">{quiz?.description}</p>
             </div>
             <div className="flex flex-col gap-4">
               <p className="text-blue-800 text-xl font-extrabold">

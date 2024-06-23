@@ -6,7 +6,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "../lib/firebaseConfig";
 
 // Lib
-import { useQuizStore, useUserStore } from "../lib/store";
+import { useUserStore } from "../lib/store";
 
 // Dependencies
 import { useNavigate } from "react-router";
@@ -96,7 +96,7 @@ export default function Base() {
             <div className="grid sm:grid-cols-[repeat(auto-fill,minmax(161px,230px))] max-sm:grid-cols-[repeat(auto-fill,minmax(120px,1fr))] max-[]:grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-6 w-full justify-center">
               {materiaOptions.map((materia) => (
                 <Link key={materia.id} to={`../materia/${materia.nome}`}>
-                  <MateriaCard name={materia.nome} id={materia.id} />
+                  <MateriaCard name={materia.nome} />
                 </Link>
               ))}
             </div>
