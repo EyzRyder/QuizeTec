@@ -21,6 +21,7 @@ export interface QuizType {
   Questions: QuestionType[];
   QuestionsID: string[];
   createdBy: string;
+  createdByName?: string | null;
   sharedWith: string[];
   createdAt: Date;
   updatedAt: Date;

@@ -4,6 +4,8 @@ import { AnsweringType, QuestionType, QuizType, quizAnswers } from "./type";
 
 type QuizStoreType = {
   quizes: QuizType[] | [];
+  quizesMap: Map<string, QuizType>;
+  setQuiz: (id: string, item: QuizType) => void;
   addQuiz: (item: QuizType) => void;
   addQuizes: (item: QuizType[]) => void;
   deleteQuiz: (id: string) => void;
@@ -46,8 +48,11 @@ type useQuizeAnswersType = {
 
 export const useQuizStore = create<QuizStoreType>((set) => ({
   quizes: [],
+  quizesMap: new Map<string, QuizType>(),
   addQuiz: (item) => set((state) => ({ quizes: [...state.quizes, item] })),
   addQuizes: (item) => set((state) => ({ quizes: [...item] })),
+  setQuiz: (id, item) =>
+    set((state) => ({ quizesMap: state.quizesMap.set(id, item) })),
   deleteQuiz: (id) =>
     set((state) => ({ quizes: state.quizes.filter((quiz) => quiz.id !== id) })),
 }));
@@ -85,9 +90,14 @@ export const useNewQuiz = create<AddingQuizStoreType>((set) => ({
     id: "",
     title: "",
     level: "",
+    description: "",
     materia: "",
     Questions: [],
+    QuestionsID: [],
     createdBy: "",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    sharedWith: [],
   },
   addId: (id) => set((state) => ({ quiz: { ...state.quiz, id } })),
   addTitle: (title) => set((state) => ({ quiz: { ...state.quiz, title } })),
@@ -101,11 +111,15 @@ export const useNewQuiz = create<AddingQuizStoreType>((set) => ({
       quiz: {
         id: "",
         title: "",
-        opened: false,
         level: "",
+        description: "",
         materia: "",
         Questions: [],
+        QuestionsID: [],
         createdBy: "",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        sharedWith: [],
       },
     })),
 }));
