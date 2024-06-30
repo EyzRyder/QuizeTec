@@ -6,16 +6,7 @@ import { useNavigate, useParams } from "react-router";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { PencilLine, Trophy } from "lucide-react";
-import {
-  deleteDoc,
-  doc,
-  getDocs,
-  collection,
-  query,
-  where,
-  onSnapshot,
-  QuerySnapshot,
-} from "firebase/firestore";
+import { deleteDoc, doc } from "firebase/firestore";
 
 // Hook
 import useQuizAnswers from "../useHook/useQuizAnswers";
@@ -42,27 +33,25 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import ProgressBar from "@/components/Progress";
-import useQuizCreator from "@/useHook/useQuizCreator";
+import useQuizesList from "@/useHook/useQuiz";
 
 export default function Menu() {
   //react
   const navigate = useNavigate();
   const { id } = useParams();
   //hook
+  useQuizesList({ id });
   useQuizAnswers();
 
   // store
   const { user } = useUserStore();
   const { resetAnswer, startQuiz } = useCurAnswersStore();
-  const quiz = useQuizStore(
-    (store) => store.quizes.filter((task) => task.id === id)[0],
-  );
+  const quiz = useQuizStore((store) => store.quizesMap.get(id || ""));
 
   if (!quiz) {
     navigate("../../base");
   }
 
-  const [creator] = useQuizCreator(quiz?.createdBy);
   const userPastAnswers = useQuizeAnswersStore(
     (store) =>
       store.quizeAnswers
@@ -83,6 +72,14 @@ export default function Menu() {
       answerindex++;
       return { sum: String(sum), index: String(answerindex) };
     }) || null;
+
+  async function deleteQuiz(id?: string) {
+    if (!id) return;
+    const quizdb = doc(db, "Quizes", id);
+    const quizAnswers = doc(db, "QuizAnswers", id);
+    await deleteDoc(quizdb);
+    await deleteDoc(quizAnswers);
+  }
 
   return (
     <IonContent>
@@ -133,11 +130,8 @@ export default function Menu() {
                     <DialogFooter>
                       <Button type="submit">Cancel</Button>
                       <Button
-                        onClick={async () => {
-                          const quizdb = doc(db, "Quizes", quiz.id);
-                          const quizAnswers = doc(db, "QuizAnswers", quiz.id);
-                          await deleteDoc(quizdb);
-                          await deleteDoc(quizAnswers);
+                        onClick={() => {
+                          deleteQuiz(quiz?.id);
                         }}
                       >
                         Confirmar
@@ -163,7 +157,9 @@ export default function Menu() {
             <div>
               <p className="text-blue-800">
                 Criado por:{" "}
-                <span className="font-extrabold">Professor(a) {creator}</span>
+                <span className="font-extrabold">
+                  Professor(a) {quiz?.createdByName && quiz?.createdByName}
+                </span>
               </p>
               <p className="text-slate-800">{quiz?.description}</p>
             </div>
@@ -223,7 +219,7 @@ export default function Menu() {
                   <ProgressBar
                     key={item.index}
                     count={Number(item.sum)}
-                    total={quiz?.Questions.length}
+                    total={Number(quiz?.Questions.length)}
                   />
                 ))}
             </div>

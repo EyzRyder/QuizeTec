@@ -26,7 +26,10 @@ export default function QuizCard({ quiz }: QuizCardProps) {
             : quiz.title}
         </p>
         <p className="text-blue-800">
-          Crado por: <span className="font-extrabold">Professor(a)</span>
+          Crado por:{" "}
+          <span className="font-extrabold">
+            Professor(a) {quiz.createdByName && quiz.createdByName}
+          </span>
         </p>
       </div>
     </div>
