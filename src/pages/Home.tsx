@@ -19,10 +19,10 @@ export default function Home() {
   return (
     <IonContent>
       <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
+        initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.8 }}
-        transition={{ duration: 1 }}
+        transition={{ duration: 0.5 }}
         className="min-h-screen bg-blue-500 text-white  flex flex-col items-center justify-center"
       >
         <div className="flex flex-col flex-1 items-center px-5 h-full w-96 justify-center ">

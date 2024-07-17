@@ -97,10 +97,10 @@ export default function Login() {
   return (
     <IonContent>
       <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
+        initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.8 }}
-        transition={{ duration: 1 }}
+        transition={{ duration: 0.5 }}
         className="h-full bg-blue-100 grid place-items-center relative"
       >
         <BackButton />

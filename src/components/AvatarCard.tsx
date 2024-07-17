@@ -20,7 +20,7 @@ export default function AvatarCard({
   instaLink,
 }: AvatarProps) {
   return (
-    <div className="flex flex-col space-y-3 p-4 justify-center items-left">
+    <div className="flex flex-col space-y-3 p-4 justify-center items-left overflow-hidden">
       <Avatar className="h-20 w-20 rounded-xl">
         <AvatarImage src={img} alt={name} className="rounded-full" />
         <AvatarFallback>{fbImg}</AvatarFallback>
@@ -32,7 +32,7 @@ export default function AvatarCard({
           <p className="text-sm w-36 text-[#333333] font-medium">{role}</p>
         ))}
       </div>
-      <div className="flex  gap-2 flex-row mr-16">
+      <div className="flex gap-1 flex-row">
         <a
           href={linkedInLink}
           target="_blank"

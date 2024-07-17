@@ -15,17 +15,17 @@ export default function Sobre() {
   return (
     <IonContent>
       <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
+        initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.8 }}
-        transition={{ duration: 1 }}
-        className="min-h-screen absolute  w-full flex flex-col overflow-y-scroll  bg-blue-100"
+        transition={{ duration: 0.5 }}
+        className="min-h-screen absolute w-full flex flex-col overflow-y-scroll bg-blue-100"
       >
         <BackButton />
-        <div className="flex flex-col flex-1 h-full  bg-blue-100 ">
-          <div className="flex-1 lg:grid lg:place-content-center ">
-            <div className="flex max-lg:flex-col gap-4 px-8 pt-20 pb-28  ">
-              <div className="min-w-96 lg:w-96 max-lg:w-full  flex flex-col gap-8">
+        <div className="flex flex-col flex-1 w-full h-full bg-blue-100">
+          <div className="flex-1 lg:grid lg:place-content-center w-full">
+            <div className="flex max-lg:flex-col gap-4 px-8 pt-20 pb-28">
+              <div className="min-w-96 lg:w-96 max-lg:w-full flex flex-col gap-8">
                 <p className="text-3xl font-semibold text-left text-blue-800 ">
                   Motivo do {"\n"}desenvolvimento
                 </p>
@@ -49,7 +49,7 @@ export default function Sobre() {
                 <p className="text-2xl text-blue-800 font-bold text-left mb-6">
                   Por Quem?
                 </p>
-                <div className="flex flex-wrap w-fit justify-center  gap-4">
+                <div className="grid grid-cols-2 grid-rows-2 w-full justify-center gap-4">
                   <AvatarCard
                     name="Gabriel B."
                     img="https://avatars.githubusercontent.com/u/85580011?v=4"
@@ -66,7 +66,7 @@ export default function Sobre() {
                     roles={["Desenvolvedor Web", "Web Designer"]}
                     instaLink="https://www.instagram.com/kaua_mtds/"
                     githubLink="https://github.com/Kc1t"
-                    linkedInLink="https://www.linkedin.com/in/kauã-miguel-a107b71b9/"
+                    linkedInLink="https://www.linkedin.com/in/kaua-miguel/"
                   />
                   <AvatarCard
                     name="Samuel L."
