@@ -1,17 +1,11 @@
-// Ionic React
-import { IonContent } from "@ionic/react";
-
 // Dependence
+import { IonContent } from "@ionic/react";
 import { useNavigate, useParams } from "react-router";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { PencilLine, Trophy } from "lucide-react";
 import { deleteDoc, doc } from "firebase/firestore";
 
-// Hook
-import useQuizAnswers from "../useHook/useQuizAnswers";
-
-// store
 import {
   useCurAnswersStore,
   useQuizStore,
@@ -19,8 +13,10 @@ import {
   useUserStore,
 } from "@/lib/store";
 import { db } from "@/lib/firebaseConfig";
+import useQuizAnswers from "@/useHook/useQuizAnswers";
+import useQuizesList from "@/useHook/useQuiz";
 
-//components
+//Components
 import BackButton from "@/components/BackButton";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,12 +29,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import ProgressBar from "@/components/Progress";
-import useQuizesList from "@/useHook/useQuiz";
 
 export default function Menu() {
   //react
   const navigate = useNavigate();
   const { id } = useParams();
+
   //hook
   useQuizesList({ id });
   useQuizAnswers();
@@ -59,27 +55,16 @@ export default function Menu() {
         ?.usersAnswer.filter((u) => u.userId == user.uid)[0]?.pastAnswers,
   );
 
-  // listing how many answers got correct
-  let answerindex = 0;
-  type totalCorrectAnswerTYPE = {
-    sum: number | string;
-    index: number | string;
-  };
-  const totalCorrectAnswer: totalCorrectAnswerTYPE[] | null =
-    userPastAnswers?.map((item) => {
-      let sum: boolean | number = false;
-      item.questions?.map((data) => (sum = +sum + +data.isRight));
-      answerindex++;
-      return { sum: String(sum), index: String(answerindex) };
-    }) || null;
+  const allowedAcesse =
+    quiz?.createdBy == user?.uid || quiz?.sharedWith.includes(user?.uid);
 
-  async function deleteQuiz(id?: string) {
-    if (!id) return;
-    const quizdb = doc(db, "Quizes", id);
-    const quizAnswers = doc(db, "QuizAnswers", id);
-    await deleteDoc(quizdb);
-    await deleteDoc(quizAnswers);
-  }
+  // listing how many answers got correct
+  const totalCorrectAnswer: number[][] | null =
+    userPastAnswers?.map((item, key) => {
+      let sum: number = 0;
+      item.questions?.forEach((data) => (sum = sum + Number(data.isRight)));
+      return [key, sum];
+    }) || null;
 
   return (
     <IonContent>
@@ -106,95 +91,56 @@ export default function Menu() {
                 {quiz?.title}
               </p>
             </div>
-            {quiz?.createdBy == user?.uid ||
-            quiz?.sharedWith.includes(user?.uid) ? (
-              <div className="max-sm:col-span-4 flex gap-6">
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="max-sm:w-full sm:w-fit"
-                    >
-                      <PencilLine />
-                      <span> Deletar Quiz </span>
-                    </Button>
-                  </DialogTrigger>
-
-                  <DialogContent className="sm:max-w-[425px]">
-                    <DialogTitle>Deletar Quiz</DialogTitle>
-                    <DialogHeader>
-                      <DialogDescription>
-                        Tem certeza que voce quer deletar.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                      <Button type="submit">Cancel</Button>
-                      <Button
-                        onClick={() => {
-                          deleteQuiz(quiz?.id);
-                        }}
-                      >
-                        Confirmar
-                      </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-                <Link to={`../../quiz/resultados/${id}`}>
-                  <Button
-                    variant="outline"
-                    className="max-sm:h-12 max-sm:w-12  sm:w-fit"
-                  >
-                    <Trophy />
-                    <span className="max-sm:hidden ">Resultados</span>
-                  </Button>
-                </Link>
-              </div>
+            {allowedAcesse ? (
+              <AdminMenuBtn id={id} />
             ) : (
               <div className="max-sm:col-span-5"></div>
             )}
           </header>
-          <div className="flex flex-col flex-1 px-5 pt-5 pb-9 gap-7 ">
+          <main className="flex flex-col flex-1 px-7 pt-5 pb-9 gap-7 ">
             <div>
-              <p className="text-blue-800">
+              <address className="text-blue-800">
                 Criado por:{" "}
                 <span className="font-extrabold">
                   Professor(a) {quiz?.createdByName && quiz?.createdByName}
                 </span>
-              </p>
-              <p className="text-slate-800">{quiz?.description}</p>
+              </address>
+              <article className="text-slate-800">{quiz?.description}</article>
             </div>
-            <div className="flex flex-col gap-4">
-              <p className="text-blue-800 text-xl font-extrabold">
-                Resultados atual
-              </p>
-              <div className="flex flex-1 flex-row justify-center space-x-5">
-                <div className="flex flex-col justify-center  bg-blue-100 rounded-xl p-6 shadow w-[161.5px] h-[148px]">
-                  <div className="flex flex-row justify-between items-center space-x-8">
-                    <div className="flex flex-col h-9 w-9  rounded-full items-center justify-center">
-                      <img
-                        src="https://i.postimg.cc/fbBS2MXz/Crown.png"
-                        alt=""
-                        className="w-12 h-12"
-                      />
+
+            <div className="w-full flex flex-col sm:flex-row gap-8 sm:items-start sm:justify-between">
+              <section className="flex flex-col gap-4">
+                <p className="text-blue-800 text-xl font-extrabold">
+                  Resultados atual
+                </p>
+                <div className="flex flex-1 flex-row justify-center space-x-5">
+                  <div className="flex flex-col justify-center  bg-blue-100 rounded-xl p-6 shadow w-[161.5px] h-[148px]">
+                    <div className="flex flex-row justify-between items-center space-x-8">
+                      <div className="flex flex-col h-9 w-9  rounded-full items-center justify-center">
+                        <img
+                          src="https://i.postimg.cc/fbBS2MXz/Crown.png"
+                          alt=""
+                          className="w-12 h-12"
+                        />
+                      </div>
                     </div>
+                    <p className="text-blue-400 font-body text font-semibold">
+                      Acertos
+                    </p>
+                    {totalCorrectAnswer ? (
+                      <p className="flex flex-col font-title text-xl text-[#2A416F] font-bold">
+                        {userPastAnswers
+                          ? totalCorrectAnswer[totalCorrectAnswer.length - 1][1]
+                          : "0"}{" "}
+                        / {quiz?.Questions.length}
+                      </p>
+                    ) : (
+                      <p className="flex flex-col font-title text-xl text-[#2A416F] font-bold">
+                        0 / {quiz?.Questions.length}
+                      </p>
+                    )}
                   </div>
-                  <p className="text-blue-400 font-body text font-semibold">
-                    Acertos
-                  </p>
-                  {totalCorrectAnswer ? (
-                    <p className="flex flex-col font-title text-xl text-[#2A416F] font-bold">
-                      {userPastAnswers
-                        ? totalCorrectAnswer[totalCorrectAnswer.length - 1].sum
-                        : "0"}{" "}
-                      / {quiz?.Questions.length}
-                    </p>
-                  ) : (
-                    <p className="flex flex-col font-title text-xl text-[#2A416F] font-bold">
-                      0 / {quiz?.Questions.length}
-                    </p>
-                  )}
-                </div>
-                {/* <div className="flex flex-col bg-white rounded-xl px-4 pt-4 pb-5 shadow">
+                  {/* <div className="flex flex-col bg-white rounded-xl px-4 pt-4 pb-5 shadow">
                 <div className="flex flex-row justify-between items-center space-x-8">
                 <div className="flex flex-col h-9 w-9  rounded-full items-center justify-center">
                     <img src="https://i.postimg.cc/2STnJdNN/Clock.png" alt="" className="w-full h-full"/>
@@ -208,25 +154,26 @@ export default function Menu() {
                 </p>
                 <p className="text-[#888] font-body text-sm">Total de temp</p>
               </div> */}
-              </div>
+                </div>
+              </section>
+              <section className="flex flex-col gap-3 flex-1">
+                <p className="text-blue-800 font-body text-xl font-extrabold">
+                  Resultados anteriores
+                </p>
+                {userPastAnswers &&
+                  totalCorrectAnswer?.map(([key, value]) => (
+                    <ProgressBar
+                      key={key}
+                      count={value}
+                      total={Number(quiz?.Questions.length)}
+                    />
+                  ))}
+              </section>
             </div>
-            <div className="flex  flex-col gap-3">
-              <p className="text-blue-800 font-body text-xl font-extrabold">
-                Resultados anteriores
-              </p>
-              {userPastAnswers &&
-                totalCorrectAnswer?.map((item) => (
-                  <ProgressBar
-                    key={item.index}
-                    count={Number(item.sum)}
-                    total={Number(quiz?.Questions.length)}
-                  />
-                ))}
-            </div>
-          </div>
-          <div className="px-9 flex flex-col max-sm:pb-28 sm:pb-6 ">
+          </main>
+          <footer className="flex flex-col w-full px-9 justify-center items-center  max-sm:pb-28 sm:pb-6 ">
             <Button
-              className="w-full"
+              className="w-full max-w-xs"
               onClick={() => {
                 resetAnswer();
                 navigate(`/quiz/${id}`);
@@ -235,9 +182,59 @@ export default function Menu() {
             >
               Começar
             </Button>
-          </div>
+          </footer>
         </div>
       </motion.div>
     </IonContent>
+  );
+}
+
+function AdminMenuBtn({ id }: { id: string | undefined }) {
+  if (id == undefined) {
+    return <div />;
+  }
+  async function deleteQuiz(id?: string) {
+    if (!id) return;
+    const quizdb = doc(db, "Quizes", id);
+    const quizAnswers = doc(db, "QuizAnswers", id);
+    await deleteDoc(quizdb);
+    await deleteDoc(quizAnswers);
+  }
+  return (
+    <menu className="max-sm:col-span-4 flex gap-6">
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant="outline" className="max-sm:w-full sm:w-fit">
+            <PencilLine />
+            <span> Deletar Quiz </span>
+          </Button>
+        </DialogTrigger>
+
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogTitle>Deletar Quiz</DialogTitle>
+          <DialogHeader>
+            <DialogDescription>
+              Tem certeza que voce quer deletar.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button type="submit">Cancel</Button>
+            <Button
+              onClick={() => {
+                deleteQuiz(id);
+              }}
+            >
+              Confirmar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <Link to={`../../quiz/resultados/${id}`}>
+        <Button variant="outline" className="max-sm:h-12 max-sm:w-12  sm:w-fit">
+          <Trophy />
+          <span className="max-sm:hidden ">Resultados</span>
+        </Button>
+      </Link>
+    </menu>
   );
 }
