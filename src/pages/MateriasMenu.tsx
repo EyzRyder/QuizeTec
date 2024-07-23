@@ -1,20 +1,23 @@
-import BackButton from "@/components/BackButton";
-import QuizCard from "@/components/QuizCard";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { useQuizStore } from "@/lib/store";
+// DEPENDENCIES
 import { IonContent } from "@ionic/react";
 import { motion } from "framer-motion";
 import { useParams } from "react-router";
 
-// Hook
-import useQuizesList from "../useHook/useQuiz";
+// COMPONENTS
+import BackButton from "@/components/BackButton";
+import QuizCard from "@/components/QuizCard";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+// Other
+import { useQuizStore } from "@/lib/store";
+import useQuizesList from "@/useHook/useQuiz";
 
 export default function MateriasMenu() {
   const { materia } = useParams();
   const { loading } = useQuizesList({ materia });
   const { quizesMap } = useQuizStore();
   const quizMateria = Array.from(quizesMap.entries()).filter(
-    ([key, value]) => value.materia == materia,
+    ([_, value]) => value.materia == materia,
   );
   return (
     <IonContent>
