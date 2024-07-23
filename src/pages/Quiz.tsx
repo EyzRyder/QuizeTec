@@ -1,41 +1,37 @@
-// Ionic React
-import { useState } from "react";
-
 // Dependencies
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { motion } from "framer-motion";
 
 // Hook
-import useQuizAnswers from "../useHook/useQuizAnswers";
+import useQuizAnswers from "@/useHook/useQuizAnswers";
 
 // Lib
-import { AnswersType } from "../lib/type";
+import { AnswersType } from "@/lib/type";
 import {
   useCurAnswersStore,
   useQuizStore,
   useQuizeAnswersStore,
   useUserStore,
-} from "../lib/store";
+} from "@/lib/store";
 
 // DB
 import { doc, updateDoc } from "firebase/firestore";
-import { db } from "../lib/firebaseConfig";
-import { Progress } from "@/components/ui/progress";
-import { getBGLinearGradientByMateria } from "@/lib/data";
+import { db } from "@/lib/firebaseConfig";
+
+//Components
 import { Button } from "@/components/ui/button";
+import ProgressBar from "@/components/Progress";
 
 export default function Quiz() {
-  // react hook
   useQuizAnswers();
 
-  //react
   const navigate = useNavigate();
   const { id } = useParams();
   const [selectedAnswer, setSelectedAnswer] = useState<AnswersType | null>(
     null,
   );
 
-  // Store
   const { user } = useUserStore(); // zustand
   const { addAnswer, curAnswers, curQuestionIndex, NextQuestion } =
     useCurAnswersStore();
@@ -49,7 +45,7 @@ export default function Quiz() {
 
   const CurQuestion = quiz.Questions[curQuestionIndex];
 
-  // Factions
+  // Fuctions
   function confirmeAnswer() {
     if (!selectedAnswer) return alert("Selecione uma resposta");
     const length = quiz.Questions.length - 1;
@@ -174,9 +170,9 @@ export default function Quiz() {
       <div className="flex-1 flex flex-col max-w-5xl sm:pb-12 pb-28 gap-6  px-5 items-center transition-shadow ease-in-out duration-500 min-h-screen">
         <header className="bg-slate-50 pt-8 flex flex-col gap-8 px-6 pb-6 rounded-b-3xl w-full">
           <div className="w-full h-6 flex flex-col justify-center items-centerrounded-2xl mb-">
-            <Progress
-              value={(curQuestionIndex + 1 / quiz.Questions.length) * 100}
-              className={`w-[97%] h-full  bg-slate-300`}
+            <ProgressBar
+              count={curQuestionIndex + 1}
+              total={quiz?.Questions.length}
             />
           </div>
           <div className="w-full">
@@ -195,8 +191,8 @@ export default function Quiz() {
               key={`${answer.id}`}
               className={`flex w-full max-w-[608px] ${
                 answer.id == selectedAnswer?.id
-                  ? "bg-blue-500 active:bg-blue-500 hover:bg-blue-400 text-slate-100 "
-                  : "bg-none"
+                  ? "outline-blue-600 text-blue-600"
+                  : "outline-slate-300 text-slate-800"
               } `}
               onClick={() => setSelectedAnswer(answer)}
             >
