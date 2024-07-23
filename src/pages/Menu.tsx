@@ -165,6 +165,7 @@ export default function Menu() {
                       key={key}
                       count={value}
                       total={Number(quiz?.Questions.length)}
+                      className=" bg-blue-100 "
                     />
                   ))}
               </section>

@@ -1,14 +1,23 @@
+import { cn } from "@/lib/utils";
 import { Progress } from "./ui/progress";
+
+interface ProgressProps extends React.HTMLAttributes<HTMLDivElement> {
+  count: number;
+  total: number;
+}
 
 export default function ProgressBar({
   count,
   total,
-}: {
-  count: number;
-  total: number;
-}) {
+  className,
+}: ProgressProps) {
   return (
-    <div className="flex flex-col bg-blue-100 relative  rounded-full px-4 pt-4 pb-5">
+    <div
+      className={cn(
+        "flex flex-col relative  rounded-full px-4 pt-4 pb-5",
+        className,
+      )}
+    >
       <p className="font-title text-xl text-blue-50 text-center font-bold absolute z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         {count} / {total}{" "}
       </p>
