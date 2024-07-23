@@ -58,7 +58,6 @@ export default function Menu() {
   const allowedAcesse =
     quiz?.createdBy == user?.uid || quiz?.sharedWith.includes(user?.uid);
 
-  // listing how many answers got correct
   const totalCorrectAnswer: number[][] | null =
     userPastAnswers?.map((item, key) => {
       let sum: number = 0;
