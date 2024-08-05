@@ -1,164 +1,140 @@
 // Dependencies
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { Navigate, useLoaderData, useNavigate, useParams } from "react-router";
 import { motion } from "framer-motion";
-
-// Hook
-import useQuizAnswers from "@/useHook/useQuizAnswers";
+import { v4 as uuid } from "uuid";
 
 // Lib
-import { AnswersType } from "@/lib/type";
+import { AnswersType, UsersAnswerType } from "@/lib/type";
+import { useCurAnswersStore, useUserStore } from "@/lib/store";
 import {
-  useCurAnswersStore,
-  useQuizStore,
-  useQuizeAnswersStore,
-  useUserStore,
-} from "@/lib/store";
-
-// DB
-import { doc, updateDoc } from "firebase/firestore";
+  collection,
+  doc,
+  getDocs,
+  query,
+  QueryDocumentSnapshot,
+  setDoc,
+  Timestamp,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
+import { LoaderData } from "@/loaders/QuizLoader";
 
 //Components
 import { Button } from "@/components/ui/button";
 import ProgressBar from "@/components/Progress";
 
 export default function Quiz() {
-  useQuizAnswers();
-
   const navigate = useNavigate();
-  const { id } = useParams();
+  const questions = useLoaderData() as LoaderData;
+  const { id, grade, materia } = useParams();
+
   const [selectedAnswer, setSelectedAnswer] = useState<AnswersType | null>(
     null,
   );
 
   const { user } = useUserStore(); // zustand
-  const { addAnswer, curAnswers, curQuestionIndex, NextQuestion } =
-    useCurAnswersStore();
-  const quiz = useQuizStore(
-    (store) => store.quizes.filter((task) => task.id === id)[0],
-  );
-  const userPastAnswers = useQuizeAnswersStore(
-    (store) =>
-      store.quizeAnswers.filter((q) => q.quizId == quiz.id)[0].usersAnswer,
-  );
+  const {
+    addAnswer,
+    curAnswers,
+    curQuestionIndex,
+    NextQuestion,
+    resetAnswer,
+    startQuiz,
+  } = useCurAnswersStore();
 
-  const CurQuestion = quiz.Questions[curQuestionIndex];
+  if (!id || !grade || !materia || questions.length === 0 || !user.uid)
+    return <Navigate to={"/"} />;
 
   // Fuctions
-  function confirmeAnswer() {
+  async function confirmeAnswer() {
     if (!selectedAnswer) return alert("Selecione uma resposta");
-    const length = quiz.Questions.length - 1;
-    if (!selectedAnswer) return;
-    addAnswer({
-      id: selectedAnswer.id,
-      letra: selectedAnswer.letra,
-      isRight: selectedAnswer.isRight,
-      title: selectedAnswer.title,
-      question: CurQuestion.title,
-      questionId: CurQuestion.id,
-    });
+    if (!user.uid) return navigate("/");
 
-    if (curQuestionIndex == length) {
-      if (!user?.uid) return navigate(-1);
-      updateAnswerHistory();
+    if (curQuestionIndex == questions.length - 1) {
+      await updateAnswerHistory();
       navigate(-1);
+      resetAnswer();
+      startQuiz();
     } else {
+      addAnswer({
+        id: uuid().toString(),
+        isRight: selectedAnswer.isRight,
+        QuestionId: questions[curQuestionIndex]?.id,
+        AnswerId: selectedAnswer.id,
+      });
       NextQuestion();
     }
     setSelectedAnswer(null);
   }
 
-  async function updateAnswerHistory() {
-    const col = doc(db, "QuizAnswers", quiz.id);
-    let answer = userPastAnswers;
-    if (!selectedAnswer) return;
+  const updateAnswerHistory = async () => {
+    if (!selectedAnswer || !user.uid) return navigate("/");
 
-    if (userPastAnswers.filter((u) => u.userId == user?.uid).length == 0) {
-      answer.push({
-        pastAnswers: [
-          {
-            questions: [
-              ...curAnswers,
-              {
-                id: selectedAnswer.id,
-                letra: selectedAnswer.letra,
-                isRight: selectedAnswer.isRight,
-                title: selectedAnswer.title,
-                question: CurQuestion.title,
-                questionId: CurQuestion.id,
-              },
-            ],
-          },
-        ],
-        userId: user.uid,
-      });
+    const userPastAnswersQuery = await getDocs(
+      query(
+        collection(db, "UserAnswers"),
+        where("QuizId", "==", id),
+        where("UserId", "==", user.uid),
+      ),
+    );
 
-      await updateDoc(col, {
-        usersAnswer: answer,
-      });
+    const currentDate = Timestamp.fromDate(new Date());
+    const newAnswers = [
+      ...curAnswers,
+      {
+        id: uuid().toString(),
+        isRight: selectedAnswer.isRight,
+        QuestionId: questions[curQuestionIndex]?.id,
+        AnswerId: selectedAnswer.id,
+      },
+    ];
+
+    if (userPastAnswersQuery.docs.length < 1) {
+      const newId = uuid().toString();
+      const userAnswer = {
+        id: newId,
+        QuizId: id,
+        UserId: user.uid,
+        createdAt: currentDate,
+        tries: [{ createdAt: currentDate, answers: newAnswers }],
+        updatedAt: currentDate,
+      };
+
+      await setDoc(doc(db, "UserAnswers", newId), userAnswer);
       return;
     }
 
-    answer = userPastAnswers.filter((u) => u.userId !== user?.uid);
+    const userPastAnswers: UsersAnswerType = userPastAnswersQuery.docs.map(
+      (doc: QueryDocumentSnapshot) => {
+        return {
+          id: doc.data().id,
+          UserId: doc.data().UserId,
+          QuizId: doc.data().QuizId,
+          createdAt: doc.data().createdAt,
+          updatedAt: doc.data().updatedAt,
+          tries: doc.data().tries,
+        };
+      },
+    )[0];
 
-    if (
-      userPastAnswers.filter((u) => u.userId == user?.uid)[0].pastAnswers
-        .length == 4
-    ) {
-      answer.push({
-        pastAnswers: [
-          userPastAnswers.filter((u) => u.userId == user?.uid)[0]
-            .pastAnswers[0],
-          userPastAnswers.filter((u) => u.userId == user?.uid)[0]
-            .pastAnswers[1],
-          userPastAnswers.filter((u) => u.userId == user?.uid)[0]
-            .pastAnswers[2],
-          {
-            questions: [
-              ...curAnswers,
-              {
-                id: selectedAnswer.id,
-                letra: selectedAnswer.letra,
-                isRight: selectedAnswer.isRight,
-                title: selectedAnswer.title,
-                question: CurQuestion.title,
-                questionId: CurQuestion.id,
-              },
-            ],
-          },
-        ],
-        userId: user?.uid,
-      });
-      await updateDoc(col, {
-        usersAnswer: answer,
-      });
-      return;
+    const newTries = [];
+
+    let tries = userPastAnswers.tries;
+    const length = tries.length <= 3 ? tries.length : 3;
+
+    for (let i = 0; i < length; i++) {
+      newTries.push(tries[i]);
     }
+    newTries.push({ createdAt: currentDate, answers: newAnswers });
 
-    answer.push({
-      pastAnswers: [
-        ...userPastAnswers.filter((u) => u.userId == user?.uid)[0].pastAnswers,
-        {
-          questions: [
-            ...curAnswers,
-            {
-              id: selectedAnswer.id,
-              letra: selectedAnswer.letra,
-              isRight: selectedAnswer.isRight,
-              title: selectedAnswer.title,
-              question: CurQuestion.title,
-              questionId: CurQuestion.id,
-            },
-          ],
-        },
-      ],
-      userId: user?.uid,
+    await updateDoc(doc(db, "UserAnswers", userPastAnswers.id), {
+      tries: newTries,
+      updatedAt: currentDate,
     });
-    await updateDoc(col, {
-      usersAnswer: answer,
-    });
-  }
+  };
+
   return (
     <motion.div
       initial={{ x: "100vw" }}
@@ -172,20 +148,20 @@ export default function Quiz() {
           <div className="w-full h-6 flex flex-col justify-center items-centerrounded-2xl mb-">
             <ProgressBar
               count={curQuestionIndex + 1}
-              total={quiz?.Questions.length}
+              total={questions?.length}
             />
           </div>
           <div className="w-full">
             <p className="text-blue-400 text-xl font-normal text-left w-full">
-              {quiz.materia} - Série {quiz.level}
+              {materia} - Série {grade}
             </p>
             <p className="text-mainTitle font-title  text-left w-full">
-              {CurQuestion.title}
+              {questions[curQuestionIndex].title}
             </p>
           </div>
         </header>
         <div className="flex-1 w-full items-center flex flex-col gap-3">
-          {CurQuestion.answers.map((answer) => (
+          {questions[curQuestionIndex].Answers?.map((answer) => (
             <Button
               variant="outline"
               key={`${answer.id}`}
