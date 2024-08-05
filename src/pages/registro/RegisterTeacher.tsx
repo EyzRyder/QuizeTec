@@ -30,8 +30,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Input, InputWrapper } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { AtSign, KeyRound, User2 } from "lucide-react";
+import BackButton from "@/components/BackButton";
 
 // type
 const formSchema = z.object({
@@ -53,7 +55,9 @@ const formSchema = z.object({
 });
 
 export default function Register() {
-  const { toast } = useToast()
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const { updateUser } = useUserStore();
 
   // form
   const form = useForm<z.infer<typeof formSchema>>({
@@ -64,12 +68,6 @@ export default function Register() {
       senha: "",
     },
   });
-
-  // react router
-  const navigate = useNavigate();
-
-  // store
-  const { updateUser } = useUserStore();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     await createUserWithEmailAndPassword(auth, values.email, values.senha)
@@ -84,13 +82,13 @@ export default function Register() {
         toast({
           title: "Sucesso",
           description: `Conta ${values.userName} criada`,
-        })
+        });
         //do verification later
         // await sendEmailVerification(auth.currentUser).catch((err) =>
         //   console.log(err)
         // );
         await updateProfile(user, { displayName: values.userName }).catch(
-          (err) => console.log(err)
+          (err) => console.log(err),
         );
         updateUser({ ...user, userName: values.userName, role: "teacher" });
         navigate("/../base");
@@ -108,22 +106,16 @@ export default function Register() {
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.8 }}
         transition={{ duration: 1 }}
-        className="h-full "
-
+        className="h-full bg-blue-100 grid place-items-center relative"
       >
-        <div className="flex flex-col flex-1 items-center px-10 h-screen justify-center sm:grid sm:grid-cols-2 bg-[#F5F9FC]">
-          <div className="flex justify-center items-center pr-14 w-[450px]">
-            <img
-              src={fallgirl}
-              alt="FallGirl"
-            />
-          </div>
+        <BackButton />
+        <div className="flex flex-col flex-1 items-center px-10 h-screen justify-center">
           <div className="flex flex-col w-full  ">
             <div className="flex flex-col pb-7 w-full">
-              <p className="font-title font-semibold text-[#2A416F] text-[30px] leading-tight">
+              <p className="font-title font-extrabold text-blue-800 text-2xl leading-tight">
                 Olá Professor,
               </p>
-              <p className="font-title font-semibold text-[#2A416F] text-[30px]  leading-tight">
+              <p className="font-title font-extrabold text-blue-800 text-2xl leading-tight">
                 Hora do Cadastro!
               </p>
             </div>
@@ -137,13 +129,10 @@ export default function Register() {
                   name="userName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nome de Usuário</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Albert Einstein"
-                          className="bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
-                          {...field}
-                        />
+                        <InputWrapper icon={User2}>
+                          <Input placeholder="Nome" {...field} />
+                        </InputWrapper>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -154,13 +143,10 @@ export default function Register() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="AlbertEinstein@etec.sp.gov.br"
-                          className="bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
-                          {...field}
-                        />
+                        <InputWrapper icon={AtSign}>
+                          <Input type="email" placeholder="E-mail" {...field} />
+                        </InputWrapper>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -171,14 +157,14 @@ export default function Register() {
                   name="senha"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Senha</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="******"
-                          type="password"
-                          className="bg-[#EFEFEF] focus:bg-[#fff] rounded-[14px] mb-0 p-4 shadow-md text-lg w-full border-0 focus:border-2 border-transparent focus:border-[#4a92ff] text-gray-500 focus:text-black placeholder-slate-500"
-                          {...field}
-                        />
+                        <InputWrapper icon={KeyRound}>
+                          <Input
+                            type="password"
+                            placeholder="Senha"
+                            {...field}
+                          />
+                        </InputWrapper>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -186,7 +172,7 @@ export default function Register() {
                 />
                 <Button
                   type="submit"
-                  className="w-full text-center rounded-[18px] bg-[#4A92FF] py-7 text-white font-medium text-[21px]"
+                  className="w-full text-center font-medium text-[21px]"
                 >
                   Cadastrar
                 </Button>
@@ -197,7 +183,9 @@ export default function Register() {
               className="w-full text-center rounded-[20px] py-6 text-[#000] font-medium text-[18px]"
             >
               Possui Conta?{" "}
-              <span className="text-[#4A92FF] hover:underline font-semibold">Entrar</span>
+              <span className="text-[#4A92FF] hover:underline font-semibold">
+                Entrar
+              </span>
             </Link>
           </div>
         </div>

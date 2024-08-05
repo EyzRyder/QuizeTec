@@ -1,24 +1,20 @@
 // DEPENDENCIES
 import { IonContent } from "@ionic/react";
 import { motion } from "framer-motion";
-import { useParams } from "react-router";
+import { useLoaderData, useParams } from "react-router";
 
 // COMPONENTS
 import BackButton from "@/components/BackButton";
 import QuizCard from "@/components/QuizCard";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-// Other
-import { useQuizStore } from "@/lib/store";
-import useQuizesList from "@/useHook/useQuiz";
+// LIB
+import { LoaderData } from "@/loaders/MateriasMenuLoader";
 
 export default function MateriasMenu() {
+  const quizes = useLoaderData() as LoaderData;
   const { materia } = useParams();
-  const { loading } = useQuizesList({ materia });
-  const { quizesMap } = useQuizStore();
-  const quizMateria = Array.from(quizesMap.entries()).filter(
-    ([_, value]) => value.materia == materia,
-  );
+
   return (
     <IonContent>
       <motion.div
@@ -35,23 +31,24 @@ export default function MateriasMenu() {
             <div className="flex flex-1 flex-col justify-center max-sm:col-span-3 ">
               <div className="flex flex-row">
                 <p className="text-blue-400 font-body font-semibold text-base">
-                  {quizMateria.length} questões
+                  {quizes.length} questões
                 </p>
               </div>
               <p className="text-blue-800 text-xl font-extrabold">{materia}</p>
             </div>
             <div className="max-sm:col-span-5"></div>
           </header>
-          {loading && (
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-300 z-10 px-4 py-3 rounded-4xl">
-              loading...
+          {quizes.length == 0 ? (
+            <div className="flex-1 flex justify-center items-center">
+              Não há quiz disponivel
             </div>
+          ) : (
+            <ScrollArea className="flex-1  pt-4">
+              {quizes.map(([key, item]) => (
+                <QuizCard quiz={item} key={key} />
+              ))}
+            </ScrollArea>
           )}
-          <ScrollArea className="h-screen pt-4">
-            {quizMateria.map(([key, item]) => (
-              <QuizCard quiz={item} key={key} />
-            ))}
-          </ScrollArea>
         </div>
       </motion.div>
     </IonContent>

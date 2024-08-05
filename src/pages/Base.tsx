@@ -1,16 +1,15 @@
-// Ionic React
-import { IonContent } from "@ionic/react";
-
-// DB
-import { signOut } from "firebase/auth";
-import { auth } from "../lib/firebaseConfig";
-
-// Lib
-import { useUserStore } from "../lib/store";
-
 // Dependencies
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
+import { LogIn, Plus } from "lucide-react";
 import { motion } from "framer-motion";
+import { IonContent } from "@ionic/react";
+
+// Lib
+import { signOut } from "firebase/auth";
+import { auth } from "@/lib/firebaseConfig";
+import { useUserStore } from "@/lib/store";
+import { materiaOptions } from "@/lib/data";
 
 // Components
 import {
@@ -19,19 +18,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { LogIn, Plus } from "lucide-react";
-import { materiaOptions } from "@/lib/data";
 import MateriaCard from "@/components/MateriaCard";
 
 export default function Base() {
   const navigate = useNavigate();
 
   const { user, updateUser } = useUserStore(); //zustand
-
-  if (!user) {
-    navigate("/");
-  }
 
   return (
     <IonContent
@@ -95,7 +87,7 @@ export default function Base() {
             </p>
             <div className="grid sm:grid-cols-[repeat(auto-fill,minmax(161px,230px))] max-sm:grid-cols-[repeat(auto-fill,minmax(120px,1fr))] max-[]:grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-6 w-full justify-center">
               {materiaOptions.map((materia) => (
-                <Link key={materia.id} to={`../materia/${materia.nome}`}>
+                <Link key={materia.id} to={`../quiz/${materia.nome}`}>
                   <MateriaCard name={materia.nome} />
                 </Link>
               ))}

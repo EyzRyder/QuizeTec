@@ -1,6 +1,17 @@
-// Ionic React
-import { useState } from "react";
+// Dependencies
 import { IonContent } from "@ionic/react";
+import { v4 as uuid } from "uuid";
+import { motion } from "framer-motion";
+import { useLoaderData, useNavigate } from "react-router";
+import { z } from "zod";
+import {
+  useForm,
+  useFieldArray,
+  UseFormRegister,
+  Control,
+} from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ChevronLeft, Plus, SaveIcon, Trash, Trash2, X } from "lucide-react";
 
 // Components
 import {
@@ -10,92 +21,331 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
+import { Input, InputWrapper } from "@/components/ui/input";
 
 // Libs
-import { useNewQuiz, useQuestionsStore, useUserStore } from "@/lib/store";
 import { levelsOptions, materiaOptions } from "@/lib/data";
-//firebase
-import { doc, setDoc } from "firebase/firestore";
+import {
+  deleteDoc,
+  doc,
+  setDoc,
+  Timestamp,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
+import { useUserStore } from "@/lib/store";
+import { LoaderData } from "@/loaders/EditQuizLoader";
 
-// Dependencies
-import { v4 as uuid } from "uuid";
-import { motion } from "framer-motion";
-import { useNavigate } from "react-router";
-import { ChevronLeft, Plus, PlusCircle, Trash, Trash2, X } from "lucide-react";
-import InputTxt from "@/components/Input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+const ALTERNATIVA = "alternativa";
+
+const OptionSchema = z.object({
+  radios: z.array(
+    z.object({
+      id: z.string(),
+      label: z.string().nonempty("Label do Radio é obrigatório"),
+    }),
+  ),
+  selectedRadio: z.string(),
+});
+
+const QuestionSchema = z.object({
+  id: z.string(),
+  title: z.string().nonempty("Título é obrigatório"),
+  option: OptionSchema,
+});
+
+const FormSchema = z.object({
+  id: z.string(),
+  materia: z.string({
+    required_error: "Selecione um materia para exibir",
+  }),
+  serie: z.string({
+    required_error: "Selecione um materia para exibir",
+  }),
+  title: z.string({
+    required_error: "Selecione um materia para exibir",
+  }),
+  description: z.string({
+    required_error: "Selecione um materia para exibir",
+  }),
+  isPublic: z.boolean().default(false),
+  isAnswersPublic: z.boolean().default(false),
+  questions: z
+    .array(QuestionSchema)
+    .min(1, { message: "Pelo menos uma questão é obrigatório" })
+    .default([]),
+});
+
+type FormSchemaType = z.infer<typeof FormSchema>;
+export type QuestionSchemaType = z.infer<typeof QuestionSchema>;
 
 export default function AddQuiz() {
+  const editQuizData = useLoaderData() as LoaderData;
   const { toast } = useToast();
-
-  // store
   const { user } = useUserStore(); // local storage do zustand
-  const {
-    questions,
-    addQuestion,
-    deleteQuestion,
-    editQuestion,
-    resetQuestion,
-  } = useQuestionsStore();
-  const { quiz, addLevel, addMateria, addTitle, resetQuiz } = useNewQuiz();
-
-  // react router
   const navigate = useNavigate();
+  const form = useForm<FormSchemaType>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      id: editQuizData ? editQuizData.quiz.id : uuid().toString(),
+      questions: editQuizData ? editQuizData.questions : [],
+      title: editQuizData ? editQuizData.quiz.title : "",
+      description: editQuizData ? editQuizData.quiz.description : "",
+      materia: editQuizData ? editQuizData.quiz.materia : "",
+      serie: editQuizData ? editQuizData.quiz.level : "",
+      isPublic: editQuizData ? editQuizData.quiz.isPublic : true,
+      isAnswersPublic: editQuizData ? editQuizData.quiz.isAnswersPublic : false,
+    },
+  });
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "questions",
+  });
 
-  async function adicionarQuiz() {
-    if (!quiz.title) return alert("Falta Preencher o Título");
-    if (!quiz.level) return alert("Falta Selecionar o Nível");
-    if (!quiz.materia) return alert("Falta Selecionar o Materia");
-    if (!quiz.Questions) return alert("Falta Adicionar o Questoes");
+  async function deleteQuiz(quizLoad: LoaderData) {
+    if (!quizLoad) return;
+    try {
+      for (const question of quizLoad.questions) {
+        for (const answer of question.option.radios) {
+          await deleteDoc(doc(db, "Answers", answer.id));
+        }
+        await deleteDoc(doc(db, "Questions", question.id));
+      }
+      await deleteDoc(doc(db, "Quizes", quizLoad.quiz.id));
+      toast({
+        title: "Sucesso",
+        description: "Quiz Deletado",
+      });
+      navigate(-1);
+    } catch (err) {
+      toast({
+        title: "Error",
+        variant: "destructive",
+        description: `Houve um error ao deletar seu quiz`,
+      });
+      console.error("Failed to delete Quiz: ", err);
+    }
+  }
 
-    const id = uuid().toString();
+  async function onSubmit(values: FormSchemaType) {
+    const questionsIDs: string[] = [];
+    const allAnswersIds: string[] = [];
 
     try {
-      const col = doc(db, "Quizes", id);
+      values.questions.forEach(async (question) => {
+        questionsIDs.push(question.id);
+        const answersIds: string[] = [];
 
-      await setDoc(col, {
-        ...quiz,
-        id,
-        Questions: questions,
-        createdBy: user?.uid,
+        question.option.radios.forEach(async (answer) => {
+          answersIds.push(answer.id);
+          allAnswersIds.push(answer.id);
+          editQuizData
+            ? await updateDoc(doc(db, "Answers", answer.id), {
+                title: answer.label,
+                questionType: ALTERNATIVA,
+                isRight: answer.label == question.option.selectedRadio,
+              })
+            : await setDoc(doc(db, "Answers", answer.id), {
+                id: answer.id,
+                title: answer.label,
+                QuestionId: question.id,
+                QuizId: values.id,
+                questionType: ALTERNATIVA,
+                isRight: answer.label == question.option.selectedRadio,
+              });
+        });
+
+        editQuizData
+          ? await updateDoc(doc(db, "Questions", question.id), {
+              title: question.title,
+              AnswersId: answersIds,
+              type: ALTERNATIVA,
+            })
+          : await setDoc(doc(db, "Questions", question.id), {
+              id: question.id,
+              title: question.title,
+              AnswersId: answersIds,
+              QuizId: values.id,
+              type: ALTERNATIVA,
+            });
       });
-      const colAns = doc(db, "QuizAnswers", id);
 
-      await setDoc(colAns, {
-        quizId: id,
-        title: quiz.title,
-        usersAnswer: [],
+      editQuizData
+        ? await updateDoc(doc(db, "Quizes", values.id), {
+            title: values.title,
+            level: values.serie,
+            materia: values.materia,
+            description: values.description,
+            isPublic: values.isPublic,
+            isAnswersPublic: values.isAnswersPublic,
+            updatedAt: Timestamp.fromDate(new Date()),
+            QuestionsID: questionsIDs,
+            sharedWith: [],
+          })
+        : await setDoc(doc(db, "Quizes", values.id), {
+            id: values.id,
+            title: values.title,
+            level: values.serie,
+            materia: values.materia,
+            description: values.description,
+            isPublic: values.isPublic,
+            isAnswersPublic: values.isAnswersPublic,
+            createdAt: Timestamp.fromDate(new Date()),
+            updatedAt: Timestamp.fromDate(new Date()),
+            QuestionsID: questionsIDs,
+            createdBy: user.uid,
+            sharedWith: [],
+          });
+
+      editQuizData?.questions.forEach(async (question) => {
+        if (questionsIDs.includes(question.id)) return;
+        await deleteDoc(doc(db, "Questions", question.id));
+        question.option.radios.forEach(async (answer) => {
+          await deleteDoc(doc(db, "Answers", answer.id));
+        });
       });
 
       toast({
         title: "Sucesso",
-        description: `Quiz ${quiz.title} foi criada`,
+        description: `Quiz ${values.title} foi criada`,
       });
 
-      goBack();
+      navigate(-1);
     } catch (err) {
       toast({
         title: "Error",
         variant: "destructive",
         description: `Houve um error ao criar seu quiz`,
       });
-      console.error("Failed to set QuizAnswers col: ", err);
+      console.error("Failed to set Quiz col: ", err);
     }
   }
-  function fullReset() {
-    resetQuiz();
-    resetQuestion();
-  }
 
-  function goBack() {
-    fullReset();
-    navigate(-1);
-  }
+  const ObjectForm: React.FC<{
+    field: any;
+    index: number;
+    removeObject: (index: number) => void;
+    control: Control<FormSchemaType>;
+    register: UseFormRegister<FormSchemaType>;
+  }> = ({ field, index, removeObject, control, register }) => {
+    const {
+      fields: radioFields,
+      append: appendRadio,
+      remove: removeRadio,
+    } = useFieldArray({
+      control,
+      name: `questions.${index}.option.radios`,
+    });
+
+    return (
+      <div className="border-2 border-blue-200 rounded-xl p-3 flex flex-col gap-3">
+        <p className="text-blue-500 font-medium">Pergunta {index + 1}. </p>
+
+        <div className="flex flex-col gap-3">
+          <FormField
+            control={control}
+            name={`questions.${index}.title`}
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <InputWrapper>
+                    <Input {...field} placeholder="Título" />
+                  </InputWrapper>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        {radioFields.map((radioField, radioIndex) => (
+          <div
+            key={radioField.id}
+            className="flex flex-row items-center w-full gap-3"
+          >
+            <FormField
+              control={control}
+              name={`questions.${index}.option.selectedRadio`}
+              render={({ field }) => (
+                <FormControl>
+                  <Input
+                    type="radio"
+                    value={radioField.label}
+                    checked={field.value === radioField.label}
+                    onChange={() => field.onChange(radioField.label)}
+                    className="w-fit"
+                  />
+                </FormControl>
+              )}
+            />
+            <FormField
+              control={control}
+              name={`questions.${index}.option.radios.${radioIndex}.label`}
+              render={({ field }) => (
+                <FormItem className="w-full flex-1">
+                  <FormControl>
+                    <InputWrapper className="w-full">
+                      <Input
+                        {...field}
+                        placeholder="Titulo da Opção"
+                        className="w-full"
+                      />
+                    </InputWrapper>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              className="rounded-full h-8 w-8 p-0"
+              onClick={() => removeRadio(radioIndex)}
+            >
+              <X />
+            </Button>
+          </div>
+        ))}
+        <div className="flex gap-3">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => removeObject(index)}
+          >
+            <Trash />
+          </Button>
+          <Button
+            variant="outline"
+            className="w-full"
+            type="button"
+            onClick={() => appendRadio({ id: uuid().toString(), label: "" })}
+          >
+            Adicionar Opção
+          </Button>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <IonContent className="min-h-screen h-full" style={{ height: "100%" }}>
@@ -106,424 +356,242 @@ export default function AddQuiz() {
         className="h-full"
       >
         <div className="flex-1 flex flex-col min-h-screen w-full sm:pb-12 px-6 pb-28">
-          <div className="flex flex-row px-2 py-6 justify-start items-center rounded-b-3xl gap-4">
+          <header className="flex flex-row px-2 py-6 justify-start items-center rounded-b-3xl gap-4">
             <Button
               variant="outline"
               className="w-12 h-12"
               onClick={() => {
-                resetQuestion();
-                resetQuiz();
                 navigate(-1);
               }}
             >
               <ChevronLeft />
             </Button>
-            <div className="flex flex-col">
+            <div className="flex flex-col flex-1">
               <span className="text-blue-400 font-medium">Quiz</span>
               <span className="text-blue-800 font-extrabold text-xl">
                 Crie uma quiz
               </span>
             </div>
-          </div>
-          <ScrollArea className="flex-1 flex flex-col h-full w-full ">
-            <div className="mb-5 mt-5 mx-8">
-              <Label className="text-blue-500 font-medium">Matéria</Label>
-              <Select
-                onValueChange={(value) => addMateria(value)}
-                defaultValue={quiz.materia}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione a matéria" />
-                </SelectTrigger>
-                <SelectContent>
-                  {materiaOptions.map((materia) => (
-                    <SelectItem key={materia.id} value={materia.nome}>
-                      {materia.nome}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex flex-col gap-5 mb-5 mx-8">
-              <p className="text-xl text-blue-800 font-extrabold">
-                Corpo do quiz
-              </p>
-              <div className="flex flex-col gap-3">
-                <InputTxt
-                  type="text"
-                  value={quiz?.title}
-                  onChange={(e) => addTitle(e.currentTarget.value)}
-                  placeholder="Título"
-                />
-                <Select
-                  onValueChange={(value) => addLevel(value)}
-                  defaultValue={quiz.level}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione a série" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {levelsOptions.map((level) => (
-                      <SelectItem key={level.id} value={level.nome}>
-                        {level.nome}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div className="flex flex-col gap-5  mb-5 mx-8">
-              <span className="font-title text-xl text-blue-800 font-extrabold">
-                Perguntas
-              </span>
-              <div className="flex flex-col gap-3">
-                {questions.map((question, i) => (
-                  <div
-                    key={question.id}
-                    className="border-2 border-blue-200 rounded-xl p-3 flex flex-col gap-3"
-                  >
-                    <p className="text-blue-500 font-medium">
-                      Pergunta {i + 1}.{" "}
-                    </p>
-                    <div className="flex flex-col gap-3">
-                      <InputTxt
-                        placeholder="Título"
-                        value={question.title}
-                        onChange={(event) => {
-                          editQuestion(
-                            { ...question, title: event.target.value },
-                            i,
-                          );
-                        }}
-                      />
-                      <div>
-                        <Label className="text-blue-400 font-medium">
-                          Tipo de questão
-                        </Label>
-                        <Select
-                          onValueChange={(value) =>
-                            editQuestion({ ...question, type: value }, i)
-                          }
-                        >
+
+            {editQuizData && (
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="outline" className="max-sm:w-full sm:w-fit">
+                    <Trash2 />
+                    <span> Deletar Quiz </span>
+                  </Button>
+                </DialogTrigger>
+
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogTitle>Deletar Quiz</DialogTitle>
+                  <DialogHeader>
+                    <DialogDescription>
+                      Tem certeza que voce quer deletar.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <Button type="submit">Cancel</Button>
+                    <Button
+                      onClick={() => {
+                        deleteQuiz(editQuizData);
+                      }}
+                    >
+                      Confirmar
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            )}
+
+            <Button onClick={form.handleSubmit(onSubmit)} className="w-fit">
+              <SaveIcon />
+              Salvar Quiz
+            </Button>
+          </header>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="mb-5 mt-5 mx-8">
+                <FormField
+                  control={form.control}
+                  name="materia"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-blue-500 font-medium">
+                        Matéria
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Selecione o tipo de questão" />
+                            <SelectValue placeholder="Selecione uma matéria" />
                           </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value={"alternativa"}>
-                              Alternativa
+                        </FormControl>
+                        <SelectContent>
+                          {materiaOptions.map((materia) => (
+                            <SelectItem key={materia.id} value={materia.nome}>
+                              {materia.nome}
                             </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex flex-col gap-5 mb-5 mx-8">
+                <p className="text-2xl text-blue-800 font-extrabold">
+                  Corpo do quiz
+                </p>
+                <div className="flex flex-col gap-3">
+                  <FormField
+                    control={form.control}
+                    name="serie"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecione uma série" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {levelsOptions.map((level) => (
+                              <SelectItem key={level.id} value={level.nome}>
+                                {level.nome}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
-                      </div>
-                      {question.type == "alternativa" && (
-                        <>
-                          <RadioGroup
-                            onValueChange={(value) => {
-                              editQuestion(
-                                {
-                                  ...question,
-                                  answers: question.answers.map((a) => {
-                                    if (a.id == value) {
-                                      return { ...a, isRight: true };
-                                    } else {
-                                      return { ...a, isRight: false };
-                                    }
-                                  }),
-                                },
-                                i,
-                              );
-                              return value;
-                            }}
-                          >
-                            <div
-                              key={question.answers[0].id}
-                              className="flex gap-3 items-center"
-                            >
-                              <RadioGroupItem
-                                value={question.answers[0].id}
-                                id={question.answers[0].id}
-                              />
-                              <InputTxt
-                                className="w-full"
-                                value={question.answers[0].title}
-                                onChange={(e) =>
-                                  editQuestion(
-                                    {
-                                      ...question,
-                                      answers: question.answers.map((an) => {
-                                        if (an.id == question.answers[0].id) {
-                                          return {
-                                            ...an,
-                                            title: e.target.value,
-                                          };
-                                        } else {
-                                          return an;
-                                        }
-                                      }),
-                                    },
-                                    i,
-                                  )
-                                }
-                              />
-                              <Button
-                                disabled
-                                onClick={() => {
-                                  editQuestion(
-                                    {
-                                      ...question,
-                                      answers: question.answers.filter(
-                                        (a) => a.id != question.answers[0].id,
-                                      ),
-                                    },
-                                    i,
-                                  );
-                                }}
-                                variant="outline"
-                                className="rounded-full h-8 w-8 p-0"
-                              >
-                                <X />
-                              </Button>
-                            </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <InputWrapper>
+                            <Input
+                              type="text"
+                              placeholder="Título"
+                              {...field}
+                            />
+                          </InputWrapper>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                            <div
-                              key={question.answers[1].id}
-                              className="flex gap-3 items-center"
-                            >
-                              <RadioGroupItem
-                                value={question.answers[1].id}
-                                id={question.answers[1].id}
-                              />
-                              <InputTxt
-                                className="w-full"
-                                value={question.answers[1].title}
-                                onChange={(e) =>
-                                  editQuestion(
-                                    {
-                                      ...question,
-                                      answers: question.answers.map((an) => {
-                                        if (an.id == question.answers[1].id) {
-                                          return {
-                                            ...an,
-                                            title: e.target.value,
-                                          };
-                                        } else {
-                                          return an;
-                                        }
-                                      }),
-                                    },
-                                    i,
-                                  )
-                                }
-                              />
-                              <Button
-                                disabled
-                                onClick={() => {
-                                  editQuestion(
-                                    {
-                                      ...question,
-                                      answers: question.answers.filter(
-                                        (a) => a.id != question.answers[1].id,
-                                      ),
-                                    },
-                                    i,
-                                  );
-                                }}
-                                variant="outline"
-                                className="rounded-full h-8 w-8 p-0"
-                              >
-                                <X />
-                              </Button>
-                            </div>
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Você pode escrever uma descrição para seu quiz."
+                            className="resize-none"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                            <div
-                              key={question.answers[2].id}
-                              className="flex gap-3 items-center"
-                            >
-                              <RadioGroupItem
-                                value={question.answers[2].id}
-                                id={question.answers[2].id}
-                              />
-                              <InputTxt
-                                className="w-full"
-                                value={question.answers[2].title}
-                                onChange={(e) =>
-                                  editQuestion(
-                                    {
-                                      ...question,
-                                      answers: question.answers.map((an) => {
-                                        if (an.id == question.answers[2].id) {
-                                          return {
-                                            ...an,
-                                            title: e.target.value,
-                                          };
-                                        } else {
-                                          return an;
-                                        }
-                                      }),
-                                    },
-                                    i,
-                                  )
-                                }
-                              />
-                              <Button
-                                disabled
-                                onClick={() => {
-                                  editQuestion(
-                                    {
-                                      ...question,
-                                      answers: question.answers.filter(
-                                        (a) => a.id != question.answers[2].id,
-                                      ),
-                                    },
-                                    i,
-                                  );
-                                }}
-                                variant="outline"
-                                className="rounded-full h-8 w-8 p-0"
-                              >
-                                <X />
-                              </Button>
-                            </div>
-
-                            <div
-                              key={question.answers[3].id}
-                              className="flex gap-3 items-center"
-                            >
-                              <RadioGroupItem
-                                value={question.answers[3].id}
-                                id={question.answers[3].id}
-                              />
-                              <InputTxt
-                                className="w-full"
-                                value={question.answers[3].title}
-                                onChange={(e) =>
-                                  editQuestion(
-                                    {
-                                      ...question,
-                                      answers: question.answers.map((an) => {
-                                        if (an.id == question.answers[3].id) {
-                                          return {
-                                            ...an,
-                                            title: e.target.value,
-                                          };
-                                        } else {
-                                          return an;
-                                        }
-                                      }),
-                                    },
-                                    i,
-                                  )
-                                }
-                              />
-                              <Button
-                                disabled
-                                onClick={() => {
-                                  editQuestion(
-                                    {
-                                      ...question,
-                                      answers: question.answers.filter(
-                                        (a) => a.id != question.answers[3].id,
-                                      ),
-                                    },
-                                    i,
-                                  );
-                                }}
-                                variant="outline"
-                                className="rounded-full h-8 w-8 p-0"
-                              >
-                                <X />
-                              </Button>
-                            </div>
-                          </RadioGroup>
-
-                          <div className="flex gap-3">
-                            <Button
-                              variant="outline"
-                              onClick={() => {
-                                deleteQuestion(question.id);
-                              }}
-                            >
-                              <Trash />
-                            </Button>
-                            <Button
-                              onClick={() => {
-                                editQuestion(
-                                  {
-                                    ...question,
-                                    answers: [
-                                      ...question.answers,
-                                      {
-                                        id: uuid().toString(),
-                                        title: "",
-                                        isRight: false,
-                                        letra: (
-                                          question.answers.length +
-                                          1 * 2
-                                        ).toString(),
-                                      },
-                                    ],
-                                  },
-                                  i,
-                                );
-                              }}
-                              variant="outline"
-                              className="w-full"
-                              disabled
-                            >
-                              Adicionar Opção
-                            </Button>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                  <FormField
+                    control={form.control}
+                    name="isPublic"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow bg-blue-50 text-slate-800 ">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel>
+                            Deixar o quiz publico para ser respondido
+                          </FormLabel>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="isAnswersPublic"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow bg-blue-50 text-slate-800 ">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none ">
+                          <FormLabel>
+                            Deixar as respostas do quiz publico
+                          </FormLabel>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
-              <Button
-                variant="outline"
-                className="w-full flex justify-center gap-1.5 items-center"
-                onClick={() => {
-                  addQuestion({
-                    id: uuid().toString(),
-                    title: "",
-                    type: "",
-                    answers: [
-                      {
-                        id: uuid().toString(),
-                        letra: "A",
-                        isRight: false,
-                        title: "",
-                      },
-                      {
-                        id: uuid().toString(),
-                        letra: "B",
-                        isRight: false,
-                        title: "",
-                      },
-                      {
-                        id: uuid().toString(),
-                        letra: "C",
-                        isRight: false,
-                        title: "",
-                      },
-                      {
-                        id: uuid().toString(),
-                        letra: "D",
-                        isRight: false,
-                        title: "",
-                      },
-                    ],
-                  });
-                }}
-              >
-                <Plus />
-                <p className="text-inherit">Nova Pergunta</p>
-              </Button>
-            </div>
-          </ScrollArea>
-          <Button onClick={adicionarQuiz} className="w-full">
-            Salvar e Criar Quiz
-          </Button>
+
+              <div className="flex-1 flex flex-col h-full w-full ">
+                <div className="flex flex-col gap-5  mb-5 mx-8">
+                  <span className="font-title text-2xl text-blue-800 font-extrabold">
+                    Perguntas
+                  </span>
+                  <p className="text-red-500 text-sm">
+                    {form.formState.errors.questions &&
+                      form.formState.errors.questions.message}
+                  </p>
+                  <div className="flex flex-col gap-3">
+                    {fields.map((field, index) => (
+                      <ObjectForm
+                        key={field.id}
+                        field={field}
+                        index={index}
+                        removeObject={remove}
+                        control={form.control}
+                        register={form.register}
+                      />
+                    ))}
+                    <Button
+                      variant="outline"
+                      className="w-full flex justify-center gap-1.5 items-center"
+                      type="button"
+                      onClick={() =>
+                        append({
+                          id: uuid().toString(),
+                          title: "",
+                          option: {
+                            radios: [{ id: uuid().toString(), label: "" }],
+                            selectedRadio: "",
+                          },
+                        })
+                      }
+                    >
+                      <Plus />
+                      <p className="text-inherit">Nova Pergunta</p>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </Form>
         </div>
       </motion.div>
     </IonContent>

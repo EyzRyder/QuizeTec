@@ -1,11 +1,5 @@
-// react
-import { IonContent } from "@ionic/react";
-
-// Assets
-import fallgirl from "../../assets/FallGirl.png";
-
 // Dependencies
-import { Link } from "react-router-dom";
+import { IonContent } from "@ionic/react";
 import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -27,13 +21,12 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 import BackButton from "@/components/BackButton";
-import InputTxt from "@/components/Input";
 import { AtSign, KeyRound, User2 } from "lucide-react";
+import { Input, InputWrapper } from "@/components/ui/input";
 
 // type
 const formSchema = z.object({
@@ -56,6 +49,8 @@ const formSchema = z.object({
 
 export default function Register() {
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { updateUser } = useUserStore();
 
   // form
   const form = useForm<z.infer<typeof formSchema>>({
@@ -66,12 +61,6 @@ export default function Register() {
       senha: "",
     },
   });
-
-  // react router
-  const navigate = useNavigate();
-
-  // store
-  const { updateUser } = useUserStore();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     await createUserWithEmailAndPassword(auth, values.email, values.senha)
@@ -135,7 +124,9 @@ export default function Register() {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <InputTxt icon={User2} placeholder="Nome" {...field} />
+                        <InputWrapper icon={User2}>
+                          <Input type="text" placeholder="Nome" {...field} />
+                        </InputWrapper>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -147,11 +138,9 @@ export default function Register() {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <InputTxt
-                          icon={AtSign}
-                          placeholder="E-mail"
-                          {...field}
-                        />
+                        <InputWrapper icon={AtSign}>
+                          <Input type="email" placeholder="E-mail" {...field} />
+                        </InputWrapper>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -163,12 +152,13 @@ export default function Register() {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <InputTxt
-                          placeholder="Senha"
-                          icon={KeyRound}
-                          type="password"
-                          {...field}
-                        />
+                        <InputWrapper icon={KeyRound}>
+                          <Input
+                            type="password"
+                            placeholder="Senha"
+                            {...field}
+                          />
+                        </InputWrapper>
                       </FormControl>
                       <FormMessage />
                     </FormItem>

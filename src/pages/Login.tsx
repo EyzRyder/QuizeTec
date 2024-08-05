@@ -1,12 +1,5 @@
-// Ionic React
-import { IonContent } from "@ionic/react";
-
-// Assets
-// import fallgirl from "../assets/FallGirl.png";
-// import EmailA from "../assets/svg/email-a";
-import { ChevronLeft } from "lucide-react";
-
 // Dependencies
+import { IonContent } from "@ionic/react";
 import { useNavigate } from "react-router";
 import { useUserStore } from "../lib/store";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,10 +22,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Link } from "react-router-dom";
-import { toast, useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { AtSign, KeyRound } from "lucide-react";
-import InputTxt from "@/components/Input";
 import BackButton from "@/components/BackButton";
+import { Input, InputWrapper } from "@/components/ui/input";
 
 // type
 const formSchema = z.object({
@@ -54,7 +47,6 @@ export default function Login() {
 
   const { updateUser } = useUserStore();
 
-  // form
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -63,10 +55,8 @@ export default function Login() {
     },
   });
 
-  // react router
   const navigate = useNavigate();
 
-  //functions
   async function onSubmit(values: z.infer<typeof formSchema>) {
     await signInWithEmailAndPassword(auth, values.email, values.senha)
       .then(async (userCredential) => {
@@ -122,11 +112,9 @@ export default function Login() {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl className="m-0">
-                        <InputTxt
-                          placeholder="E-mail"
-                          icon={AtSign}
-                          {...field}
-                        />
+                        <InputWrapper icon={AtSign}>
+                          <Input type="email" placeholder="E-mail" {...field} />
+                        </InputWrapper>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -137,14 +125,14 @@ export default function Login() {
                   name="senha"
                   render={({ field }) => (
                     <FormItem>
-                      {/* <FormLabel>Senha</FormLabel> */}
                       <FormControl>
-                        <InputTxt
-                          placeholder="Senha"
-                          type="password"
-                          icon={KeyRound}
-                          {...field}
-                        />
+                        <InputWrapper icon={KeyRound}>
+                          <Input
+                            type="password"
+                            placeholder="Senha"
+                            {...field}
+                          />
+                        </InputWrapper>
                       </FormControl>
                       <FormMessage />
                       <Link
