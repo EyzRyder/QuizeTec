@@ -162,7 +162,10 @@ export default function AddQuiz() {
           allAnswersIds.push(answer.id);
           editQuizData
             ? await updateDoc(doc(db, "Answers", answer.id), {
+                id: answer.id,
                 title: answer.label,
+                QuestionId: question.id,
+                QuizId: values.id,
                 questionType: ALTERNATIVA,
                 isRight: answer.label == question.option.selectedRadio,
               })
@@ -178,8 +181,10 @@ export default function AddQuiz() {
 
         editQuizData
           ? await updateDoc(doc(db, "Questions", question.id), {
+              id: question.id,
               title: question.title,
               AnswersId: answersIds,
+              QuizId: values.id,
               type: ALTERNATIVA,
             })
           : await setDoc(doc(db, "Questions", question.id), {
