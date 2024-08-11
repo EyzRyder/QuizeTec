@@ -45,6 +45,9 @@ export async function resultadosLoader({
   for (let i = 0; i < loopUserCount; i++) {
     const tempCount = i * 25;
     const userSlice = userArray.slice(tempCount, tempCount + 25);
+
+    if (userSlice.length < 1) continue;
+
     const usersQuerySnapshot = await getDocs(
       query(collection(db, "users"), where("id", "in", userSlice)),
     );
