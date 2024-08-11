@@ -7,7 +7,7 @@ import { Outlet } from "react-router-dom";
 export default function Layout() {
   return (
     <IonContent
-      className="flex-1 flex flex-col relative bg-slate-50 min-h-screen"
+      className="flex-1 flex flex-col relative bg-slate-50 min-h-[100vh]"
       style={{ height: "100%", flex: "1 1 0%" }}
     >
       <Outlet />

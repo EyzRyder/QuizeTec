@@ -21,7 +21,7 @@ export default function MateriasMenu() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, transition: { delay: 0.2, duration: 0.2 } }}
         exit={{ opacity: 0.2, transition: { duration: 0.2 } }}
-        className="min-h-screen flex justify-center bg-blue-100 "
+        className="min-h-[100vh] flex justify-center bg-blue-100 "
       >
        <div className="flex flex-col flex-1 min-h-[100vh] max-w-5xl relative items-center">
           <header

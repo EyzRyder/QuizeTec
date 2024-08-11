@@ -27,7 +27,7 @@ export default function Resultados() {
 
   return (
     <IonContent
-      className="min-h-screen h-full bg-slate-50 flex justify-center"
+      className="min-h-[100vh] h-full bg-slate-50 flex justify-center"
       style={{ height: "100%" }}
     >
       <div className="h-full flex justify-center">

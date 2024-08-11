@@ -27,14 +27,14 @@ export default function Base() {
 
   return (
     <IonContent
-      className="min-h-screen h-full transition-all"
+      className="min-h-[100vh] h-full transition-all"
       style={{ height: "100%" }}
     >
       <motion.div
         initial={{ opacity: 0.1 }}
         animate={{ opacity: 1, transition: { delay: 0.2, duration: 0.3 } }}
         exit={{ opacity: 0.1, transition: { duration: 0.2 } }}
-        className="min-h-screen bg-blue-50"
+        className="min-h-[100vh] bg-blue-50"
       >
         <div className="flex-1 flex flex-col h-full w-full">
           <div className="flex flex-col bg-blue-500 shadow-lg gap-6 rounded-b-3xl py-10 px-6">

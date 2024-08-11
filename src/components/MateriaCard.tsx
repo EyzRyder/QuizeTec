@@ -1,5 +1,4 @@
 import { materiaImages } from "@/lib/data";
-import { useQuizStore } from "@/lib/store";
 import { useParams } from "react-router";
 
 export default function MateriaCard({ name }: { name: string }) {

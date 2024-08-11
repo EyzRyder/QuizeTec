@@ -353,14 +353,14 @@ export default function AddQuiz() {
   };
 
   return (
-    <IonContent className="min-h-screen h-full" style={{ height: "100%" }}>
+    <IonContent className="min-h-[100vh] h-full" style={{ height: "100%" }}>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, transition: { delay: 0.2, duration: 0.2 } }}
         exit={{ opacity: 0.2, transition: { duration: 0.2 } }}
         className="h-full"
       >
-        <div className="flex-1 flex flex-col min-h-screen w-full sm:pb-12 px-6 pb-28">
+        <div className="flex-1 flex flex-col min-h-[100vh] w-full sm:pb-12 px-6 pb-28">
           <header className="flex flex-row px-2 py-6 justify-start items-center rounded-b-3xl gap-4">
             <Button
               variant="outline"

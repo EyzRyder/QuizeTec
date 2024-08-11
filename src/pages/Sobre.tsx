@@ -19,7 +19,7 @@ export default function Sobre() {
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.8 }}
         transition={{ duration: 0.5 }}
-        className="min-h-screen absolute w-full flex flex-col overflow-y-scroll bg-blue-100"
+        className="min-h-[100vh] absolute w-full flex flex-col overflow-y-scroll bg-blue-100"
       >
         <BackButton />
         <div className="flex flex-col flex-1 w-full h-full bg-blue-100">

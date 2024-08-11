@@ -109,7 +109,7 @@ export default function Register() {
         className="h-full bg-blue-100 grid place-items-center relative"
       >
         <BackButton />
-        <div className="flex flex-col flex-1 items-center px-10 h-screen justify-center">
+        <div className="flex flex-col flex-1 items-center px-10 h-[100vh] justify-center">
           <div className="flex flex-col w-full  ">
             <div className="flex flex-col pb-7 w-full">
               <p className="font-title font-extrabold text-blue-800 text-2xl leading-tight">
