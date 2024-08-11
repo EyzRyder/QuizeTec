@@ -63,22 +63,22 @@ export default function Base() {
         exit={{ opacity: 0.1, transition: { duration: 0.2 } }}
         className="min-h-screen bg-blue-50"
       >
-        <div className="flex-1 flex flex-col h-full w-full ">
-          <div className="flex flex-col bg-blue-500 gap-6 rounded-b-3xl py-10 px-6">
+        <div className="flex-1 flex flex-col h-full w-full">
+          <div className="flex flex-col bg-blue-500 shadow-lg gap-6 rounded-b-3xl py-10 px-6">
             <div className="flex flex-row justify-between items-center ">
               <div className="flex flex-col justify-center">
-                <p className="text-white text-2xl font-extrabold">
+                <p className="text-white text-xl font-bold">
                   Olá {user?.userName}
                 </p>
-                <p className="text-white text-2xl font-extrabold">
+                <p className="text-white text-xl font-bold">
                   Bem Vindo(a)👋
                 </p>
               </div>
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button variant="outlineWhite" className="h-12 w-12">
+                  <div  className="h-11 w-11 text-white border-2 border-white flex items-center justify-center rounded-xl">
                     <LogIn />
-                  </Button>
+                  </div>
                 </PopoverTrigger>
                 <PopoverContent className="w-[80%] flex bg-transparent border-none shadow-none">
                   <Button
@@ -100,7 +100,7 @@ export default function Base() {
               <Link to="/addQuiz">
                 <Button
                   variant="outlineWhite"
-                  className="w-full border flex items-center justify-center gap-2 text-md font-bold"
+                  className="w-full border flex items-center justify-center gap-2 text-md font-bold py-2.5"
                 >
                   <Plus />
                   Criar Quiz
@@ -108,13 +108,17 @@ export default function Base() {
               </Link>
             )}
           </div>
-          <div className="flex-1 flex flex-col justify-between px-8 pt-4 pb-28 space-y-2 h-full w-full items-center">
-            <p className="text-blue-400 font-extrabold">
+          <div className="flex-1 flex flex-col justify-between px-2 pt-4 pb-28 space-y-2 h-full w-full items-center">
+            <p className="text-blue-400 font-bold">
               Selecione uma matéria
             </p>
-            <div className="grid sm:grid-cols-[repeat(auto-fill,minmax(161px,230px))] max-sm:grid-cols-[repeat(auto-fill,minmax(120px,1fr))] max-[]:grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-6 w-full justify-center">
+            <div className="grid sm:grid-cols-[repeat(auto-fill,minmax(161px,230px))] max-sm:grid-cols-[repeat(auto-fill,minmax(120px,1fr))] max-[]:grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-4 w-full justify-center">
               {materiaOptions.map((materia) => (
-                <Link key={materia.id} to={`../materia/${materia.nome}`}>
+                <Link
+                  className="flex items-center justify-center w-full"
+                  key={materia.id}
+                  to={`../materia/${materia.nome}`}
+                >
                   <MateriaCard name={materia.nome} id={materia.id} />
                 </Link>
               ))}

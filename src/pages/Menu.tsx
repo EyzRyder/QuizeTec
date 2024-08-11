@@ -93,7 +93,7 @@ export default function Menu() {
                   {quiz?.level} Ano
                 </p>
               </div>
-              <p className="text-blue-800 text-xl font-extrabold">
+              <p className="text-blue-800 text-xl font-bold">
                 {quiz?.title}
               </p>
             </div>
@@ -149,26 +149,26 @@ export default function Menu() {
           <div className="flex flex-col flex-1 px-5 pt-5 pb-9 gap-7 ">
             <div>
               <p className="text-blue-800">
-                Criado por: <span className="font-extrabold">Professor(a)</span>
+                Criado por: <span className="font-bold">Professor(a)</span>
               </p>
               <p className="text-slate-800">...</p>
             </div>
             <div className="flex flex-col gap-4">
-              <p className="text-blue-800 text-xl font-extrabold">
-                Resultados atual
+              <p className="text-blue-800 text-xl font-bold">
+                Resultado atual
               </p>
-              <div className="flex flex-1 flex-row justify-center space-x-5">
-                <div className="flex flex-col justify-center  bg-blue-100 rounded-xl p-6 shadow w-[161.5px] h-[148px]">
+              <div className="flex flex-1 flex-row justify-start items-start space-x-5">
+                <div className="flex flex-col justify-center bg-blue-100 rounded-xl p-6 border-2 border-[#F8FAFC] w-[161.5px] h-[148px]">
                   <div className="flex flex-row justify-between items-center space-x-8">
-                    <div className="flex flex-col h-9 w-9  rounded-full items-center justify-center">
+                    <div className="flex flex-col h-12 w-12  rounded-full items-center justify-center">
                       <img
                         src="https://i.postimg.cc/fbBS2MXz/Crown.png"
                         alt=""
-                        className="w-12 h-12"
+                        className="w-14 h-14"
                       />
                     </div>
                   </div>
-                  <p className="text-blue-400 font-body text font-semibold">
+                  <p className="text-blue-400 font-body text font-bold">
                     Acertos
                   </p>
                   {totalCorrectAnswer ? (
@@ -201,7 +201,7 @@ export default function Menu() {
               </div>
             </div>
             <div className="flex  flex-col gap-3">
-              <p className="text-blue-800 font-body text-xl font-extrabold">
+              <p className="text-blue-800 font-body text-xl font-bold">
                 Resultados anteriores
               </p>
               {userPastAnswers &&

@@ -25,7 +25,7 @@ export default function Resultados() {
   const users = useUsersList();
 
   const quizAnswers = useQuizeAnswersStore(
-    (store) => store.quizeAnswers.filter((q) => q.quizId == id)[0],
+    (store) => store.quizeAnswers.filter((q) => q.quizId == id)[0]
   );
 
   const countCorrectAnswers = (item: usersAnswerType) => {
@@ -67,7 +67,7 @@ export default function Resultados() {
             <div className="w-full flex flex-col items-center gap-4 pb-8">
               {quizAnswers?.usersAnswer?.map((item) => {
                 const userData = users.filter(
-                  (user: any) => user.id == item.userId,
+                  (user: any) => user.id == item.userId
                 )[0];
                 const userEmail = userData?.email;
                 const username = userData?.userName;

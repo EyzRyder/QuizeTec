@@ -120,13 +120,13 @@ export default function AddQuiz() {
             </Button>
             <div className="flex flex-col">
               <span className="text-blue-400 font-medium">Quiz</span>
-              <span className="text-blue-800 font-extrabold text-xl">
-                Crie uma quiz
+              <span className="text-blue-800 font-bold text-xl">
+                Crie um quiz
               </span>
             </div>
           </div>
-          <ScrollArea className="flex-1 flex flex-col h-full w-full ">
-            <div className="mb-5 mt-5 mx-8">
+          <ScrollArea className="flex-1 flex flex-col h-full w-full">
+            <div className="mb-5 mt-5 w-full">
               <Label className="text-blue-500 font-medium">Matéria</Label>
               <Select
                 onValueChange={(value) => addMateria(value)}
@@ -144,10 +144,8 @@ export default function AddQuiz() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex flex-col gap-5 mb-5 mx-8">
-              <p className="text-xl text-blue-800 font-extrabold">
-                Corpo do quiz
-              </p>
+            <div className="flex flex-col gap-5 mb-5">
+              <p className="text-xl text-blue-800 font-bold">Corpo do quiz</p>
               <div className="flex flex-col gap-3">
                 <InputTxt
                   type="text"
@@ -172,8 +170,8 @@ export default function AddQuiz() {
                 </Select>
               </div>
             </div>
-            <div className="flex flex-col gap-5  mb-5 mx-8">
-              <span className="font-title text-xl text-blue-800 font-extrabold">
+            <div className="flex flex-col gap-5 mb-5">
+              <span className="font-title text-xl text-blue-800 font-bold">
                 Perguntas
               </span>
               <div className="flex flex-col gap-3">
@@ -192,7 +190,7 @@ export default function AddQuiz() {
                         onChange={(event) => {
                           editQuestion(
                             { ...question, title: event.target.value },
-                            i,
+                            i
                           );
                         }}
                       />
@@ -230,7 +228,7 @@ export default function AddQuiz() {
                                     }
                                   }),
                                 },
-                                i,
+                                i
                               );
                               return value;
                             }}
@@ -261,7 +259,7 @@ export default function AddQuiz() {
                                         }
                                       }),
                                     },
-                                    i,
+                                    i
                                   )
                                 }
                               />
@@ -272,10 +270,10 @@ export default function AddQuiz() {
                                     {
                                       ...question,
                                       answers: question.answers.filter(
-                                        (a) => a.id != question.answers[0].id,
+                                        (a) => a.id != question.answers[0].id
                                       ),
                                     },
-                                    i,
+                                    i
                                   );
                                 }}
                                 variant="outline"
@@ -311,7 +309,7 @@ export default function AddQuiz() {
                                         }
                                       }),
                                     },
-                                    i,
+                                    i
                                   )
                                 }
                               />
@@ -322,10 +320,10 @@ export default function AddQuiz() {
                                     {
                                       ...question,
                                       answers: question.answers.filter(
-                                        (a) => a.id != question.answers[1].id,
+                                        (a) => a.id != question.answers[1].id
                                       ),
                                     },
-                                    i,
+                                    i
                                   );
                                 }}
                                 variant="outline"
@@ -361,7 +359,7 @@ export default function AddQuiz() {
                                         }
                                       }),
                                     },
-                                    i,
+                                    i
                                   )
                                 }
                               />
@@ -372,10 +370,10 @@ export default function AddQuiz() {
                                     {
                                       ...question,
                                       answers: question.answers.filter(
-                                        (a) => a.id != question.answers[2].id,
+                                        (a) => a.id != question.answers[2].id
                                       ),
                                     },
-                                    i,
+                                    i
                                   );
                                 }}
                                 variant="outline"
@@ -411,7 +409,7 @@ export default function AddQuiz() {
                                         }
                                       }),
                                     },
-                                    i,
+                                    i
                                   )
                                 }
                               />
@@ -422,10 +420,10 @@ export default function AddQuiz() {
                                     {
                                       ...question,
                                       answers: question.answers.filter(
-                                        (a) => a.id != question.answers[3].id,
+                                        (a) => a.id != question.answers[3].id
                                       ),
                                     },
-                                    i,
+                                    i
                                   );
                                 }}
                                 variant="outline"
@@ -463,7 +461,7 @@ export default function AddQuiz() {
                                       },
                                     ],
                                   },
-                                  i,
+                                  i
                                 );
                               }}
                               variant="outline"
@@ -479,46 +477,48 @@ export default function AddQuiz() {
                   </div>
                 ))}
               </div>
-              <Button
-                variant="outline"
-                className="w-full flex justify-center gap-1.5 items-center"
-                onClick={() => {
-                  addQuestion({
-                    id: uuid().toString(),
-                    title: "",
-                    type: "",
-                    answers: [
-                      {
-                        id: uuid().toString(),
-                        letra: "A",
-                        isRight: false,
-                        title: "",
-                      },
-                      {
-                        id: uuid().toString(),
-                        letra: "B",
-                        isRight: false,
-                        title: "",
-                      },
-                      {
-                        id: uuid().toString(),
-                        letra: "C",
-                        isRight: false,
-                        title: "",
-                      },
-                      {
-                        id: uuid().toString(),
-                        letra: "D",
-                        isRight: false,
-                        title: "",
-                      },
-                    ],
-                  });
-                }}
-              >
-                <Plus />
-                <p className="text-inherit">Nova Pergunta</p>
-              </Button>
+              <div className="mx-2">
+                <Button
+                  variant="outline"
+                  className="w-full flex justify-center gap-1.5 items-center"
+                  onClick={() => {
+                    addQuestion({
+                      id: uuid().toString(),
+                      title: "",
+                      type: "",
+                      answers: [
+                        {
+                          id: uuid().toString(),
+                          letra: "A",
+                          isRight: false,
+                          title: "",
+                        },
+                        {
+                          id: uuid().toString(),
+                          letra: "B",
+                          isRight: false,
+                          title: "",
+                        },
+                        {
+                          id: uuid().toString(),
+                          letra: "C",
+                          isRight: false,
+                          title: "",
+                        },
+                        {
+                          id: uuid().toString(),
+                          letra: "D",
+                          isRight: false,
+                          title: "",
+                        },
+                      ],
+                    });
+                  }}
+                >
+                  <Plus />
+                  <p className="text-inherit">Nova Pergunta</p>
+                </Button>
+              </div>
             </div>
           </ScrollArea>
           <Button onClick={adicionarQuiz} className="w-full">
