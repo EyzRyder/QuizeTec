@@ -20,15 +20,19 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.scss";
 import "./themes/globals.scss";
 import Routing from "./Routes";
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster";
 
+import { queryClient } from "./lib/query";
+import { QueryClientProvider } from "@tanstack/react-query";
 setupIonicReact();
 
 const App: React.FC = () => (
-  <IonApp>
-    <Routing />
-    <Toaster />
-  </IonApp>
+  <QueryClientProvider client={queryClient}>
+    <IonApp>
+      <Routing />
+      <Toaster />
+    </IonApp>
+  </QueryClientProvider>
 );
 
 export default App;

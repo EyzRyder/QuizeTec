@@ -1,35 +1,31 @@
 import BackButton from "@/components/BackButton";
 import ResultAttempt from "@/components/ResultAttempt";
-import { LoaderData } from "@/loaders/ResultadosDetailsLoader";
+import { fetchResultDetails } from "@/lib/fetches/ResultadosDetailsFetch";
 import { IonContent } from "@ionic/react";
+import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { useMemo } from "react";
-import { useLoaderData, useParams } from "react-router";
+import { Navigate, useParams } from "react-router";
 
 export default function ResultDetails() {
-  const { title, email, name } = useParams();
+  const { id, title, email, name, userId } = useParams();
 
-  const { userAnswers, questionMap, answerMap } = useLoaderData() as LoaderData;
+  if (!id || !title || !email || !name || !userId) {
+    return <Navigate to="/base" />;
+  }
 
-  const attempts = useMemo(() => {
-    return userAnswers.tries.map((item, index) => {
-      const correctAnswers = item.answers.reduce(
-        (sum, data) => sum + Number(data.isRight),
-        0,
-      );
+  const { data, isPending, error, refetch } = useQuery({
+    queryKey: ["UserResults", id, userId],
+    queryFn: () => fetchResultDetails({ id, userId }),
+    staleTime: 1000 * 60 * 10, //10 minutes
+  });
 
-      return (
-        <ResultAttempt
-          key={index}
-          correctAnswers={correctAnswers}
-          index={index}
-          item={item}
-          questionMap={questionMap}
-          answerMap={answerMap}
-        />
-      );
-    });
-  }, [userAnswers, questionMap, answerMap]);
+  if (error) {
+    console.error(error);
+    return <p>Error loading data</p>;
+  }
+  if (isPending) {
+    return <p>loading ...</p>;
+  }
 
   return (
     <IonContent>
@@ -64,19 +60,37 @@ export default function ResultDetails() {
               <p className="text-blue-800">
                 Primeira resposta:{" "}
                 <span className="font-extrabold">
-                  {userAnswers?.createdAt &&
-                    userAnswers?.createdAt.toDateString()}
+                  {data?.userAnswers?.createdAt &&
+                    data?.userAnswers?.createdAt.toDateString()}
                 </span>
               </p>
               <p className="text-blue-800">
                 Ultimo vez respondido:{" "}
                 <span className="font-extrabold">
-                  {userAnswers?.updatedAt &&
-                    userAnswers?.updatedAt.toDateString()}
+                  {data?.userAnswers?.updatedAt &&
+                    data?.userAnswers?.updatedAt.toDateString()}
                 </span>
               </p>
             </div>
-            <div className="w-full flex flex-col gap-8">{attempts}</div>
+            <div className="w-full flex flex-col gap-8">
+              {data?.userAnswers?.tries.map((item, index) => {
+                const correctAnswers = item.answers.reduce(
+                  (sum, data) => sum + Number(data.isRight),
+                  0,
+                );
+
+                return (
+                  <ResultAttempt
+                    key={index}
+                    correctAnswers={correctAnswers}
+                    index={index}
+                    item={item}
+                    questionMap={data?.questionMap}
+                    answerMap={data?.answerMap}
+                  />
+                );
+              })}
+            </div>
           </div>
         </div>
       </motion.div>

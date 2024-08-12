@@ -28,7 +28,11 @@ const useUserAnswersCurrentQuiz = ({
         );
 
         const unsubscribeUserAnswers = onSnapshot(
-          q,
+          query(
+            collection(db, "UserAnswers"),
+                where("UserId", "==", userId),
+                where("QuizId", "==", quizId),
+          ),
           (querySnapshot) => {
             if (!querySnapshot.empty) {
               const doc = querySnapshot.docs[0];

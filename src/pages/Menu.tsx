@@ -1,42 +1,50 @@
 // Dependence
 import { IonContent } from "@ionic/react";
-import { Navigate, useLoaderData, useNavigate, useParams } from "react-router";
+import { Navigate, useNavigate, useParams } from "react-router";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { PencilLine, Trophy } from "lucide-react";
-import { useCurAnswersStore, useUserStore } from "@/lib/store";
-import useUserAnswersCurrentQuiz from "@/useHook/useUserAnswersCurrentQuiz";
+import { useQuery } from "@tanstack/react-query";
 
 //Components
 import BackButton from "@/components/BackButton";
 import { Button } from "@/components/ui/button";
 import ProgressBar from "@/components/Progress";
-import { useToast } from "@/components/ui/use-toast";
-import { LoaderData } from "@/loaders/MenuLoader";
+
+//lib
+import { useCurAnswersStore, useUserStore } from "@/lib/store";
+import { fetchMenu } from "@/lib/fetches/MenuFetch";
 
 export default function Menu() {
-  const quiz = useLoaderData() as LoaderData;
   const { id } = useParams();
-  const { toast } = useToast();
   const navigate = useNavigate();
 
   // store
   const { user } = useUserStore();
   const { resetAnswer, startQuiz } = useCurAnswersStore();
 
-  if (!id || quiz == null) {
+  if (!id || !user.uid) {
     return <Navigate to="/base" />;
   }
-  const allowedAcesse =
-    quiz?.createdBy == user?.uid || quiz?.sharedWith.includes(user?.uid);
 
-  const { userAnswers, loading: loadingUserAnswers } =
-    useUserAnswersCurrentQuiz({
-      userId: user?.uid,
-      quizId: id,
-    });
+  const { data, isPending, error, refetch } = useQuery({
+    queryKey: ["menu", id, user.uid],
+    queryFn: () => fetchMenu({ quizId: id, userId: user.uid }),
+    staleTime: 1000 * 60 * 10, //10 minutes
+  });
+
+  if (isPending) return <p>Loading...</p>;
+  if (error) {
+    console.error(error);
+    return <p>Error loading data</p>;
+  }
+
+  const allowedAcesse =
+    data?.quizData?.createdBy == user?.uid ||
+    data?.quizData?.sharedWith.includes(user?.uid);
+
   const totalCorrectAnswer: number[][] | null =
-    userAnswers?.tries?.map((item, key) => {
+    data?.userAnswers?.tries?.map((item, key) => {
       let sum: number = 0;
 
       item.answers?.forEach((data) => (sum = sum + Number(data.isRight)));
@@ -94,13 +102,13 @@ export default function Menu() {
             <div className="flex flex-1 flex-col justify-center max-sm:col-span-3 ">
               <div className="flex flex-row">
                 <p className="text-blue-400 font-body font-semibold text-base">
-                  {quiz?.materia}
+                  {data?.quizData?.materia}
                   {" - "}
-                  {quiz?.level} Ano
+                  {data?.quizData?.level} Ano
                 </p>
               </div>
               <p className="text-blue-800 text-xl font-bold">
-                {quiz?.title}
+                {data?.quizData?.title}
               </p>
             </div>
             {allowedAcesse ? (
@@ -114,12 +122,19 @@ export default function Menu() {
               <address className="text-blue-800">
                 Criado por:{" "}
                 <span className="font-extrabold">
-                  Professor(a) {quiz?.createdByName && quiz?.createdByName}
+                  Professor(a){" "}
+                  {data?.quizData?.createdByName &&
+                    data?.quizData?.createdByName}
                 </span>
               </address>
-              <p>Data de Criação: {quiz?.createdAt.toDateString()}</p>
-              <p>Ultima vez atualizado: {quiz?.updatedAt.toDateString()}</p>
-              <article className="text-slate-800">{quiz?.description}</article>
+              <p>Data de Criação: {data?.quizData?.createdAt.toDateString()}</p>
+              <p>
+                Ultima vez atualizado:{" "}
+                {data?.quizData?.updatedAt.toDateString()}
+              </p>
+              <article className="text-slate-800">
+                {data?.quizData?.description}
+              </article>
             </div>
             <div className="w-full flex flex-col sm:flex-row gap-8 sm:items-start sm:justify-between">
               <section className="flex flex-col gap-4">
@@ -140,16 +155,16 @@ export default function Menu() {
                     <p className="text-blue-400 font-body text font-bold">
                       Acertos
                     </p>
-                    {totalCorrectAnswer && !loadingUserAnswers ? (
+                    {totalCorrectAnswer ? (
                       <p className="flex flex-col font-title text-xl text-[#2A416F] font-bold">
-                        {!loadingUserAnswers && userAnswers
+                        {totalCorrectAnswer
                           ? totalCorrectAnswer[totalCorrectAnswer.length - 1][1]
                           : "0"}{" "}
-                        / {quiz?.QuestionsID.length}
+                        / {data?.quizData?.QuestionsID.length}
                       </p>
                     ) : (
                       <p className="flex flex-col font-title text-xl text-[#2A416F] font-bold">
-                        0 / {quiz?.QuestionsID.length}
+                        0 / {data?.quizData?.QuestionsID.length}
                       </p>
                     )}
                   </div>
@@ -166,9 +181,11 @@ export default function Menu() {
                     <p className="text-blue-400 font-body text font-semibold">
                       Ultima vez respondido
                     </p>
-                    {totalCorrectAnswer && !loadingUserAnswers ? (
+                    {totalCorrectAnswer ? (
                       <p className="flex flex-col font-title text-lg text-[#2A416F] font-bold">
-                        {userAnswers?.updatedAt?.toLocaleDateString("pt-BR")}
+                        {data?.userAnswers?.updatedAt?.toLocaleDateString(
+                          "pt-BR",
+                        )}
                       </p>
                     ) : (
                       <p className="flex flex-col font-title text-xl text-[#2A416F] font-bold">
@@ -182,13 +199,12 @@ export default function Menu() {
                 <p className="text-blue-800 font-body text-xl font-bold">
                   Resultados anteriores
                 </p>
-                {!loadingUserAnswers &&
-                  userAnswers &&
+                {data?.userAnswers &&
                   totalCorrectAnswer?.map(([key, value]) => (
                     <ProgressBar
                       key={key}
                       count={value}
-                      total={Number(quiz?.QuestionsID.length)}
+                      total={Number(data?.quizData?.QuestionsID.length)}
                       className=" bg-blue-100 "
                     />
                   ))}

@@ -111,7 +111,6 @@ const Routing = () => {
           children: [
             {
               index: true,
-              loader: materiaLoader,
               element: <MateriasMenu />,
             },
             {
@@ -124,7 +123,6 @@ const Routing = () => {
                 },
                 {
                   path: "menu",
-                  loader: menuLoader,
                   element: <Menu />,
                 },
                 {

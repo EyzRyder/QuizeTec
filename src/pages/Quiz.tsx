@@ -1,6 +1,6 @@
 // Dependencies
 import { useState } from "react";
-import { Navigate, useLoaderData, useNavigate, useParams } from "react-router";
+import { Navigate, useNavigate, useParams } from "react-router";
 import { motion } from "framer-motion";
 import { v4 as uuid } from "uuid";
 
@@ -19,15 +19,17 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
-import { LoaderData } from "@/loaders/QuizLoader";
 
 //Components
 import { Button } from "@/components/ui/button";
 import ProgressBar from "@/components/Progress";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { fetchQuiz } from "@/lib/fetches/QuizFetch";
+import { queryClient } from "@/lib/query";
+import { fetchMenu } from "@/lib/fetches/MenuFetch";
 
 export default function Quiz() {
   const navigate = useNavigate();
-  const questions = useLoaderData() as LoaderData;
   const { id, grade, materia } = useParams();
 
   const [selectedAnswer, setSelectedAnswer] = useState<AnswersType | null>(
@@ -44,8 +46,28 @@ export default function Quiz() {
     startQuiz,
   } = useCurAnswersStore();
 
-  if (!id || !grade || !materia || questions.length === 0 || !user.uid)
-    return <Navigate to={"/"} />;
+  if (!id || !grade || !materia || !user.uid) return <Navigate to={"/"} />;
+
+  const { data, isPending, error } = useQuery({
+    queryKey: ["quiz", id],
+    queryFn: () => fetchQuiz(id),
+    staleTime: 1000 * 60 * 10, //10 minutes
+  });
+
+  const mutation = useMutation({
+    mutationFn: () => fetchMenu({ quizId: id, userId: user.uid }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["menu", id, user.uid] });
+    },
+  });
+
+  if (isPending) return <p>loading ...</p>;
+
+  if (error) {
+    console.error(error);
+    return <p>Error loading data</p>;
+  }
+  const questions = data ? data : [];
 
   // Fuctions
   async function confirmeAnswer() {
@@ -54,6 +76,7 @@ export default function Quiz() {
 
     if (curQuestionIndex == questions.length - 1) {
       await updateAnswerHistory();
+      mutation.mutate();
       navigate(-1);
       resetAnswer();
       startQuiz();

@@ -1,21 +1,39 @@
 // Dependencies
-import { Navigate, useLoaderData, useParams } from "react-router";
+import { Navigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { IonContent } from "@ionic/react";
+import { useQuery } from "@tanstack/react-query";
 
 // Components
 import BackButton from "@/components/BackButton";
 import ProgressBar from "@/components/Progress";
+
+// lib
 import { UserAttemptResponse } from "@/lib/type";
-import { LoaderData } from "@/loaders/ResultadosLoader";
+import { fetchResultados } from "@/lib/fetches/ResultadosFetch";
 
 export default function Resultados() {
-  const userAnswers = useLoaderData() as LoaderData;
   const { id, title } = useParams();
 
   if (!id || !title) {
     return <Navigate to={"/"} />;
   }
+
+  const { data, isPending, error, refetch } = useQuery({
+    queryKey: ["results", id],
+    queryFn: () => fetchResultados(id),
+    staleTime: 1000 * 60 * 10, //10 minutes
+  });
+
+  if (error) {
+    console.error(error);
+    return <p>Error loading data</p>;
+  }
+  if (isPending) {
+    return <p>loading ...</p>;
+  }
+
+  const userAnswers = data ? data : [];
 
   const countCorrectAnswers = (answers: UserAttemptResponse[]) => {
     const correctAnswers = answers?.reduce(
